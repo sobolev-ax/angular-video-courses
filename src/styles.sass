@@ -2,5 +2,79 @@
 @import '~reset-css'
 @import '~normalize.css'
 
+@font-face
+  font-family: 'SourceSansPro'
+  src: url('./assets/Source_Sans_Pro/SourceSansPro-Regular.ttf') format('truetype')
+  font-weight: 400
+  font-style: normal
+@font-face
+  font-family: 'SourceSansPro'
+  src: url('./assets/Source_Sans_Pro/SourceSansPro-SemiBold.ttf') format('truetype')
+  font-weight: 600
+  font-style: normal
+
 body
-  --main-bg-color: #414452
+  --dark-sky-color: #414452
+  --blue-sky-color: #33b1e3
+  --like-snow-color: #ffffff
+
+body
+  font-size: 14px
+  font-family: SourceSansPro, sans-serif
+
+// Grid
+.row
+  padding-left: 1rem
+  padding-right: 1rem
+
+.container
+  outline: 1px solid green
+
+@media (min-width: 1280px)
+  .container
+    width: 1280px
+    margin: 0 auto
+
+// Buttons
+.btn
+  --const-size: 1rem
+  border-width: 0
+  background-color: var(--blue-sky-color)
+  padding-left: calc(var(--const-size) * 2)
+  padding-right: var(--const-size)
+  border-radius: 3px
+  font-weight: 600
+  font-size: .857rem
+  font-stretch: normal
+  font-style: normal
+  line-height: 1.4rem
+  letter-spacing: -0.09px
+  color: var(--like-snow-color)
+  position: relative
+  transition: opacity .3s ease-out
+
+.btn-color-parent
+  background-color: inherit
+
+.btn:hover
+  cursor: pointer
+  opacity: .8
+
+.btn:before
+  content: ''
+  display: block
+  position: absolute
+  width: calc(var(--const-size) * 1.5)
+  left: calc(var(--const-size) * .5)
+  top: 0
+  bottom: 0
+  background-repeat: no-repeat
+  background-position: center
+
+.btn-ic-user:before
+  background-image: url("./assets/ic-user/ic-user.png")
+  background-size: 9px auto
+
+.btn-ic-exit:before
+  background-image: url("./assets/ic-exit/ic-exit.png")
+  background-size: 13px auto
