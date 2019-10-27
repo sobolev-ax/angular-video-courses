@@ -16,13 +16,20 @@
 body
   --dark-night-color: #2c2f3c
   --dark-sky-color: #414452
+  --good-night-color: #525462
   --blue-sky-color: #33b1e3
+  --green-grass-color: #9bc837
   --like-snow-color: #ffffff
+  --dirty-snow-color: #d9dbe3
   --fog-smog-color: #f2f3f7
+
+  --const-size: 1rem
+
 
 body
   font-size: 14px
   font-family: SourceSansPro, sans-serif
+  background-color: var(--fog-smog-color)
 
 // Grid
 .row
@@ -39,7 +46,6 @@ body
 
 // Buttons
 .btn
-  --const-size: 1rem
   border-width: 0
   background-color: var(--blue-sky-color)
   padding-left: calc(var(--const-size) * 2)
@@ -58,6 +64,9 @@ body
 .btn-color-parent
   background-color: inherit
 
+.btn-color-a
+  background-color: var(--green-grass-color)
+
 .btn:hover
   cursor: pointer
   opacity: .8
@@ -73,13 +82,18 @@ body
   background-repeat: no-repeat
   background-position: center
 
-.btn-ic-user:before
-  background-image: url("./assets/ic-user/ic-user.png")
-  background-size: 9px auto
+.btn-text
+  padding-left: var(--const-size)
+  font-size: 1.286rem
+  font-weight: 600
+  font-stretch: normal
+  font-style: normal
+  line-height: 2.56rem
+  letter-spacing: -0.13px
+  color: var(--like-snow-color)
 
-.btn-ic-exit:before
-  background-image: url("./assets/ic-exit/ic-exit.png")
-  background-size: 13px auto
+.btn-text:before
+  content: none
 
 // Panels
 .panel
@@ -100,3 +114,49 @@ body
 
 .panel-right-el:first-child
   margin-left: unset
+
+// Inputs
+.input-txt
+  box-sizing: border-box
+  display: inline-block
+  width: 100%
+  font-size: 1.286rem
+  line-height: 2.56rem
+  border-radius: 3px
+  border: solid 1px var(--dirty-snow-color)
+  background-color: var(--like-snow-color)
+  color: var(--good-night-color)
+  font-weight: normal
+  font-stretch: normal
+  font-style: normal
+  letter-spacing: normal
+  padding-left: calc(var(--const-size) * 3)
+
+.search-input-wrap
+  position: relative
+  width: 100%
+  display: inline-block
+
+.search-input-wrap:before
+  content: ''
+  display: block
+  position: absolute
+  top: 0
+  bottom: 0
+  left: calc(var(--const-size) * .5)
+  width: calc(var(--const-size) * 2)
+  background-repeat: no-repeat
+  background-position: center
+
+// Icons
+.ic-user:before
+  background-image: url("./assets/ic-user/ic-user.png")
+  background-size: 9px auto
+
+.ic-exit:before
+  background-image: url("./assets/ic-exit/ic-exit.png")
+  background-size: 13px auto
+
+.ic-search:before
+  background-image: url("./assets/ic-search/ic-search.png")
+  background-size: 20px auto

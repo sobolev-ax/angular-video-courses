@@ -1,0 +1,17 @@
+<section class="row">
+  <div class="search container">
+    <span class="search-el search-input-wrap search-input ic-search">
+      <input
+        (keyup.enter) = "findCourse()"
+        [(ngModel)] = "course"
+        type="text"
+        class="input-txt input-txt-ic-search"
+        placeholder="Text to search"
+      />
+    </span>
+    <button
+      class="search-el btn btn-text btn-color-a"
+      (click)="findCourse()"
+    >Search</button>
+  </div>
+</section>
