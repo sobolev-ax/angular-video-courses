@@ -8,8 +8,7 @@ import { CoursesListItem } from '../../interfaces/courses-list-item';
 })
 export class CoursesListItemComponent implements OnInit {
 
-  @Input()
-  public item: CoursesListItem;
+  @Input() item: CoursesListItem;
 
   constructor() { }
 

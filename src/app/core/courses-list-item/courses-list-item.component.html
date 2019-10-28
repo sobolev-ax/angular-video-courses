@@ -1,1 +1,22 @@
-<p>{{item.Title}}</p>
+<section class="item">
+  <div class="item-main">
+    <div class="item-main-header">
+      <h3>{{item.Title}}</h3>
+      <div class="item-main-header-meta">
+        <span class="btn">{{item.Duration}}</span>
+        <span class="btn">{{item.CreationDate}}</span>
+      </div>
+    </div>
+    <div class="item-main-description">
+      {{item.Description}}
+    </div>
+  </div>
+  <div class="item-control">
+    <button class="btn">
+      Edit
+    </button>
+    <button class="btn">
+      Delete
+    </button>
+  </div>
+</section>
