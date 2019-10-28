@@ -1,0 +1,40 @@
+.item
+  margin-bottom: 2rem
+
+.item:last-child
+  margin-bottom: unset
+
+.item-main-header
+  display: grid
+  grid-gap: 1rem
+  grid-template-columns: 1fr
+
+.item-control
+  padding-top: .5rem
+
+.item-control-el
+  margin-right: 1rem
+
+.item-control-el:last-child
+  margin-right: unset
+
+@media (min-width: 1280px)
+  .item
+    display: flex
+
+  .item-main
+    width: 920px
+
+  .item-control
+    padding-top: unset
+    flex: 2
+    display: flex
+    justify-content: flex-end
+    align-items: flex-end
+    padding-bottom: 2rem
+
+  .item-main-header
+    display: flex
+    justify-content: space-between
+    margin-bottom: 1.2rem
+    align-items: center

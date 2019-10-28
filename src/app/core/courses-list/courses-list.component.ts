@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnChanges, OnInit } from '@angular/core';
 import { CoursesService } from '../../services/courses.service';
 import { CoursesListItem } from '../../interfaces/courses-list-item';
 
@@ -7,7 +7,7 @@ import { CoursesListItem } from '../../interfaces/courses-list-item';
   templateUrl: './courses-list.component.html',
   styleUrls: ['./courses-list.component.sass']
 })
-export class CoursesListComponent implements OnInit {
+export class CoursesListComponent implements OnInit, OnChanges {
 
   public courses: CoursesListItem[] = [];
 
@@ -16,7 +16,24 @@ export class CoursesListComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    console.log('ngOnInit');
     this.courses = this.coursesService.getAllCourses();
+  }
+
+  ngOnChanges() {
+    console.log('ngOnChanges');
+  }
+
+  addCourse(): void {
+    console.log('addCourse');
+  }
+
+  deleteCourse(id: Number): void {
+    console.log('deleteCourse, id', id);
+  }
+
+  editCourse(id: Number): void {
+    console.log('editCourse, id', id);
   }
 
 }

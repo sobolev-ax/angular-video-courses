@@ -2,6 +2,9 @@
 @import '~reset-css'
 @import '~normalize.css'
 
+$fa-font-path: "~font-awesome/fonts" !default
+@import "~font-awesome/scss/font-awesome"
+
 @font-face
   font-family: 'SourceSansPro'
   src: url('./assets/Source_Sans_Pro/SourceSansPro-Regular.ttf') format('truetype')
@@ -18,8 +21,11 @@ body
   --dark-sky-color: #414452
   --good-night-color: #525462
   --blue-sky-color: #33b1e3
+  --loft-sofa-color: #577ce6
   --green-grass-color: #9bc837
   --like-snow-color: #ffffff
+  --like-steel-color: #868996
+  --white-steel-color: #b9bdce
   --dirty-snow-color: #d9dbe3
   --fog-smog-color: #f2f3f7
 
@@ -37,7 +43,7 @@ body
   padding-right: 1rem
 
 .container
-  outline: 1px solid green
+  outline: 1px solid rgba(200, 200, 200, .5)
 
 @media (min-width: 1280px)
   .container
@@ -48,7 +54,7 @@ body
 .btn
   border-width: 0
   background-color: var(--blue-sky-color)
-  padding-left: calc(var(--const-size) * 2)
+  padding-left: var(--const-size)
   padding-right: var(--const-size)
   border-radius: 3px
   font-weight: 600
@@ -71,20 +77,16 @@ body
 .btn-color-a
   background-color: var(--green-grass-color)
 
+.btn-color-b
+  background-color: var(--like-snow-color)
+  color: var(--white-steel-color)
+
 .btn:hover
   cursor: pointer
   opacity: .8
 
-.btn:before
-  content: ''
-  display: block
-  position: absolute
-  width: calc(var(--const-size) * 1.5)
-  left: calc(var(--const-size) * .5)
-  top: 0
-  bottom: 0
-  background-repeat: no-repeat
-  background-position: center
+.btn-ic
+  margin-right: .2rem
 
 .btn-text
   padding-left: var(--const-size)
@@ -98,6 +100,12 @@ body
 
 .btn-text:before
   content: none
+
+.btn-not
+  cursor: default !important
+
+.btn-not:hover
+  opacity: unset
 
 // Panels
 .panel
@@ -119,48 +127,93 @@ body
 .panel-right-el:first-child
   margin-left: unset
 
-// Inputs
-.input-txt
-  box-sizing: border-box
-  display: inline-block
-  width: 100%
-  font-size: 1.286rem
-  line-height: 2.56rem
-  border-radius: 3px
-  border: solid 1px var(--dirty-snow-color)
-  background-color: var(--like-snow-color)
-  color: var(--good-night-color)
-  font-weight: normal
-  font-stretch: normal
-  font-style: normal
-  letter-spacing: normal
-  padding-left: calc(var(--const-size) * 3)
+.panel-right-el:last-child
+  margin-right: unset
 
+// Inputs
 .search-input-wrap
   position: relative
   width: 100%
   display: inline-block
+  font-size: 1.286rem
+  line-height: 2.56rem
+  font-weight: normal
+  font-stretch: normal
+  font-style: normal
+  letter-spacing: normal
+  color: var(--good-night-color)
 
-.search-input-wrap:before
-  content: ''
-  display: block
+.input-txt
+  box-sizing: border-box
+  display: inline-block
+  width: 100%
+  font-size: inherit
+  line-height: inherit
+  border-radius: 3px
+  border: solid 1px var(--dirty-snow-color)
+  background-color: var(--like-snow-color)
+  color: inherit
+  font-weight: inherit
+  font-stretch: inherit
+  font-style: inherit
+  letter-spacing: inherit
+  padding-left: calc(var(--const-size) * 3)
+
+.input-ic
   position: absolute
   top: 0
   bottom: 0
-  left: calc(var(--const-size) * .5)
-  width: calc(var(--const-size) * 2)
-  background-repeat: no-repeat
-  background-position: center
+  left: 0
+  text-align: center
+  font-size: inherit
+  line-height: inherit
+  color: var(--like-steel-color)
+  font-weight: inherit
+  font-stretch: inherit
+  font-style: inherit
+  letter-spacing: inherit
+  width: calc(var(--const-size) * 3)
 
-// Icons
-.ic-user:before
-  background-image: url("./assets/ic-user/ic-user.png")
-  background-size: 9px auto
+.input-ic-reverse
+  transform: scale(-1, 1)
 
-.ic-exit:before
-  background-image: url("./assets/ic-exit/ic-exit.png")
-  background-size: 13px auto
+// Headers
+h3
+  cursor: default
+  font-size: 1.75rem
+  font-weight: 600
+  font-stretch: normal
+  font-style: normal
+  line-height: 1.25rem
+  letter-spacing: normal
+  color: var(--dark-night-color)
 
-.ic-search:before
-  background-image: url("./assets/ic-search/ic-search.png")
-  background-size: 20px auto
+// Text
+a
+  color: var(--loft-sofa-color)
+  font-size: .857rem
+  font-weight: normal
+  font-stretch: normal
+  font-style: normal
+  line-height: 1.5rem
+  letter-spacing: 0.19px
+  transition: opacity .3s ease-out
+
+a:hover
+  opacity: .7
+
+p
+  cursor: default
+  font-size: 1rem
+  font-weight: normal
+  font-stretch: normal
+  font-style: normal
+  line-height: 1.71rem
+  letter-spacing: normal
+  color: var(--good-night-color)
+
+.article
+  border-radius: 8px
+  box-shadow: 0 1px 24px 0 rgba(18, 21, 35, 0.08)
+  background-color: var(--like-snow-color)
+  padding: 2rem 1.7rem

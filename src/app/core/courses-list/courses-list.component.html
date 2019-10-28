@@ -1,12 +1,23 @@
 <main class="courses-list row">
   <div class="courses-list-panel courses-list-el container">
-    <button class="btn btn-a">Add course</button>
+    <button
+      class="btn btn-a ic-plus"
+      (click)="addCourse()"
+    >
+      <i class="fa btn-ic fa-plus"></i>
+      Add course
+    </button>
   </div>
-  <div class="courses-list-el container">
+  <section class="courses-list-el container courses-list-main">
     <app-courses-list-item
       *ngFor="let course of courses"
       [item]="course"
+      (deleteCourse)="deleteCourse($event)"
+      (editCourse)="editCourse($event)"
     ></app-courses-list-item>
-  </div>
+    <article class="article more">
+      <a href="/">LOAD MORE</a>
+    </article>
+  </section>
 </main>
 
