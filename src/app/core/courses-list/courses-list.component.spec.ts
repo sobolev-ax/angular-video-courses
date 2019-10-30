@@ -1,6 +1,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { CoursesListComponent } from './courses-list.component';
+import { Component, Input } from '@angular/core';
+import { CoursesListItem } from '../../interfaces/courses-list-item';
 
 describe('CoursesListComponent', () => {
   let component: CoursesListComponent;
@@ -8,7 +10,10 @@ describe('CoursesListComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ CoursesListComponent ]
+      declarations: [
+        CoursesListComponent,
+        MockCoursesListItemComponent,
+      ],
     })
     .compileComponents();
   }));
@@ -23,3 +28,12 @@ describe('CoursesListComponent', () => {
     expect(component).toBeTruthy();
   });
 });
+
+
+@Component({
+  selector: 'app-courses-list-item',
+  template: ''
+})
+class MockCoursesListItemComponent {
+  @Input() item: CoursesListItem;
+}
