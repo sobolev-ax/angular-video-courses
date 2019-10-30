@@ -10,7 +10,7 @@
   </div>
   <section class="courses-list-el container courses-list-main">
     <app-courses-list-item
-      *ngFor="let course of courses"
+      *ngFor="let course of courses; trackBy: trackByFn"
       [item]="course"
       (deleteCourse)="deleteCourse($event)"
       (editCourse)="editCourse($event)"

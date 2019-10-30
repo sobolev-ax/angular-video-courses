@@ -20,6 +20,10 @@ export class CoursesListComponent implements OnInit, OnChanges {
     this.courses = this.coursesService.getAllCourses();
   }
 
+  trackByFn(index, item): Number {
+    return item.id;
+  }
+
   ngOnChanges() {
     console.log('ngOnChanges');
   }
