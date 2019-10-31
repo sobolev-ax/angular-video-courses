@@ -1,31 +1,27 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { SearchComponent } from './search.component';
-import { FormsModule } from '@angular/forms';
 
 describe('SearchComponent', () => {
-  let component: SearchComponent;
-  let fixture: ComponentFixture<SearchComponent>;
-
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      imports: [
-        FormsModule,
-      ],
-      declarations: [
-        SearchComponent,
-      ],
-    })
-    .compileComponents();
-  }));
+  let comp: SearchComponent;
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(SearchComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+    comp = new SearchComponent();
   });
 
   it('should create', () => {
-    expect(component).toBeTruthy();
+    expect(comp).toBeTruthy();
+  });
+
+  it('should have empty course value', () => {
+    expect(comp.course).toEqual('');
+  });
+
+  describe('findCourse()', () => {
+    it('should clear value', () => {
+      comp.course = 'course';
+
+      comp.findCourse();
+
+      expect(comp.course).toEqual('');
+    });
   });
 });
