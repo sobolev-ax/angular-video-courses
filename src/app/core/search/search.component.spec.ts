@@ -11,6 +11,10 @@ describe('SearchComponent', () => {
     expect(comp).toBeTruthy();
   });
 
+  it('should have ngOnInit method', () => {
+    expect(comp.ngOnInit()).toBe(undefined);
+  });
+
   it('should have empty course value', () => {
     expect(comp.course).toEqual('');
   });
@@ -22,6 +26,13 @@ describe('SearchComponent', () => {
       comp.findCourse();
 
       expect(comp.course).toEqual('');
+    });
+    it('should ignore incorrect value', () => {
+      comp.course = '   ';
+
+      comp.findCourse();
+
+      expect(comp.course).toEqual('   ');
     });
   });
 });
