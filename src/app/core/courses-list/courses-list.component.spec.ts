@@ -1,39 +1,63 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { CoursesListComponent } from './courses-list.component';
-import { Component, Input } from '@angular/core';
-import { CoursesListItem } from '../../interfaces/courses-list-item';
+import { CoursesService } from '../../services/courses.service';
 
 describe('CoursesListComponent', () => {
-  let component: CoursesListComponent;
-  let fixture: ComponentFixture<CoursesListComponent>;
+  let comp: CoursesListComponent;
+  let service: CoursesService;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [
-        CoursesListComponent,
-        MockCoursesListItemComponent,
-      ],
-    })
-    .compileComponents();
-  }));
+  beforeAll(() => {
+    service = new CoursesService;
+
+    console.log = jasmine.createSpy('log');
+  });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(CoursesListComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+    comp = new CoursesListComponent(service);
   });
 
   it('should create', () => {
-    expect(component).toBeTruthy();
+    expect(comp).toBeTruthy();
+  });
+
+  it('ngOnInit() should get courses', () => {
+    expect(comp.courses.length).toBe(0);
+
+    comp.ngOnInit();
+
+    expect(comp.courses.length).toBe(service.getAllCourses().length);
+  });
+
+  it('trackByFn() should return id', () => {
+    let id: Number;
+    const index = 0;
+    const item = { id: 0 };
+
+    id = comp.trackByFn(index, item);
+
+    expect(id).toBe(item.id);
+  });
+
+  it('ngOnChanges() should call console.log', () => {
+    comp.ngOnChanges();
+
+    expect(console.log).toHaveBeenCalledWith('ngOnChanges');
+  });
+
+  it('addCourse() should call console.log', () => {
+    comp.addCourse();
+
+    expect(console.log).toHaveBeenCalledWith('addCourse');
+  });
+
+  it('deleteCourse() should call console.log', () => {
+    comp.deleteCourse(0);
+
+    expect(console.log).toHaveBeenCalledWith('deleteCourse, id', 0);
+  });
+
+  it('editCourse() should call console.log', () => {
+    comp.editCourse(0);
+
+    expect(console.log).toHaveBeenCalledWith('editCoursegit, id', 0);
   });
 });
-
-
-@Component({
-  selector: 'app-courses-list-item',
-  template: ''
-})
-class MockCoursesListItemComponent {
-  @Input() item: CoursesListItem;
-}
