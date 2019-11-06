@@ -58,6 +58,6 @@ describe('CoursesListComponent', () => {
   it('editCourse() should call console.log', () => {
     comp.editCourse(0);
 
-    expect(console.log).toHaveBeenCalledWith('editCoursegit, id', 0);
+    expect(console.log).toHaveBeenCalledWith('editCourse, id', 0);
   });
 });
