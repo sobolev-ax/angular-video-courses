@@ -1,16 +1,28 @@
 import { Injectable } from '@angular/core';
 import { CoursesListItem } from '../interfaces/courses-list-item';
+import { IDates } from '../interfaces/dates';
+
+import * as moment from 'moment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CoursesService {
 
+  private today: moment.Moment = moment();
+  private dt: IDates = {
+    nextDate: moment(this.today).add(1, 'days'),
+    today: this.today,
+    prevDate: moment(this.today).subtract(1, 'days'),
+    prevOneWeeks: moment(this.today).subtract(1, 'weeks'),
+    prevTwoWeeks: moment(this.today).subtract(2, 'weeks'),
+  };
+
   private courses: CoursesListItem[] = [
     {
       Id: 0,
       Title: 'Video Course 1',
-      CreationDate: '09 Nov, 2019',
+      CreationDate: this.dt.nextDate,
       Duration: '1h 28min',
       Description: 'Learn about where you can find course descriptions, what information they include, how they work, and details ' +
         'about various components of a course description. Course descriptions report information about a university or college\'s ' +
@@ -20,7 +32,7 @@ export class CoursesService {
     {
       Id: 1,
       Title: 'Video Course 2',
-      CreationDate: '12 Nov, 2019',
+      CreationDate: this.dt.today,
       Duration: '1h 28min',
       Description: 'Learn about where you can find course descriptions, what information they include, how they work, and details ' +
         'about various components of a course description. Course descriptions report information about a university or college\'s ' +
@@ -30,7 +42,7 @@ export class CoursesService {
     {
       Id: 2,
       Title: 'Video Course 3',
-      CreationDate: '20 Nov, 2019',
+      CreationDate: this.dt.prevDate,
       Duration: '1h 28min',
       Description: 'Learn about where you can find course descriptions, what information they include, how they work, and details ' +
         'about various components of a course description. Course descriptions report information about a university or college\'s ' +
@@ -40,7 +52,7 @@ export class CoursesService {
     {
       Id: 3,
       Title: 'Video Course 4',
-      CreationDate: '05 Dec, 2019',
+      CreationDate: this.dt.prevOneWeeks,
       Duration: '1h 28min',
       Description: 'Learn about where you can find course descriptions, what information they include, how they work, and details ' +
         'about various components of a course description. Course descriptions report information about a university or college\'s ' +
@@ -50,7 +62,7 @@ export class CoursesService {
     {
       Id: 4,
       Title: 'Video Course 5',
-      CreationDate: '09 Dec, 2019',
+      CreationDate: this.dt.prevTwoWeeks,
       Duration: '1h 28min',
       Description: 'Learn about where you can find course descriptions, what information they include, how they work, and details ' +
         'about various components of a course description. Course descriptions report information about a university or college\'s ' +

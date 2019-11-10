@@ -12,6 +12,7 @@
     <app-courses-list-item
       *ngFor="let course of courses; trackBy: trackByFn"
       [item]="course"
+      [appRelevance]="course.CreationDate"
       (deleteCourse)="deleteCourse($event)"
       (editCourse)="editCourse($event)"
     ></app-courses-list-item>

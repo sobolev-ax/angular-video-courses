@@ -37,6 +37,8 @@ body
   --dirty-snow-color: #d9dbe3
   --like-silver-car: #c0c3ce
   --fog-smog-color: #f2f3f7
+  --opacity-sun-color: rgba(36, 230, 110, 0.15)
+  --opacity-sky-color: rgb(51, 177, 227, 0.15)
 
   --const-size: 1rem
 
@@ -222,7 +224,10 @@ p
   color: var(--good-night-color)
 
 .article
+  --article-color: rgba(18, 21, 35, 0.08)
+
   border-radius: 8px
-  box-shadow: 0 1px 24px 0 rgba(18, 21, 35, 0.08)
+  box-shadow: 0 1px 24px 0 var(--article-color)
+  border: 1px solid var(--article-color)
   background-color: var(--like-snow-color)
   padding: 2rem 1.7rem

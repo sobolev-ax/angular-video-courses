@@ -7,10 +7,19 @@ import { FooterComponent } from './footer/footer.component';
 import { BreadcrumbsComponent } from './breadcrumbs/breadcrumbs.component';
 import { SearchComponent } from './search/search.component';
 import { FormsModule } from '@angular/forms';
+import { RelevanceDirective } from './../directives/relevance.directive';
 
 
 @NgModule({
-  declarations: [CoursesListComponent, CoursesListItemComponent, HeaderComponent, FooterComponent, BreadcrumbsComponent, SearchComponent],
+  declarations: [
+    CoursesListComponent,
+    CoursesListItemComponent,
+    HeaderComponent,
+    FooterComponent,
+    BreadcrumbsComponent,
+    SearchComponent,
+    RelevanceDirective,
+  ],
   exports: [
     CoursesListComponent,
     HeaderComponent,
