@@ -2,6 +2,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { CoursesListItemComponent } from './courses-list-item.component';
 import { CoursesListItem } from '../../interfaces/courses-list-item';
+import { DurationPipe } from '../../pipes/duration.pipe';
 import { Component } from '@angular/core';
 import * as moment  from 'moment';
 
@@ -14,7 +15,7 @@ describe('CoursesListItemComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [CoursesListItemComponent, TestHostComponent],
+      declarations: [CoursesListItemComponent, TestHostComponent, DurationPipe],
     })
     .compileComponents();
   }));
@@ -31,10 +32,11 @@ describe('CoursesListItemComponent', () => {
 
   it('should display full information of course', () => {
     const main: HTMLElement = fixture.nativeElement.querySelector('.item-main');
+    const duration = (new DurationPipe).transform(mockCourse.Duration);
 
-    expect(main.textContent).toContain(mockCourse.Title);
+    expect(main.textContent).toContain(mockCourse.Title.toUpperCase());
     expect(main.textContent).toContain(String(mockCourse.CreationDate));
-    expect(main.textContent).toContain(mockCourse.Duration);
+    expect(main.textContent).toContain(duration);
     expect(main.textContent).toContain(mockCourse.Description);
 
     expect(Object.keys(mockCourse).length).toBe(5);
@@ -55,7 +57,7 @@ const mockCourse: CoursesListItem = {
   Id: 0,
   Title: 'Title',
   CreationDate: moment(),
-  Duration: 'Duration',
+  Duration: moment.duration(),
   Description: 'Description'
 };
 

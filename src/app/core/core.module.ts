@@ -8,6 +8,7 @@ import { BreadcrumbsComponent } from './breadcrumbs/breadcrumbs.component';
 import { SearchComponent } from './search/search.component';
 import { FormsModule } from '@angular/forms';
 import { RelevanceDirective } from './../directives/relevance.directive';
+import { DurationPipe } from './../pipes/duration.pipe';
 
 
 @NgModule({
@@ -19,6 +20,7 @@ import { RelevanceDirective } from './../directives/relevance.directive';
     BreadcrumbsComponent,
     SearchComponent,
     RelevanceDirective,
+    DurationPipe,
   ],
   exports: [
     CoursesListComponent,

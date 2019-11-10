@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { CoursesListItem } from '../interfaces/courses-list-item';
 import { IDates } from '../interfaces/dates';
+import { IDurations } from '../interfaces/durations';
 
 import * as moment from 'moment';
 
@@ -18,12 +19,18 @@ export class CoursesService {
     prevTwoWeeks: moment(this.today).subtract(2, 'weeks'),
   };
 
+  private durations: IDurations = {
+    normal: moment.duration('01:28'),
+    short: moment.duration('00:25'),
+    long: moment.duration('23:00'),
+  };
+
   private courses: CoursesListItem[] = [
     {
       Id: 0,
       Title: 'Video Course 1',
       CreationDate: this.dt.nextDate,
-      Duration: '1h 28min',
+      Duration: this.durations.normal,
       Description: 'Learn about where you can find course descriptions, what information they include, how they work, and details ' +
         'about various components of a course description. Course descriptions report information about a university or college\'s ' +
         'classes. They\'re published both in course catalogs that outline degree requirements and in course schedules that contain ' +
@@ -33,7 +40,7 @@ export class CoursesService {
       Id: 1,
       Title: 'Video Course 2',
       CreationDate: this.dt.today,
-      Duration: '1h 28min',
+      Duration: this.durations.short,
       Description: 'Learn about where you can find course descriptions, what information they include, how they work, and details ' +
         'about various components of a course description. Course descriptions report information about a university or college\'s ' +
         'classes. They\'re published both in course catalogs that outline degree requirements and in course schedules that contain ' +
@@ -44,7 +51,7 @@ export class CoursesService {
       Title: 'Video Course 3',
       TopRated: true,
       CreationDate: this.dt.prevDate,
-      Duration: '1h 28min',
+      Duration: this.durations.long,
       Description: 'Learn about where you can find course descriptions, what information they include, how they work, and details ' +
         'about various components of a course description. Course descriptions report information about a university or college\'s ' +
         'classes. They\'re published both in course catalogs that outline degree requirements and in course schedules that contain ' +
@@ -54,7 +61,7 @@ export class CoursesService {
       Id: 3,
       Title: 'Video Course 4',
       CreationDate: this.dt.prevOneWeeks,
-      Duration: '1h 28min',
+      Duration: this.durations.normal,
       Description: 'Learn about where you can find course descriptions, what information they include, how they work, and details ' +
         'about various components of a course description. Course descriptions report information about a university or college\'s ' +
         'classes. They\'re published both in course catalogs that outline degree requirements and in course schedules that contain ' +
@@ -65,7 +72,7 @@ export class CoursesService {
       Title: 'Video Course 5',
       TopRated: true,
       CreationDate: this.dt.prevTwoWeeks,
-      Duration: '1h 28min',
+      Duration: this.durations.normal,
       Description: 'Learn about where you can find course descriptions, what information they include, how they work, and details ' +
         'about various components of a course description. Course descriptions report information about a university or college\'s ' +
         'classes. They\'re published both in course catalogs that outline degree requirements and in course schedules that contain ' +
