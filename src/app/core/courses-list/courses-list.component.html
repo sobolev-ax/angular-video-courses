@@ -16,6 +16,9 @@
       (deleteCourse)="deleteCourse($event)"
       (editCourse)="editCourse($event)"
     ></app-courses-list-item>
+    <article class="article more" *ngIf="courses.length === 0">
+      <h3>NO DATA, FEEL FREE TO ADD NEW COURSE</h3>
+    </article>
     <article class="article more">
       <a href="/">LOAD MORE</a>
     </article>
