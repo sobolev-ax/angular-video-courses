@@ -3,6 +3,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { CoursesListItemComponent } from './courses-list-item.component';
 import { CoursesListItem } from '../../interfaces/courses-list-item';
 import { Component } from '@angular/core';
+import * as moment  from 'moment';
 
 describe('CoursesListItemComponent', () => {
   let testHost: TestHostComponent;
@@ -32,7 +33,7 @@ describe('CoursesListItemComponent', () => {
     const main: HTMLElement = fixture.nativeElement.querySelector('.item-main');
 
     expect(main.textContent).toContain(mockCourse.Title);
-    expect(main.textContent).toContain(mockCourse.CreationDate);
+    expect(main.textContent).toContain(String(mockCourse.CreationDate));
     expect(main.textContent).toContain(mockCourse.Duration);
     expect(main.textContent).toContain(mockCourse.Description);
 
@@ -53,7 +54,7 @@ describe('CoursesListItemComponent', () => {
 const mockCourse: CoursesListItem = {
   Id: 0,
   Title: 'Title',
-  CreationDate: 'CreationDate',
+  CreationDate: moment(),
   Duration: 'Duration',
   Description: 'Description'
 };

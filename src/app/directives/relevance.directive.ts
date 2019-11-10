@@ -1,4 +1,4 @@
-import { Directive, ElementRef, Renderer2, Input, HostListener, OnInit } from '@angular/core';
+import { Directive, ElementRef, Input, OnInit } from '@angular/core';
 import * as moment from 'moment';
 
 @Directive({
@@ -13,7 +13,7 @@ export class RelevanceDirective implements OnInit{
     future: '--opacity-sky-color',
   };
 
-  constructor(private elementRef: ElementRef, private renderer: Renderer2) {
+  constructor(private elementRef: ElementRef) {
   }
 
   ngOnInit() {
