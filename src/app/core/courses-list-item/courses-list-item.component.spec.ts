@@ -4,6 +4,7 @@ import { CoursesListItemComponent } from './courses-list-item.component';
 import { CoursesListItem } from '../../interfaces/courses-list-item';
 import { DurationPipe } from '../../pipes/duration.pipe';
 import { Component } from '@angular/core';
+import { DatePipe } from '@angular/common';
 import * as moment  from 'moment';
 
 describe('CoursesListItemComponent', () => {
@@ -12,6 +13,8 @@ describe('CoursesListItemComponent', () => {
 
   let editBtnEl: HTMLElement;
   let deleBtnEl: HTMLElement;
+
+  const pipe = new DatePipe('en');
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -35,7 +38,7 @@ describe('CoursesListItemComponent', () => {
     const duration = (new DurationPipe).transform(mockCourse.Duration);
 
     expect(main.textContent).toContain(mockCourse.Title.toUpperCase());
-    expect(main.textContent).toContain(String(mockCourse.CreationDate));
+    expect(main.textContent).toContain(pipe.transform(mockCourse.CreationDate, 'd LLL, yyyy'));
     expect(main.textContent).toContain(duration);
     expect(main.textContent).toContain(mockCourse.Description);
 
