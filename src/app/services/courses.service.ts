@@ -42,6 +42,7 @@ export class CoursesService {
     {
       Id: 2,
       Title: 'Video Course 3',
+      TopRated: true,
       CreationDate: this.dt.prevDate,
       Duration: '1h 28min',
       Description: 'Learn about where you can find course descriptions, what information they include, how they work, and details ' +
@@ -62,6 +63,7 @@ export class CoursesService {
     {
       Id: 4,
       Title: 'Video Course 5',
+      TopRated: true,
       CreationDate: this.dt.prevTwoWeeks,
       Duration: '1h 28min',
       Description: 'Learn about where you can find course descriptions, what information they include, how they work, and details ' +
