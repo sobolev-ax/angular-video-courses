@@ -1,5 +1,5 @@
 <app-header></app-header>
 <app-breadcrumbs></app-breadcrumbs>
-<app-search></app-search>
-<app-courses-list></app-courses-list>
+<app-search (searchCourse)="search($event)"></app-search>
+<app-courses-list [filter]="courseName"></app-courses-list>
 <app-footer></app-footer>

@@ -28,7 +28,7 @@ export class CoursesService {
   private courses: CoursesListItem[] = [
     {
       Id: 0,
-      Title: 'Video Course 1',
+      Title: 'Introduction to the Angular Docs',
       CreationDate: this.dt.nextDate,
       Duration: this.durations.normal,
       Description: 'Learn about where you can find course descriptions, what information they include, how they work, and details ' +
@@ -38,7 +38,7 @@ export class CoursesService {
     },
     {
       Id: 1,
-      Title: 'Video Course 2',
+      Title: 'Tour of Heroes App and Tutorial',
       CreationDate: this.dt.today,
       Duration: this.durations.short,
       Description: 'Learn about where you can find course descriptions, what information they include, how they work, and details ' +
@@ -48,7 +48,7 @@ export class CoursesService {
     },
     {
       Id: 2,
-      Title: 'Video Course 3',
+      Title: 'Architecture overview',
       TopRated: true,
       CreationDate: this.dt.prevDate,
       Duration: this.durations.long,
@@ -59,7 +59,7 @@ export class CoursesService {
     },
     {
       Id: 3,
-      Title: 'Video Course 4',
+      Title: 'Security',
       CreationDate: this.dt.prevOneWeeks,
       Duration: this.durations.normal,
       Description: 'Learn about where you can find course descriptions, what information they include, how they work, and details ' +
@@ -69,7 +69,7 @@ export class CoursesService {
     },
     {
       Id: 4,
-      Title: 'Video Course 5',
+      Title: 'Workspace and project file structure',
       TopRated: true,
       CreationDate: this.dt.prevTwoWeeks,
       Duration: this.durations.normal,

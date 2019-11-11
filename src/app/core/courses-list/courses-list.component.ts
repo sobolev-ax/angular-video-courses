@@ -1,4 +1,4 @@
-import { Component, OnChanges, OnInit } from '@angular/core';
+import { Component, OnChanges, OnInit, Input } from '@angular/core';
 import { CoursesService } from '../../services/courses.service';
 import { CoursesListItem } from '../../interfaces/courses-list-item';
 
@@ -10,6 +10,8 @@ import { CoursesListItem } from '../../interfaces/courses-list-item';
 export class CoursesListComponent implements OnInit, OnChanges {
 
   public courses: CoursesListItem[] = [];
+
+  @Input() filter: string;
 
   constructor(
     private coursesService: CoursesService,
@@ -25,7 +27,10 @@ export class CoursesListComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges() {
-    console.log('ngOnChanges');
+    this.courses = this.filterCourses(
+      this.coursesService.getAllCourses(),
+      this.filter
+    );
   }
 
   addCourse(): void {
@@ -38,6 +43,14 @@ export class CoursesListComponent implements OnInit, OnChanges {
 
   editCourse(id: Number): void {
     console.log('editCourse, id', id);
+  }
+
+  private filterCourses(courses, filter): CoursesListItem[] {
+    if (filter !== undefined && filter !== '') {
+      return courses
+        .filter(({ Title }) => Title.toUpperCase().indexOf(filter.toUpperCase()) !== -1);
+    }
+    return courses;
   }
 
 }

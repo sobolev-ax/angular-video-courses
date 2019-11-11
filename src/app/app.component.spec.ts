@@ -1,8 +1,11 @@
 import { TestBed, async } from '@angular/core/testing';
 import { AppComponent } from './app.component';
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 describe('AppComponent', () => {
+  let fixture;
+  let app;
+
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [
@@ -16,16 +19,25 @@ describe('AppComponent', () => {
     }).compileComponents();
   }));
 
+  beforeEach(() => {
+    fixture = TestBed.createComponent(AppComponent);
+    app = fixture.debugElement.componentInstance;
+  });
+
   it('should create the app', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.debugElement.componentInstance;
     expect(app).toBeTruthy();
   });
 
   it(`should have as title 'angular-video-courses'`, () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.debugElement.componentInstance;
     expect(app.title).toEqual('angular-video-courses');
+  });
+
+  it(`search(name) should change courseName`, () => {
+    app.courseName = '';
+
+    app.search('name');
+
+    expect(app.courseName).toEqual('name');
   });
 });
 
@@ -52,7 +64,9 @@ class MockSearchComponent {}
   selector: 'app-courses-list',
   template: ''
 })
-class MockCoursesListComponent {}
+class MockCoursesListComponent {
+  @Input() filter: String;
+}
 
 @Component({
   selector: 'app-footer',

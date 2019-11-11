@@ -19,20 +19,13 @@ describe('SearchComponent', () => {
     expect(comp.course).toEqual('');
   });
 
-  describe('findCourse()', () => {
-    it('should clear value', () => {
+  describe('search()', () => {
+    it('should not clear value', () => {
       comp.course = 'course';
 
-      comp.findCourse();
+      comp.search();
 
-      expect(comp.course).toEqual('');
-    });
-    it('should ignore incorrect value', () => {
-      comp.course = '   ';
-
-      comp.findCourse();
-
-      expect(comp.course).toEqual('   ');
+      expect(comp.course).not.toEqual('');
     });
   });
 });

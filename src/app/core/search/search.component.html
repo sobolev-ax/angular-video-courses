@@ -3,7 +3,7 @@
     <div class="search-el search-input-wrap ic-search">
       <i class="input-ic input-ic-reverse fa fa-search"></i>
       <input
-        (keyup.enter) = "findCourse()"
+        (keyup.enter) = "search()"
         [(ngModel)] = "course"
         type="text"
         class="input-txt"
@@ -12,7 +12,7 @@
     </div>
     <button
       class="search-el btn btn-text btn-color-a"
-      (click)="findCourse()"
+      (click)="search()"
     >Search</button>
   </div>
 </section>

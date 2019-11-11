@@ -37,10 +37,21 @@ describe('CoursesListComponent', () => {
     expect(id).toBe(item.id);
   });
 
-  it('ngOnChanges() should call console.log', () => {
+  it('ngOnChanges() should update courses', () => {
+    comp.courses = [];
+
     comp.ngOnChanges();
 
-    expect(console.log).toHaveBeenCalledWith('ngOnChanges');
+    expect(comp.courses.length).toBe(5);
+  });
+
+  it('ngOnChanges() should filter courses', () => {
+    comp.filter = service.getAllCourses()[0].Title;
+
+    comp.ngOnChanges();
+
+    expect(comp.courses.length).toBe(1);
+    expect(comp.courses[0].Title).toBe(comp.filter);
   });
 
   it('addCourse() should call console.log', () => {
