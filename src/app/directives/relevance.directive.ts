@@ -1,10 +1,10 @@
-import { Directive, ElementRef, Input, OnInit } from '@angular/core';
+import { Directive, ElementRef, Input, OnInit, OnChanges } from '@angular/core';
 import * as moment from 'moment';
 
 @Directive({
   selector: '[appRelevance]'
 })
-export class RelevanceDirective implements OnInit{
+export class RelevanceDirective implements OnInit, OnChanges {
 
   @Input('appRelevance') appRelevanceDate: moment.Moment;
 
@@ -17,6 +17,14 @@ export class RelevanceDirective implements OnInit{
   }
 
   ngOnInit() {
+    this.toRelevance();
+  }
+
+  ngOnChanges() {
+    this.toRelevance();
+  }
+
+  private toRelevance(): void {
     const creation = this.appRelevanceDate.hours(0).minutes(0).seconds(0);
     const curr = moment().hours(0).minutes(0).seconds(0);
 
@@ -26,7 +34,6 @@ export class RelevanceDirective implements OnInit{
       this.updateBorder(this.borders.future);
     }
   }
-
 
   private updateBorder(color: String) {
     const child = this.elementRef.nativeElement.children[0];

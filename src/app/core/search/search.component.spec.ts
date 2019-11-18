@@ -5,14 +5,12 @@ describe('SearchComponent', () => {
 
   beforeEach(() => {
     comp = new SearchComponent();
+
+    comp.searchCourse.emit = jasmine.createSpy('emit');
   });
 
   it('should create', () => {
     expect(comp).toBeTruthy();
-  });
-
-  it('should have ngOnInit method', () => {
-    expect(comp.ngOnInit()).toBe(undefined);
   });
 
   it('should have empty course value', () => {
@@ -26,6 +24,14 @@ describe('SearchComponent', () => {
       comp.search();
 
       expect(comp.course).not.toEqual('');
+    });
+
+    it('should emit event', () => {
+      comp.course = 'course';
+
+      comp.search();
+
+      expect(comp.searchCourse.emit).toHaveBeenCalledWith(comp.course);
     });
   });
 });

@@ -1,5 +1,12 @@
 <app-header></app-header>
 <app-breadcrumbs></app-breadcrumbs>
-<app-search (searchCourse)="search($event)"></app-search>
-<app-courses-list [filter]="courseName"></app-courses-list>
+<app-search
+  (searchCourse)="searchCourse($event)"
+></app-search>
+<app-courses-list
+  [courses]="courses"
+  (addCourse)="addCourse($event)"
+  (deleteCourse)="deleteCourse($event)"
+  (editCourse)="editCourse($event)"
+></app-courses-list>
 <app-footer></app-footer>

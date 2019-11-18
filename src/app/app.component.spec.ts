@@ -1,6 +1,7 @@
 import { TestBed, async } from '@angular/core/testing';
 import { AppComponent } from './app.component';
-import { Component, Input } from '@angular/core';
+import { Component, Input, NO_ERRORS_SCHEMA } from '@angular/core';
+import { CoursesService } from './services/courses.service';
 
 describe('AppComponent', () => {
   let fixture;
@@ -16,6 +17,9 @@ describe('AppComponent', () => {
         MockCoursesListComponent,
         MockFooterComponent,
       ],
+      schemas: [
+        NO_ERRORS_SCHEMA
+      ],
     }).compileComponents();
   }));
 
@@ -28,17 +32,13 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  it(`should have as title 'angular-video-courses'`, () => {
-    expect(app.title).toEqual('angular-video-courses');
-  });
+  // it(`search(name) should change courseName`, () => {
+  //   app.courseName = '';
 
-  it(`search(name) should change courseName`, () => {
-    app.courseName = '';
+  //   app.search('name');
 
-    app.search('name');
-
-    expect(app.courseName).toEqual('name');
-  });
+  //   expect(app.courseName).toEqual('name');
+  // });
 });
 
 

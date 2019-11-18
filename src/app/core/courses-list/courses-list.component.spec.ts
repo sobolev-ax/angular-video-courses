@@ -1,74 +1,58 @@
 import { CoursesListComponent } from './courses-list.component';
-import { CoursesService } from '../../services/courses.service';
+import { CoursesListItem } from '../../interfaces/courses-list-item';
+import * as moment from 'moment';
 
 describe('CoursesListComponent', () => {
   let comp: CoursesListComponent;
-  let service: CoursesService;
+
+  const course: CoursesListItem = {
+    Id: 0,
+    Title: '',
+    CreationDate: moment(),
+    Duration: moment.duration(),
+    Description: '',
+  };
 
   beforeAll(() => {
-    service = new CoursesService;
-
     console.log = jasmine.createSpy('log');
   });
 
   beforeEach(() => {
-    comp = new CoursesListComponent(service);
+    comp = new CoursesListComponent();
+
+    comp.addCourse.emit = jasmine.createSpy('emit');
+    comp.deleteCourse.emit = jasmine.createSpy('emit');
+    comp.editCourse.emit = jasmine.createSpy('emit');
   });
 
   it('should create', () => {
     expect(comp).toBeTruthy();
   });
 
-  it('ngOnInit() should get courses', () => {
-    expect(comp.courses.length).toBe(0);
-
-    comp.ngOnInit();
-
-    expect(comp.courses.length).toBe(service.getAllCourses().length);
-  });
-
   it('trackByFn() should return id', () => {
     let id: Number;
     const index = 0;
-    const item = { id: 0 };
 
-    id = comp.trackByFn(index, item);
+    id = comp.trackByFn(index, course);
 
-    expect(id).toBe(item.id);
+    expect(id).toBe(course.Id);
   });
 
-  it('ngOnChanges() should update courses', () => {
-    comp.courses = [];
+  it('add() should emit event', () => {
+    comp.add(course);
 
-    comp.ngOnChanges();
-
-    expect(comp.courses.length).toBe(5);
+    expect(comp.addCourse.emit).toHaveBeenCalledWith(course);
   });
 
-  it('ngOnChanges() should filter courses', () => {
-    comp.filter = service.getAllCourses()[0].Title;
+  it('delete() should emit event', () => {
+    comp.delete(course.Id);
 
-    comp.ngOnChanges();
-
-    expect(comp.courses.length).toBe(1);
-    expect(comp.courses[0].Title).toBe(comp.filter);
+    expect(comp.deleteCourse.emit).toHaveBeenCalledWith(course.Id);
   });
 
-  it('addCourse() should call console.log', () => {
-    comp.addCourse();
+  it('edit() should emit event', () => {
+    comp.edit(course.Id);
 
-    expect(console.log).toHaveBeenCalledWith('addCourse');
-  });
-
-  it('deleteCourse() should call console.log', () => {
-    comp.deleteCourse(0);
-
-    expect(console.log).toHaveBeenCalledWith('deleteCourse, id', 0);
-  });
-
-  it('editCourse() should call console.log', () => {
-    comp.editCourse(0);
-
-    expect(console.log).toHaveBeenCalledWith('editCourse, id', 0);
+    expect(comp.editCourse.emit).toHaveBeenCalledWith(course.Id);
   });
 });

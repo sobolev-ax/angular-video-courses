@@ -1,5 +1,4 @@
-import { Component, OnChanges, OnInit, Input } from '@angular/core';
-import { CoursesService } from '../../services/courses.service';
+import { Component, Input, EventEmitter, Output } from '@angular/core';
 import { CoursesListItem } from '../../interfaces/courses-list-item';
 
 @Component({
@@ -7,50 +6,27 @@ import { CoursesListItem } from '../../interfaces/courses-list-item';
   templateUrl: './courses-list.component.html',
   styleUrls: ['./courses-list.component.sass']
 })
-export class CoursesListComponent implements OnInit, OnChanges {
+export class CoursesListComponent {
 
-  public courses: CoursesListItem[] = [];
+  @Input() courses: CoursesListItem[];
 
-  @Input() filter: string;
+  @Output() addCourse = new EventEmitter<CoursesListItem>();
+  @Output() deleteCourse = new EventEmitter<CoursesListItem['Id']>();
+  @Output() editCourse = new EventEmitter<CoursesListItem['Id']>();
 
-  constructor(
-    private coursesService: CoursesService,
-  ) { }
-
-  ngOnInit() {
-    console.log('ngOnInit');
-    this.courses = this.coursesService.getAllCourses();
+  trackByFn(index: Number, item: CoursesListItem): Number {
+    return item.Id;
   }
 
-  trackByFn(index, item): Number {
-    return item.id;
+  add(course: CoursesListItem): void {
+    this.addCourse.emit(course);
   }
 
-  ngOnChanges() {
-    this.courses = this.filterCourses(
-      this.coursesService.getAllCourses(),
-      this.filter
-    );
+  delete(id: CoursesListItem['Id']): void {
+    this.deleteCourse.emit(id);
   }
 
-  addCourse(): void {
-    console.log('addCourse');
+  edit(id: CoursesListItem['Id']): void {
+    this.editCourse.emit(id);
   }
-
-  deleteCourse(id: Number): void {
-    console.log('deleteCourse, id', id);
-  }
-
-  editCourse(id: Number): void {
-    console.log('editCourse, id', id);
-  }
-
-  private filterCourses(courses, filter): CoursesListItem[] {
-    if (filter !== undefined && filter !== '') {
-      return courses
-        .filter(({ Title }) => Title.toUpperCase().indexOf(filter.toUpperCase()) !== -1);
-    }
-    return courses;
-  }
-
 }
