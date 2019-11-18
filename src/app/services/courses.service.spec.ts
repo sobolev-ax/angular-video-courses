@@ -27,18 +27,17 @@ describe('CoursesService', () => {
 
   it('removeCourse() should remove course', () => {
     const removeId = COURSES[0].Id;
-    const newLength = service.removeCourse(removeId).length;
     const decreasedLength = COURSES.length - 1;
 
-    expect(decreasedLength).toBe(newLength);
+    service.removeCourse(removeId);
+
+    expect(service.courses.length).toBe(decreasedLength);
   });
 
-  it('createCourse() should create course', () => {
-    service.createCourse(course);
+  it('addCourse() should insert course as first', () => {
+    service.addCourse(course);
 
-    const lastIndex = service.courses.length - 1;
-
-    expect(service.courses[lastIndex]).toEqual(course);
+    expect(service.courses[0]).toEqual(course);
   });
 
   it('getCourse() should return course by Id', () => {
@@ -47,23 +46,28 @@ describe('CoursesService', () => {
     expect(service.courses[0]).toEqual(course);
   });
 
-  it('filterListCourses() should return filtred courses', () => {
-    const filtred = service.filterListCourses(service.courses, service.courses[0].Title);
+  it('filterListCourses() should return one course', () => {
+    const search = service.courses[0].Title;
 
-    expect(filtred[0]).toEqual(service.courses[0]);
+    const count = service.getFilterListCourses(search).length;
+
+    expect(count).toEqual(1);
   });
 
   it('filterListCourses() should return all courses', () => {
-    const filtred = service.filterListCourses(service.courses, '');
+    const search = '';
 
-    expect(filtred.length).toEqual(service.courses.length);
+    const count = service.getFilterListCourses(search).length;
+
+    expect(count).toEqual(COURSES.length);
   });
 
-  it('updateCourse() should update all items in an course', () => {
+  it('updateCourse() should update course by Id', () => {
     course.Id = 0;
+
     service.updateCourse(course);
 
-    expect(service.courses[0].Title).toBe(course.Title);
+    expect(service.courses[0].Title).toEqual(course.Title);
   });
 });
 

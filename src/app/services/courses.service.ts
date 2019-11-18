@@ -2,11 +2,13 @@ import { Injectable } from '@angular/core';
 import { CoursesListItem } from '../interfaces/courses-list-item';
 
 import { COURSES } from './local-data';
+import { Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CoursesService {
+  readonly courses$: Subject<CoursesListItem[]> = new Subject();
 
   private courses = [...COURSES];
 
@@ -16,27 +18,24 @@ export class CoursesService {
     return this.courses;
   }
 
-  public filterListCourses(courses, filter): CoursesListItem[] {
+  public getFilterListCourses(filter): CoursesListItem[] {
     if (filter !== undefined && filter !== '') {
-      return courses
+      return this.getListCourses()
         .filter(({ Title }) => Title.toUpperCase().indexOf(filter.toUpperCase()) !== -1);
     }
-    return courses;
+    return this.getListCourses();
   }
 
-  public createCourse(course: CoursesListItem): CoursesListItem[] {
-    this.courses.push(course);
-
-    return this.courses;
+  public addCourse(course: CoursesListItem): void {
+    this.courses.unshift(course);
+    this.courses$.next();
   }
 
   public getCourse(id: CoursesListItem['Id']): CoursesListItem {
     return this.courses.find(course => course.Id === id);
   }
 
-  public updateCourse(
-    newCourse: CoursesListItem
-  ): CoursesListItem[] {
+  public updateCourse(newCourse: CoursesListItem): void {
     const course = this.getCourse(newCourse.Id);
 
     course.Title = newCourse.Title;
@@ -45,11 +44,11 @@ export class CoursesService {
     course.Duration = newCourse.Duration;
     course.Description = newCourse.Description;
 
-    return this.courses;
+    this.courses$.next();
   }
 
-  public removeCourse(id: CoursesListItem['Id']): CoursesListItem[] {
+  public removeCourse(id: CoursesListItem['Id']): void {
     this.courses = this.courses.filter(course => course.Id !== id);
-    return this.courses;
+    this.courses$.next();
   }
 }

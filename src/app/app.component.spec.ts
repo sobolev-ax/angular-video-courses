@@ -7,6 +7,8 @@ describe('AppComponent', () => {
   let fixture;
   let app;
 
+  let isConfirmed;
+
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [
@@ -26,19 +28,65 @@ describe('AppComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(AppComponent);
     app = fixture.debugElement.componentInstance;
+
+    window.confirm = jasmine.createSpy('confirm').and.callFake(() => isConfirmed);
+
+    app.coursesService.courses$.subscribe = jasmine.createSpy('subscribe');
+    app.coursesService.addCourse = jasmine.createSpy('addCourse');
+    app.coursesService.updateCourse = jasmine.createSpy('updateCourse');
+    app.coursesService.getFilterListCourses = jasmine.createSpy('getFilterListCourses');
+    app.coursesService.removeCourse = jasmine.createSpy('removeCourse');
+
+    isConfirmed = false;
   });
 
   it('should create the app', () => {
     expect(app).toBeTruthy();
   });
 
-  // it(`search(name) should change courseName`, () => {
-  //   app.courseName = '';
+  it('ngOnInit() should update courses', () => {
+    app.ngOnInit();
 
-  //   app.search('name');
+    expect(app.coursesService.courses$.subscribe).toHaveBeenCalled();
+  });
 
-  //   expect(app.courseName).toEqual('name');
-  // });
+  it('searchCourse() should change filter name', () => {
+    app.courseName = '';
+
+    app.searchCourse('name');
+
+    expect(app.courseName).toBe('name');
+  });
+
+  it('addCourse() should call service', () => {
+    app.addCourse();
+
+    expect(app.coursesService.addCourse).toHaveBeenCalled();
+  });
+
+  it('editCourse() should call service', () => {
+    app.editCourse();
+
+    expect(app.coursesService.updateCourse).toHaveBeenCalled();
+  });
+
+  it('deleteCourse() should nothing delete', () => {
+    const id = 0;
+
+    isConfirmed = false;
+    app.deleteCourse(id);
+
+    expect(app.coursesService.removeCourse).not.toHaveBeenCalled();
+  });
+
+  it('deleteCourse() should call service', () => {
+    const id = 0;
+
+    isConfirmed = true;
+    app.deleteCourse(id);
+
+    expect(app.coursesService.removeCourse).toHaveBeenCalledWith(id);
+  });
 });
 
 
