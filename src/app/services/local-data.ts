@@ -1,6 +1,7 @@
 import { CoursesListItem } from '../interfaces/courses-list-item';
 import { IDates } from '../interfaces/dates';
 import { IDurations } from '../interfaces/durations';
+import { IUser } from '../interfaces/user';
 
 import * as moment from 'moment';
 
@@ -75,4 +76,16 @@ const COURSES: CoursesListItem[] = [
   },
 ];
 
+const USERS: IUser[] = [
+  {
+    email: 'alexandr@mail.com',
+    password: '123AL',
+  },
+  {
+    email: 'erbol@mail.com',
+    password: '123ER',
+  },
+];
+
 export { COURSES };
+export { USERS };

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CoursesService } from './services/courses.service';
+import { AuthService } from './services/auth.service';
 import { CoursesListItem } from './interfaces/courses-list-item';
 import * as moment from 'moment';
 
@@ -14,12 +15,21 @@ export class AppComponent implements OnInit {
 
   private courseName: CoursesListItem['Title'] = '';
 
+  public isAuthenticated: boolean;
+  public isPageLogin: boolean;
+
   constructor(
     private coursesService: CoursesService,
+    private authService: AuthService,
   ) { }
 
   ngOnInit() {
     console.log('AppComponent.ngOnInit()');
+
+    this.isPageLogin = false;
+    this.isAuthenticated = this.authService.isAuthenticated();
+    this.authService.user$.subscribe(this.updateLogin.bind(this));
+
     this.updateCourses();
     this.coursesService.courses$.subscribe(this.updateCourses.bind(this));
   }
@@ -74,5 +84,20 @@ export class AppComponent implements OnInit {
     this.courses = this.coursesService.getFilterListCourses(
       this.courseName
     );
+  }
+
+  public updateLogin(): void {
+    console.log('AppComponent.updateLogin()');
+    this.isAuthenticated = this.authService.isAuthenticated();
+  }
+
+  public logIn(): void {
+    console.log('AppComponent.logIn()');
+    this.isPageLogin = true;
+  }
+
+  public logOf(): void {
+    console.log('AppComponent.logOf()');
+    this.isPageLogin = false;
   }
 }

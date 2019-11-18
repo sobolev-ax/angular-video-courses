@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-header',
@@ -6,4 +6,16 @@ import { Component } from '@angular/core';
   styleUrls: ['./header.component.sass']
 })
 export class HeaderComponent {
+  @Input() isAuth: boolean;
+
+  @Output() logOff = new EventEmitter();
+  @Output() logIn = new EventEmitter();
+
+  off(): void {
+    this.logOff.emit();
+  }
+
+  in(): void {
+    this.logIn.emit();
+  }
 }

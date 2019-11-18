@@ -11,11 +11,11 @@
     </a>
   </div>
   <section class="panel-right">
-    <button class="panel-right-el btn btn-color-parent">
+    <button class="panel-right-el btn btn-color-parent" *ngIf="isAuth === false" (click)="in()">
       <i class="fa btn-ic fa-user"></i>
       User login
     </button>
-    <button class="panel-right-el btn btn-color-parent">
+    <button class="panel-right-el btn btn-color-parent" *ngIf="isAuth === true" (click)="off()">
       <i class="fa btn-ic fa-sign-out"></i>
       Log off
     </button>

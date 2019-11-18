@@ -21,8 +21,11 @@ body
   height: 100%
 
 app-root
-  display: block
-  padding-bottom: 140px
+  display: flex
+  flex-direction: column
+  justify-content: space-between
+  min-height: 100%
+  box-sizing: border-box
 
 body
   --dark-night-color: #2c2f3c
@@ -189,6 +192,16 @@ body
 
 .input-ic-reverse
   transform: scale(-1, 1)
+
+.input-txt-paper
+  padding-left: 1.5rem
+
+.search-input-required
+  color: var(--dirty-snow-color)
+  cursor: default
+
+label
+  cursor: pointer
 
 // Headers
 h3

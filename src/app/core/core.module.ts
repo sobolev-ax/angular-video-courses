@@ -9,6 +9,7 @@ import { SearchComponent } from './search/search.component';
 import { FormsModule } from '@angular/forms';
 import { RelevanceDirective } from './../directives/relevance.directive';
 import { DurationPipe } from './../pipes/duration.pipe';
+import { ModalBoxComponent } from './modal-box/modal-box.component';
 
 
 @NgModule({
@@ -21,6 +22,7 @@ import { DurationPipe } from './../pipes/duration.pipe';
     SearchComponent,
     RelevanceDirective,
     DurationPipe,
+    ModalBoxComponent,
   ],
   exports: [
     CoursesListComponent,
@@ -28,6 +30,7 @@ import { DurationPipe } from './../pipes/duration.pipe';
     FooterComponent,
     BreadcrumbsComponent,
     SearchComponent,
+    ModalBoxComponent,
   ],
   imports: [
     CommonModule,
