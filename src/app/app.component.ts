@@ -10,13 +10,14 @@ import * as moment from 'moment';
   styleUrls: ['./app.component.sass']
 })
 export class AppComponent implements OnInit {
-
   public courses: CoursesListItem[] = [];
 
-  private courseName: CoursesListItem['Title'] = '';
+  private filter = '';
 
   public isAuthenticated: boolean;
+
   public isPageLogin: boolean;
+
 
   constructor(
     private coursesService: CoursesService,
@@ -30,14 +31,16 @@ export class AppComponent implements OnInit {
     this.isAuthenticated = this.authService.isAuthenticated();
     this.authService.user$.subscribe(this.updateLogin.bind(this));
 
-    this.updateCourses();
     this.coursesService.courses$.subscribe(this.updateCourses.bind(this));
+    this.coursesService.init(this.filter);
   }
 
+
   public searchCourse(title: CoursesListItem['Title']): void {
-    console.log('AppComponent.searchCourse(), title:', title);
-    this.courseName = title;
-    this.updateCourses();
+    console.log('AppComponent.searchCourse()');
+
+    this.filter = title;
+    this.coursesService.setFilter(this.filter);
   }
 
   public addCourse(course: CoursesListItem): void {
@@ -68,7 +71,7 @@ export class AppComponent implements OnInit {
   public editCourse(id: CoursesListItem['Id']): void {
     console.log('AppComponent.editCourse()');
 
-    const newCourse: CoursesListItem = {
+    const course: CoursesListItem = {
       Id: 0,
       Title: 'Edited',
       CreationDate: moment(),
@@ -76,14 +79,13 @@ export class AppComponent implements OnInit {
       Description: 'New description'
     };
 
-    this.coursesService.updateCourse(newCourse);
+    this.coursesService.updateCourse(course);
   }
 
-  public updateCourses(): void {
+  public updateCourses(courses: CoursesListItem[]): void {
     console.log('AppComponent.updateCourses()');
-    this.courses = this.coursesService.getFilterListCourses(
-      this.courseName
-    );
+
+    this.courses = [...courses];
   }
 
   public updateLogin(): void {
@@ -93,11 +95,13 @@ export class AppComponent implements OnInit {
 
   public logIn(): void {
     console.log('AppComponent.logIn()');
+
     this.isPageLogin = true;
   }
 
   public logOf(): void {
     console.log('AppComponent.logOf()');
+
     this.isPageLogin = false;
   }
 }

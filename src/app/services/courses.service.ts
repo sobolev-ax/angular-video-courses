@@ -12,43 +12,95 @@ export class CoursesService {
 
   private courses = [...COURSES];
 
-  constructor() { }
+  private filter = '';
 
-  public getListCourses(): CoursesListItem[] {
+
+  @withUpdateCourses
+  public init(filter: string = ''): void {
+    console.log('CoursesService: init()');
+
+    this.filter = filter;
+  }
+
+  @withUpdateCourses
+  public setFilter(filter: string): void {
+    console.log('CoursesService: setFilter()');
+
+    this.filter = filter;
+  }
+
+  @withUpdateCourses
+  public addCourse(course: CoursesListItem): void {
+    console.log('CoursesService: addCourse()');
+
+    this.courses.unshift(course);
+  }
+
+  @withUpdateCourses
+  public removeCourse(id: CoursesListItem['Id']): void {
+    console.log('CoursesService: removeCourse()');
+
+    this.courses = this.courses.filter(course => course.Id !== id);
+  }
+
+  @withUpdateCourses
+  public updateCourse(c: CoursesListItem): void {
+    console.log('CoursesService: updateCourse()');
+
+    const course = this.getCourse(c.Id);
+
+    course.Title = c.Title;
+    course.TopRated = c.TopRated;
+    course.CreationDate = c.CreationDate;
+    course.Duration = c.Duration;
+    course.Description = c.Description;
+  }
+
+
+  private getListCourses(): CoursesListItem[] {
+    console.log('CoursesService: getListCourses()');
+
     return this.courses;
   }
 
-  public getFilterListCourses(filter): CoursesListItem[] {
-    if (filter !== undefined && filter !== '') {
+  private getFilterListCourses(): CoursesListItem[] {
+    console.log('CoursesService: getFilterListCourses()');
+
+    if (this.filter !== '') {
       return this.getListCourses()
-        .filter(({ Title }) => Title.toUpperCase().indexOf(filter.toUpperCase()) !== -1);
+        .filter(({ Title }) => Title.toUpperCase().indexOf(this.filter.toUpperCase()) !== -1);
     }
+
     return this.getListCourses();
   }
 
-  public addCourse(course: CoursesListItem): void {
-    this.courses.unshift(course);
-    this.courses$.next();
+  private getCourse(id: CoursesListItem['Id']): CoursesListItem {
+    console.log('CoursesService: getCourse()');
+
+    const course: CoursesListItem = this.courses.find(course => course.Id === id);
+
+    if (course === undefined) {
+      throw new TypeError(`Cannot find course for this id: ${id}`);
+    }
+
+    return course;
   }
+}
 
-  public getCourse(id: CoursesListItem['Id']): CoursesListItem {
-    return this.courses.find(course => course.Id === id);
-  }
+function withUpdateCourses(
+  target: Object,
+  method: string,
+  descriptor: PropertyDescriptor
+): void {
+  const originalMethod = descriptor.value;
 
-  public updateCourse(newCourse: CoursesListItem): void {
-    const course = this.getCourse(newCourse.Id);
+  descriptor.value = function (...args) {
+    console.log('CoursesService: withUpdateCourses()');
 
-    course.Title = newCourse.Title;
-    course.TopRated = newCourse.TopRated;
-    course.CreationDate = newCourse.CreationDate;
-    course.Duration = newCourse.Duration;
-    course.Description = newCourse.Description;
+    originalMethod.apply(this, args);
 
-    this.courses$.next();
-  }
+    this.courses$.next(this.getFilterListCourses());
 
-  public removeCourse(id: CoursesListItem['Id']): void {
-    this.courses = this.courses.filter(course => course.Id !== id);
-    this.courses$.next();
-  }
+    return this.courses$;
+  };
 }
