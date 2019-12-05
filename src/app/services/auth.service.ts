@@ -9,34 +9,63 @@ import { Subject } from 'rxjs';
 })
 export class AuthService {
 
-  readonly user$ = new Subject();
+  readonly auth$ = new Subject();
 
   private STORAGE_KEY = 'AuthServiceUser';
 
+
+  @withUpdateAuthentication
+  public init(): void {
+    console.log('AuthService: init()');
+  }
+
+  @withUpdateAuthentication
   public toLogin(email: IUser['email'], password: IUser['password']): void {
+    console.log('AuthService: toLogin()');
     const user: IUser = this.getUserInfo(email);
 
     if (!user) return;
     if (user.password !== password) return;
 
     localStorage.setItem(this.STORAGE_KEY, JSON.stringify(user));
-    this.user$.next();
   }
 
+  @withUpdateAuthentication
   public toLogout(): void {
+    console.log('AuthService: toLogout()');
     if (!this.isAuthenticated()) return;
 
     localStorage.removeItem(this.STORAGE_KEY);
-    this.user$.next();
   }
 
   public isAuthenticated(): boolean {
+    console.log('AuthService: isAuthenticated()');
     return !!localStorage.getItem(this.STORAGE_KEY);
   }
 
-  public getUserInfo(email: IUser['email']): IUser {
+
+  private getUserInfo(email: IUser['email']): IUser {
+    console.log('AuthService: getUserInfo()');
     const user: IUser = USERS.find(user => user.email === email);
 
     return user;
   }
+}
+
+function withUpdateAuthentication(
+  target: Object,
+  method: string,
+  descriptor: PropertyDescriptor
+): void {
+  const originalMethod = descriptor.value;
+
+  descriptor.value = function (...args) {
+    console.log('AuthService: withUpdateAuthentication()');
+
+    originalMethod.apply(this, args);
+
+    this.auth$.next(this.isAuthenticated());
+
+    return this.auth$;
+  };
 }

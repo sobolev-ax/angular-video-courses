@@ -78,12 +78,12 @@ const COURSES: CoursesListItem[] = [
 
 const USERS: IUser[] = [
   {
-    email: 'alexandr@mail.com',
-    password: '123AL',
+    email: 'admin',
+    password: 'admin',
   },
   {
-    email: 'erbol@mail.com',
-    password: '123ER',
+    email: 'user',
+    password: 'user',
   },
 ];
 

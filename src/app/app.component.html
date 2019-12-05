@@ -1,23 +1,5 @@
-<app-header
-  (logIn)="logIn()"
-  (logOff)="logOff()"
-  [isAuth]="isAuthenticated"></app-header>
+<app-header></app-header>
 
-<main *ngIf="isPageLogin === false; else login">
-  <app-breadcrumbs></app-breadcrumbs>
-  <app-search
-    (searchCourse)="searchCourse($event)"
-    [course]="filter"
-  ></app-search>
-  <app-courses-list
-    [courses]="courses"
-    (addCourse)="addCourse($event)"
-    (deleteCourse)="deleteCourse($event)"
-    (editCourse)="editCourse($event)"
-  ></app-courses-list>
-</main>
-<ng-template #login>
-  <app-modal-box></app-modal-box>
-</ng-template>
+<router-outlet></router-outlet>
 
 <app-footer></app-footer>

@@ -1,15 +1,16 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Output, EventEmitter } from '@angular/core';
+import { IUser } from 'src/app/interfaces/user';
 
 @Component({
   selector: 'app-modal-box',
   templateUrl: './modal-box.component.html',
   styleUrls: ['./modal-box.component.sass']
 })
-export class ModalBoxComponent implements OnInit {
+export class ModalBoxComponent {
 
-  constructor() { }
+  @Output() logIn = new EventEmitter<IUser>();
 
-  ngOnInit() {
+  enter(email: string, password: string): void {
+    this.logIn.emit({ email, password });
   }
-
 }

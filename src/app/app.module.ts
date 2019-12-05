@@ -1,12 +1,11 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { Routes, RouterModule } from '@angular/router';
 
 import { AppComponent } from './app.component';
 import { FormsModule } from '@angular/forms';
 
 
-import { CommonModule } from '@angular/common';
 import { CoursesListComponent } from './components/courses-list/courses-list.component';
 import { CoursesListItemComponent } from './components/courses-list-item/courses-list-item.component';
 import { HeaderComponent } from './components/header/header.component';
@@ -18,6 +17,19 @@ import { RelevanceDirective } from './directives/relevance.directive';
 import { DurationPipe } from './pipes/duration.pipe';
 import { ModalBoxComponent } from './components/modal-box/modal-box.component';
 
+import { CoursesPageComponent } from './pages/courses/courses.page';
+import { LoginPageComponent } from './pages/login/login.page';
+
+import { CoursesGuard } from './pages/courses/courses.guard';
+
+import { CoursesService } from './services/courses.service';
+import { AuthService } from './services/auth.service';
+
+const appRoutes: Routes = [
+  { path: '', redirectTo: 'courses', pathMatch:'full' },
+  { path: 'courses', component: CoursesPageComponent, canActivate: [CoursesGuard] },
+  { path: 'login', component: LoginPageComponent },
+];
 
 @NgModule({
   declarations: [
@@ -31,6 +43,8 @@ import { ModalBoxComponent } from './components/modal-box/modal-box.component';
     RelevanceDirective,
     DurationPipe,
     ModalBoxComponent,
+    CoursesPageComponent,
+    LoginPageComponent,
   ],
   exports: [
     CoursesListComponent,
@@ -41,11 +55,15 @@ import { ModalBoxComponent } from './components/modal-box/modal-box.component';
     ModalBoxComponent,
   ],
   imports: [
-    CommonModule,
     FormsModule,
     BrowserModule,
+    RouterModule.forRoot(appRoutes),
   ],
-  providers: [],
+  providers: [
+    CoursesService,
+    AuthService,
+    CoursesGuard,
+  ],
   bootstrap: [AppComponent]
 })
 

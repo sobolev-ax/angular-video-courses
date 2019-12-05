@@ -5,7 +5,6 @@
     </h3>
   </div>
   <div class="item search-input-wrap">
-    <!-- (keyup.enter) = "search()"    [(ngModel)] = "course" -->
     <div class="item-inner">
       <label for="email">E-mail:</label>
       <span class="search-input-required">*required</span>
@@ -15,10 +14,10 @@
       class="input-txt input-txt-paper"
       placeholder="Enter e-mail"
       id="email"
+      [(ngModel)]="email"
     />
   </div>
   <div class="item search-input-wrap">
-      <!-- (keyup.enter) = "search()"    [(ngModel)] = "course" -->
       <div class="item-inner">
         <label for="password">Password:</label>
         <span class="search-input-required">*required</span>
@@ -28,54 +27,16 @@
         class="input-txt input-txt-paper"
         placeholder="Enter password"
         id="password"
+        [(ngModel)]="password"
       />
   </div>
   <div class="item search-input-wrap">
       <div class="item-inner">
-        <a href="#">Forgot password?</a>
+        <a routerLink="/login">Forgot password?</a>
         <button
+          (click)="enter(email, password)"
           class="btn btn-text btn-color-a"
         >Login</button>
       </div>
   </div>
-  <!-- <div class="item-main">
-    <div class="item-main-header">
-      <h3>{{item.Title | uppercase}}
-        <i *ngIf="item.TopRated" class="fa btn-ic fa-star"></i>
-      </h3>
-      <div class="item-main-header-meta">
-        <span class="btn btn-not btn-color-b">
-          <i class="fa btn-ic fa-clock-o"></i>
-          {{item.Duration | duration}}
-        </span>
-        <span class="btn btn-not btn-color-b">
-          <i class="fa btn-ic fa-calendar"></i>
-          {{item.CreationDate | date: 'd LLL, yyyy'}}
-        </span>
-      </div>
-    </div>
-    <p class="item-main-description">
-      {{item.Description}}
-    </p>
-  </div>
-
-  <div class="item-control">
-    <button
-      id="item-control-el-edit"
-      class="btn item-control-el"
-      (click)="edit()"
-    >
-      <i class="fa btn-ic fa-pencil"></i>
-      Edit
-    </button>
-    <button
-      id="item-control-el-delete"
-      class="btn item-control-el"
-      (click)="delete()"
-    >
-      <i class="fa btn-ic fa-trash"></i>
-      Delete
-    </button>
-  </div> -->
-
 </section>

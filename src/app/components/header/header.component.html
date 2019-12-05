@@ -1,6 +1,6 @@
 <header class="row panel">
   <div class="container">
-    <a href="/" title="Go to main page" class="header-logo">
+    <a routerLink="" title="Go to main page" class="header-logo">
       <img src="./assets/logo.png"
            srcset="./assets/logo@2x.png 2x,
                  ./assets/logo@3x.png 3x"
@@ -11,11 +11,15 @@
     </a>
   </div>
   <section class="panel-right">
-    <button class="panel-right-el btn btn-color-parent" *ngIf="isAuth === false" (click)="in()">
+    <button *ngIf="isAuth === false" style="pointer-events: none;"
+      routerLink="login"
+      class="panel-right-el btn btn-color-parent">
       <i class="fa btn-ic fa-user"></i>
-      User login
+      Log in
     </button>
-    <button class="panel-right-el btn btn-color-parent" *ngIf="isAuth === true" (click)="off()">
+    <button *ngIf="isAuth === true"
+      class="panel-right-el btn btn-color-parent"
+      (click)="logOut()">
       <i class="fa btn-ic fa-sign-out"></i>
       Log off
     </button>
