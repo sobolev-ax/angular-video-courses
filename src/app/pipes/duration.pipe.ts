@@ -6,9 +6,19 @@ import * as moment from 'moment';
 })
 export class DurationPipe implements PipeTransform {
 
-  transform(duration: moment.Duration): string {
-    const h = duration.hours() ? `${duration.hours()}h ` : '';
-    const m = `${duration.minutes()}m`;
+  transform(duration: moment.Duration | string): string {
+    let self: moment.Duration;
+
+    if (typeof duration === 'number') {
+      self = moment.duration(duration, 'minutes');
+    } else {
+      self = moment.duration(duration);
+    }
+    console.log(typeof duration);
+
+
+    const h = self.hours() ? `${self.hours()}h ` : '';
+    const m = `${self.minutes()}m`;
     return h + m;
   }
 

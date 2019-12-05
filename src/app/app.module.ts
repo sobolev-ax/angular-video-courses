@@ -24,10 +24,12 @@ import { CoursesGuard } from './pages/courses/courses.guard';
 
 import { CoursesService } from './services/courses.service';
 import { AuthService } from './services/auth.service';
+import { EditPageComponent } from './pages/edit/edit.page';
 
 const appRoutes: Routes = [
   { path: '', redirectTo: 'courses', pathMatch:'full' },
   { path: 'courses', component: CoursesPageComponent, canActivate: [CoursesGuard] },
+  { path: 'edit', component: EditPageComponent },
   { path: 'login', component: LoginPageComponent },
 ];
 
@@ -45,6 +47,7 @@ const appRoutes: Routes = [
     ModalBoxComponent,
     CoursesPageComponent,
     LoginPageComponent,
+    EditPageComponent,
   ],
   exports: [
     CoursesListComponent,

@@ -150,18 +150,6 @@ router-outlet
   margin-right: unset
 
 // Inputs
-.search-input-wrap
-  position: relative
-  width: 100%
-  display: inline-block
-  font-size: 1.286rem
-  line-height: 2.56rem
-  font-weight: normal
-  font-stretch: normal
-  font-style: normal
-  letter-spacing: normal
-  color: var(--good-night-color)
-
 .input-txt
   box-sizing: border-box
   display: inline-block
@@ -199,12 +187,51 @@ router-outlet
 .input-txt-paper
   padding-left: 1.5rem
 
-.search-input-required
+.input-required
   color: var(--dirty-snow-color)
   cursor: default
 
 label
   cursor: pointer
+
+.modal
+  display: inline-block
+  margin: 0 auto
+  text-align: left
+.item
+  margin-bottom: 1.5rem
+.item:last-child
+  margin-bottom: unset
+.item-inner
+  display: flex
+  justify-content: space-between
+  align-items: center
+  margin-bottom: .1rem
+
+.input-wrap
+  position: relative
+  width: 100%
+  display: inline-block
+  font-size: 1.286rem
+  line-height: 2.56rem
+  font-weight: normal
+  font-stretch: normal
+  font-style: normal
+  letter-spacing: normal
+  color: var(--good-night-color)
+
+.input-inner--left
+  justify-content: flex-start
+
+.input-inner--right
+  justify-content: flex-end
+
+.input-inner-el
+  width: auto
+  margin-right: 1rem
+
+.input-inner-el:last-child
+  margin-right: unset
 
 // Headers
 h3
