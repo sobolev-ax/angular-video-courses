@@ -7,6 +7,8 @@ import { IUser } from 'src/app/interfaces/user';
   styleUrls: ['./modal-box.component.sass']
 })
 export class ModalBoxComponent {
+  public email: string;
+  public password: string;
 
   @Output() logIn = new EventEmitter<IUser>();
 

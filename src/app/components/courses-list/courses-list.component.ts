@@ -1,10 +1,11 @@
-import { Component, Input, EventEmitter, Output } from '@angular/core';
+import { Component, Input, EventEmitter, Output, ChangeDetectionStrategy } from '@angular/core';
 import { CoursesListItem } from '../../interfaces/courses-list-item';
 
 @Component({
   selector: 'app-courses-list',
   templateUrl: './courses-list.component.html',
-  styleUrls: ['./courses-list.component.sass']
+  styleUrls: ['./courses-list.component.sass'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CoursesListComponent {
 
@@ -18,8 +19,8 @@ export class CoursesListComponent {
     return item.Id;
   }
 
-  add(course: CoursesListItem): void {
-    this.addCourse.emit(course);
+  add(): void {
+    this.addCourse.emit();
   }
 
   delete(id: CoursesListItem['Id']): void {

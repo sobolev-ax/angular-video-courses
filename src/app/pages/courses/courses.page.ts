@@ -12,7 +12,7 @@ export class CoursesPageComponent implements OnInit {
 
   public courses: CoursesListItem[] = [];
 
-  private filter = '';
+  public filter = '';
 
 
   constructor(
