@@ -14,11 +14,10 @@ export class DurationPipe implements PipeTransform {
     } else {
       self = moment.duration(duration);
     }
-    console.log(typeof duration);
-
 
     const h = self.hours() ? `${self.hours()}h ` : '';
     const m = `${self.minutes()}m`;
+
     return h + m;
   }
 

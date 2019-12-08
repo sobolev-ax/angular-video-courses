@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-header',
@@ -26,17 +26,15 @@ export class HeaderComponent implements OnInit {
   }
 
   public logOut(): void {
-    this.authService.toLogout();
+    const isLogout = this.authService.toLogout();
+
+    if (isLogout) {
+      this.router.navigate(['login']);
+    }
   }
 
 
   private updateAuth(logged: boolean): void {
     this.isAuth = logged;
-
-    if (this.isAuth) {
-      this.router.navigate(['']);
-    } else {
-      this.router.navigate(['/login']);
-    }
   }
 }

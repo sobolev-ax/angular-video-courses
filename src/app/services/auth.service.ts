@@ -20,22 +20,26 @@ export class AuthService {
   }
 
   @withUpdateAuthentication
-  public toLogin(email: IUser['email'], password: IUser['password']): void {
+  public toLogin(email: IUser['email'], password: IUser['password']): boolean {
     console.log('AuthService: toLogin()');
     const user: IUser = this.getUserInfo(email);
 
-    if (!user) return;
-    if (user.password !== password) return;
+    if (!user) return false;
+    if (user.password !== password) return false;
 
     localStorage.setItem(this.STORAGE_KEY, JSON.stringify(user));
+
+    return true;
   }
 
   @withUpdateAuthentication
-  public toLogout(): void {
+  public toLogout(): boolean {
     console.log('AuthService: toLogout()');
-    if (!this.isAuthenticated()) return;
+    if (!this.isAuthenticated()) return false;
 
     localStorage.removeItem(this.STORAGE_KEY);
+
+    return true;
   }
 
   public isAuthenticated(): boolean {

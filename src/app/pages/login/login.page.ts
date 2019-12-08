@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AuthService } from 'src/app/services/auth.service';
 import { IUser } from 'src/app/interfaces/user';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -8,13 +9,23 @@ import { IUser } from 'src/app/interfaces/user';
   templateUrl: './login.page.html',
   styleUrls: ['./login.page.sass']
 })
-export class LoginPageComponent {
+export class LoginPageComponent implements OnInit {
 
   constructor(
     private authService: AuthService,
+    private router: Router,
   ) { }
 
+  ngOnInit() {
+    if (!this.authService.isAuthenticated()) return;
+    this.router.navigate(['']);
+  }
+
   logIn(event: IUser): void {
-    this.authService.toLogin(event.email, event.password);
+    const isLogin: boolean = this.authService.toLogin(event.email, event.password);
+
+    if (isLogin) {
+      this.router.navigate(['']);
+    }
   }
 }
