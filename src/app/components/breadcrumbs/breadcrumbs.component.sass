@@ -1,4 +1,5 @@
 .breadcrumb
+  display: inline
   cursor: default
   font-size: 1rem
   font-weight: 600
@@ -7,3 +8,16 @@
   line-height: 1.71rem
   letter-spacing: normal
   color: var(--dark-night-color)
+
+.breadcrumb:after
+  display: inline
+  content: ' / '
+
+.breadcrumb:last-child:after
+  display: none
+
+.breadcrumb-inner[routerLink]
+  cursor: pointer
+
+.breadcrumb-inner[routerLink]:hover
+  opacity: .8

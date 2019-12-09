@@ -3,6 +3,8 @@ import { IUser } from 'src/app/interfaces/user';
 import { DurationPipe } from 'src/app/pipes/duration.pipe';
 
 import * as moment from 'moment';
+import { ActivatedRoute } from '@angular/router';
+import { CoursesService } from 'src/app/services/courses.service';
 
 @Component({
   selector: 'app-edit-page',
@@ -16,7 +18,18 @@ export class EditPageComponent {
   public date: string;
   public authors: string;
 
+  public crumbs: string[] = ['courses'];
+
   public durationMoment = moment;
+
+  constructor(
+    private activateRoute: ActivatedRoute,
+    private coursesService: CoursesService,
+  ) {
+    activateRoute.params.subscribe(
+      params => this.crumbs[1] = coursesService.getCourse(Number(params['id'])).Title
+    );
+  }
 
   get elDuration() {
     return this.duration.asMinutes();

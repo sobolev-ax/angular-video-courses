@@ -56,6 +56,18 @@ export class CoursesService {
     course.Description = c.Description;
   }
 
+  public getCourse(id: CoursesListItem['Id']): CoursesListItem {
+    console.log('CoursesService: getCourse()');
+
+    const course: CoursesListItem = this.courses.find(course => course.Id === id);
+
+    if (course === undefined) {
+      throw new TypeError(`Cannot find course for this id: ${id}`);
+    }
+
+    return course;
+  }
+
 
   private getListCourses(): CoursesListItem[] {
     console.log('CoursesService: getListCourses()');
@@ -72,18 +84,6 @@ export class CoursesService {
     }
 
     return this.getListCourses();
-  }
-
-  private getCourse(id: CoursesListItem['Id']): CoursesListItem {
-    console.log('CoursesService: getCourse()');
-
-    const course: CoursesListItem = this.courses.find(course => course.Id === id);
-
-    if (course === undefined) {
-      throw new TypeError(`Cannot find course for this id: ${id}`);
-    }
-
-    return course;
   }
 }
 

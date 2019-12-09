@@ -1,5 +1,7 @@
 <main>
-    <app-breadcrumbs></app-breadcrumbs>
+    <app-breadcrumbs
+      [crumbs]="['courses']"
+    ></app-breadcrumbs>
     <app-search
       (searchCourse)="searchCourse($event)"
       [course]="filter"

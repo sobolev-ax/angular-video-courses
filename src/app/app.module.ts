@@ -19,18 +19,38 @@ import { ModalBoxComponent } from './components/modal-box/modal-box.component';
 
 import { CoursesPageComponent } from './pages/courses/courses.page';
 import { LoginPageComponent } from './pages/login/login.page';
+import { EditPageComponent } from './pages/edit/edit.page';
+import { NotfoundPageComponent } from './pages/notfound/notfound.page';
 
 import { CoursesGuard } from './pages/courses/courses.guard';
 
 import { CoursesService } from './services/courses.service';
 import { AuthService } from './services/auth.service';
-import { EditPageComponent } from './pages/edit/edit.page';
 
 const appRoutes: Routes = [
   { path: '', redirectTo: 'courses', pathMatch:'full' },
-  { path: 'courses', component: CoursesPageComponent, canActivate: [CoursesGuard] },
-  { path: 'edit', component: EditPageComponent, canActivate: [CoursesGuard] },
+  {
+    path: 'courses',
+    pathMatch:'full',
+    component: CoursesPageComponent,
+    canActivate: [CoursesGuard],
+  },
+  {
+    path: 'new',
+    component: EditPageComponent,
+    canActivate: [CoursesGuard],
+  },
+  {
+    path: 'courses/:id',
+    pathMatch:'full',
+    component: EditPageComponent,
+    canActivate: [CoursesGuard],
+  },
   { path: 'login', component: LoginPageComponent },
+  {
+    path: '**',
+    component: NotfoundPageComponent,
+  },
 ];
 
 @NgModule({
@@ -48,6 +68,7 @@ const appRoutes: Routes = [
     CoursesPageComponent,
     LoginPageComponent,
     EditPageComponent,
+    NotfoundPageComponent,
   ],
   exports: [
     CoursesListComponent,

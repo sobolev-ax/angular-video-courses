@@ -1,5 +1,17 @@
 <section class="row panel panel-color-a">
   <div class="container">
-    <span class="breadcrumb">Courses</span>
+  <ul>
+    <li *ngFor="let crumb of crumbs; trackBy: trackByFn; let i = index" class="breadcrumb">
+
+      <span *ngIf="crumbs.length > 1 && i === 0; else unset" class="breadcrumb-inner"
+          routerLink="">
+        {{crumb}}
+      </span>
+      <ng-template #unset>
+          <span class="breadcrumb-inner">{{ crumb }}</span>
+      </ng-template> 
+
+    </li>
+  </ul>
   </div>
 </section>

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CoursesService } from '../../services/courses.service';
 import { CoursesListItem } from '../../interfaces/courses-list-item';
-import * as moment from 'moment';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-courses-page',
@@ -17,6 +17,7 @@ export class CoursesPageComponent implements OnInit {
 
   constructor(
     private coursesService: CoursesService,
+    private router: Router,
   ) { }
 
 
@@ -38,15 +39,16 @@ export class CoursesPageComponent implements OnInit {
   public addCourse(course: CoursesListItem): void {
     console.log('CoursesPageComponent.addCourse()');
 
-    const newCourse: CoursesListItem = {
-      Id: 100,
-      Title: 'New Course',
-      CreationDate: moment(),
-      Duration: moment.duration(),
-      Description: 'New description'
-    };
+    this.router.navigate(['new']);
+    // const newCourse: CoursesListItem = {
+    //   Id: 100,
+    //   Title: 'New Course',
+    //   CreationDate: moment(),
+    //   Duration: moment.duration(),
+    //   Description: 'New description'
+    // };
 
-    this.coursesService.addCourse(newCourse);
+    // this.coursesService.addCourse(newCourse);
   }
 
   public deleteCourse(id: CoursesListItem['Id']): void {
@@ -63,15 +65,17 @@ export class CoursesPageComponent implements OnInit {
   public editCourse(id: CoursesListItem['Id']): void {
     console.log('CoursesPageComponent.editCourse()');
 
-    const course: CoursesListItem = {
-      Id: 0,
-      Title: 'Edited',
-      CreationDate: moment(),
-      Duration: moment.duration(),
-      Description: 'New description'
-    };
+    this.router.navigate([`courses/${id}`]);
 
-    this.coursesService.updateCourse(course);
+    // const course: CoursesListItem = {
+    //   Id: 0,
+    //   Title: 'Edited',
+    //   CreationDate: moment(),
+    //   Duration: moment.duration(),
+    //   Description: 'New description'
+    // };
+
+    // this.coursesService.updateCourse(course);
   }
 
   public updateCourses(courses: CoursesListItem[]): void {
