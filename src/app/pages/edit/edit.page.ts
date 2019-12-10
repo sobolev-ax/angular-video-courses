@@ -1,17 +1,18 @@
-import { Component, Output, EventEmitter } from '@angular/core';
+import { Component, Output, EventEmitter, OnInit, OnDestroy } from '@angular/core';
 import { IUser } from 'src/app/interfaces/user';
 import { DurationPipe } from 'src/app/pipes/duration.pipe';
 
 import * as moment from 'moment';
 import { ActivatedRoute } from '@angular/router';
 import { CoursesService } from 'src/app/services/courses.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-edit-page',
   templateUrl: './edit.page.html',
   styleUrls: ['./edit.page.sass']
 })
-export class EditPageComponent {
+export class EditPageComponent implements OnInit, OnDestroy {
   public duration: moment.Duration = moment.duration(100, 'minutes');
   public description: string;
   public title: string;
@@ -22,13 +23,25 @@ export class EditPageComponent {
 
   public durationMoment = moment;
 
+  private updateSubscription: Subscription;
+
   constructor(
     private activateRoute: ActivatedRoute,
     private coursesService: CoursesService,
-  ) {
-    activateRoute.params.subscribe(
-      params => this.crumbs[1] = coursesService.getCourse(Number(params['id'])).Title
+  ) { }
+
+  ngOnInit() {
+    console.log('EditPageComponent.ngOnInit()');
+
+    this.updateSubscription = this.activateRoute.params.subscribe(
+      params => this.crumbs[1] = this.coursesService.getCourse(Number(params['id'])).Title
     );
+  }
+
+  ngOnDestroy() {
+    console.log('EditPageComponent.ngOnDestroy()');
+
+    this.updateSubscription.unsubscribe();
   }
 
   get elDuration() {

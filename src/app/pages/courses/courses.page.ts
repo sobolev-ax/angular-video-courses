@@ -1,18 +1,21 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CoursesService } from '../../services/courses.service';
 import { CoursesListItem } from '../../interfaces/courses-list-item';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-courses-page',
   templateUrl: './courses.page.html',
   styleUrls: ['./courses.page.sass']
 })
-export class CoursesPageComponent implements OnInit {
+export class CoursesPageComponent implements OnInit, OnDestroy {
 
   public courses: CoursesListItem[] = [];
 
   public filter = '';
+
+  private updateSubscription: Subscription;
 
 
   constructor(
@@ -24,8 +27,14 @@ export class CoursesPageComponent implements OnInit {
   ngOnInit() {
     console.log('CoursesPageComponent.ngOnInit()');
 
-    this.coursesService.courses$.subscribe(this.updateCourses.bind(this));
+    this.updateSubscription = this.coursesService.courses$.subscribe(this.updateCourses.bind(this));
     this.coursesService.init(this.filter);
+  }
+
+  ngOnDestroy() {
+    console.log('CoursesPageComponent.ngOnDestroy()');
+
+    this.updateSubscription.unsubscribe();
   }
 
 
