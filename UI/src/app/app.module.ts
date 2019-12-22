@@ -4,6 +4,7 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { AppComponent } from './app.component';
 import { FormsModule } from '@angular/forms';
+import { HttpClientModule }   from '@angular/common/http';
 
 
 import { CoursesListComponent } from './components/courses-list/courses-list.component';
@@ -82,6 +83,7 @@ const appRoutes: Routes = [
     FormsModule,
     BrowserModule,
     RouterModule.forRoot(appRoutes),
+    HttpClientModule,
   ],
   providers: [
     CoursesService,

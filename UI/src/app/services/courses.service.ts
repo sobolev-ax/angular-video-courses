@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { CoursesListItem } from '../interfaces/courses-list-item';
 
 import { COURSES } from './local-data';
 import { Subject } from 'rxjs';
+import * as moment from 'moment';
 
 @Injectable({
   providedIn: 'root'
@@ -10,9 +12,15 @@ import { Subject } from 'rxjs';
 export class CoursesService {
   readonly courses$: Subject<CoursesListItem[]> = new Subject();
 
-  private courses = [...COURSES];
+  private isLocalData = false;
+
+  private courses = this.isLocalData ? [...COURSES] : [];
 
   private filter = '';
+  private BASE_URL = 'http://localhost:3004';
+
+
+  constructor(private http: HttpClient) { }
 
 
   @withUpdateCourses
@@ -72,7 +80,28 @@ export class CoursesService {
   private getListCourses(): CoursesListItem[] {
     console.log('CoursesService: getListCourses()');
 
+    this.http.get<CoursesListItem[]>(`${this.BASE_URL}/courses`).subscribe(this.transformToListCourses.bind(this));
+    console.log(this.courses);
     return this.courses;
+  }
+
+  private transformToListCourses(courses): CoursesListItem[] {
+    console.log('CoursesService: transformToListCourses()');
+
+    this.courses = courses.map(this.createCourseItem.bind(this));
+
+    return this.courses;
+  }
+
+  private createCourseItem(item): CoursesListItem {
+    return {
+      Id: item.id,
+      Title: item.name,
+      TopRated: item.isTopRated,
+      CreationDate: moment(item.date),
+      Duration: moment.duration(item.length),
+      Description: item.description,
+    };
   }
 
   private getFilterListCourses(): CoursesListItem[] {
