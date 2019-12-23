@@ -1,8 +1,9 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CoursesService } from '../../services/courses.service';
 import { CoursesListItem } from '../../interfaces/courses-list-item';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { CoursesLoad } from 'src/app/interfaces/courses-load';
 
 @Component({
   selector: 'app-courses-page',
@@ -14,13 +15,23 @@ export class CoursesPageComponent implements OnInit, OnDestroy {
   public courses: CoursesListItem[] = [];
 
   public filter = '';
+  public isLocalCourses = false;
 
   private updateSubscription: Subscription;
+
+  private routeSubscription: Subscription;
+
+  private coursesLoad: CoursesLoad = {
+    Start: 0,
+    Step: 5,
+    Count: 0,
+  };
 
 
   constructor(
     private coursesService: CoursesService,
     private router: Router,
+    private activateRoute: ActivatedRoute,
   ) { }
 
 
@@ -28,13 +39,16 @@ export class CoursesPageComponent implements OnInit, OnDestroy {
     console.log('CoursesPageComponent.ngOnInit()');
 
     this.updateSubscription = this.coursesService.courses$.subscribe(this.updateCourses.bind(this));
-    this.coursesService.init(this.filter);
+    this.routeSubscription = this.activateRoute.queryParams.subscribe(this.updateRoute.bind(this));
+
+    this.coursesService.init(this.filter, this.isLocalCourses);
   }
 
   ngOnDestroy() {
     console.log('CoursesPageComponent.ngOnDestroy()');
 
     this.updateSubscription.unsubscribe();
+    this.routeSubscription.unsubscribe();
   }
 
 
@@ -91,5 +105,21 @@ export class CoursesPageComponent implements OnInit, OnDestroy {
     console.log('CoursesPageComponent.updateCourses()');
 
     this.courses = [...courses];
+  }
+
+  public updateRoute(params: Params): void {
+    console.log('CoursesPageComponent.updateRoute()');
+
+    this.coursesLoad.Count = this.coursesLoad.Count + this.coursesLoad.Step;
+
+    // this.router.navigate(
+    //   [''],
+    //   {
+    //     queryParams:{
+    //       start: this.coursesLoad.Start,
+    //       count: this.coursesLoad.Count,
+    //     }
+    //   }
+    // );
   }
 }

@@ -5,30 +5,47 @@ import { CoursesListItem } from '../interfaces/courses-list-item';
 import { COURSES } from './local-data';
 import { Subject } from 'rxjs';
 import * as moment from 'moment';
+import { CoursesLoad } from '../interfaces/courses-load';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CoursesService {
+
   readonly courses$: Subject<CoursesListItem[]> = new Subject();
 
-  private isLocalData = false;
+  private courses = [];
 
-  private courses = this.isLocalData ? [...COURSES] : [];
+  private isLocalCourses: boolean;
 
   private filter = '';
+
   private BASE_URL = 'http://localhost:3004';
 
+  private start: number;
+  private count: number;
 
-  constructor(private http: HttpClient) { }
+  private CoursesLoad: CoursesLoad = {
+    Start: 0,
+    Step: 5,
+    Count: 0,
+  };
 
 
-  @withUpdateCourses
-  public init(filter: string = ''): void {
+  constructor(
+    private http: HttpClient,
+  ) { }
+
+
+  public init(filter: string = '', isLocalCourses: boolean = false): void {
     console.log('CoursesService: init()');
 
     this.filter = filter;
+    this.isLocalCourses = isLocalCourses;
+
+    this.updateCourses(true);
   }
+
 
   @withUpdateCourses
   public setFilter(filter: string): void {
@@ -37,6 +54,7 @@ export class CoursesService {
     this.filter = filter;
   }
 
+
   @withUpdateCourses
   public addCourse(course: CoursesListItem): void {
     console.log('CoursesService: addCourse()');
@@ -44,12 +62,14 @@ export class CoursesService {
     this.courses.unshift(course);
   }
 
+
   @withUpdateCourses
   public removeCourse(id: CoursesListItem['Id']): void {
     console.log('CoursesService: removeCourse()');
 
     this.courses = this.courses.filter(course => course.Id !== id);
   }
+
 
   @withUpdateCourses
   public updateCourse(c: CoursesListItem): void {
@@ -77,14 +97,6 @@ export class CoursesService {
   }
 
 
-  private getListCourses(): CoursesListItem[] {
-    console.log('CoursesService: getListCourses()');
-
-    this.http.get<CoursesListItem[]>(`${this.BASE_URL}/courses`).subscribe(this.transformToListCourses.bind(this));
-    console.log(this.courses);
-    return this.courses;
-  }
-
   private transformToListCourses(courses): CoursesListItem[] {
     console.log('CoursesService: transformToListCourses()');
 
@@ -93,28 +105,56 @@ export class CoursesService {
     return this.courses;
   }
 
+
   private createCourseItem(item): CoursesListItem {
     return {
       Id: item.id,
       Title: item.name,
       TopRated: item.isTopRated,
       CreationDate: moment(item.date),
-      Duration: moment.duration(item.length),
+      Duration: moment.duration(item.length, 'minutes'),
       Description: item.description,
     };
   }
 
-  private getFilterListCourses(): CoursesListItem[] {
+
+  private async getListCourses(isFirstInit: boolean = false): Promise<CoursesListItem[]> {
+    console.log('CoursesService: getListCourses()');
+
+    return await new Promise((resolve, reject) => {
+      if (this.isLocalCourses) {
+        const courses = isFirstInit ? [...COURSES] : this.courses;
+
+        setTimeout(() => resolve(courses), 750);
+      } else {
+        this.http.get<CoursesListItem[]>(`${this.BASE_URL}/courses`).subscribe((courses) => {
+          resolve(this.transformToListCourses(courses));
+        });
+      }
+    });
+  }
+
+
+  private getFilterListCourses(courses: CoursesListItem[]): CoursesListItem[] {
     console.log('CoursesService: getFilterListCourses()');
 
     if (this.filter !== '') {
-      return this.getListCourses()
-        .filter(({ Title }) => Title.toUpperCase().indexOf(this.filter.toUpperCase()) !== -1);
+      return courses.filter(({ Title }) => Title.toUpperCase().indexOf(this.filter.toUpperCase()) !== -1);
     }
 
-    return this.getListCourses();
+    return courses;
+  }
+
+
+  private updateCourses(isFirstInit: boolean = false): void {
+    this.getListCourses(isFirstInit)
+      .then((courses) => {
+        this.courses = courses;
+        this.courses$.next(this.getFilterListCourses(courses));
+      });
   }
 }
+
 
 function withUpdateCourses(
   target: Object,
@@ -128,7 +168,7 @@ function withUpdateCourses(
 
     originalMethod.apply(this, args);
 
-    this.courses$.next(this.getFilterListCourses());
+    this.updateCourses();
 
     return this.courses$;
   };
