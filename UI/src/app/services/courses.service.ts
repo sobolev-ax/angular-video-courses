@@ -13,6 +13,7 @@ import { CoursesLoad } from '../interfaces/courses-load';
 export class CoursesService {
 
   readonly courses$: Subject<CoursesListItem[]> = new Subject();
+  readonly route$: Subject<CoursesLoad> = new Subject();
 
   private courses = [];
 
@@ -25,10 +26,10 @@ export class CoursesService {
   private start: number;
   private count: number;
 
-  private CoursesLoad: CoursesLoad = {
+  private coursesLoad: CoursesLoad = {
     Start: 0,
     Step: 5,
-    Count: 0,
+    Count: 10,
   };
 
 
@@ -38,8 +39,6 @@ export class CoursesService {
 
 
   public init(filter: string = '', isLocalCourses: boolean = false): void {
-    console.log('CoursesService: init()');
-
     this.filter = filter;
     this.isLocalCourses = isLocalCourses;
 
@@ -49,32 +48,24 @@ export class CoursesService {
 
   @withUpdateCourses
   public setFilter(filter: string): void {
-    console.log('CoursesService: setFilter()');
-
     this.filter = filter;
   }
 
 
   @withUpdateCourses
   public addCourse(course: CoursesListItem): void {
-    console.log('CoursesService: addCourse()');
-
     this.courses.unshift(course);
   }
 
 
   @withUpdateCourses
   public removeCourse(id: CoursesListItem['Id']): void {
-    console.log('CoursesService: removeCourse()');
-
     this.courses = this.courses.filter(course => course.Id !== id);
   }
 
 
   @withUpdateCourses
   public updateCourse(c: CoursesListItem): void {
-    console.log('CoursesService: updateCourse()');
-
     const course = this.getCourse(c.Id);
 
     course.Title = c.Title;
@@ -85,9 +76,13 @@ export class CoursesService {
   }
 
   public getCourse(id: CoursesListItem['Id']): CoursesListItem {
-    console.log('CoursesService: getCourse()');
+    let course: CoursesListItem;
 
-    const course: CoursesListItem = this.courses.find(course => course.Id === id);
+    if (true) {
+      course = this.createCourseItem(this.http.get<CoursesListItem[]>(`${this.BASE_URL}/courses/2`));
+    } else {
+      course = this.courses.find(course => course.Id === id);
+    }
 
     if (course === undefined) {
       throw new TypeError(`Cannot find course for this id: ${id}`);
@@ -98,8 +93,6 @@ export class CoursesService {
 
 
   private transformToListCourses(courses): CoursesListItem[] {
-    console.log('CoursesService: transformToListCourses()');
-
     this.courses = courses.map(this.createCourseItem.bind(this));
 
     return this.courses;
@@ -119,15 +112,13 @@ export class CoursesService {
 
 
   private async getListCourses(isFirstInit: boolean = false): Promise<CoursesListItem[]> {
-    console.log('CoursesService: getListCourses()');
-
     return await new Promise((resolve, reject) => {
       if (this.isLocalCourses) {
         const courses = isFirstInit ? [...COURSES] : this.courses;
 
         setTimeout(() => resolve(courses), 750);
       } else {
-        this.http.get<CoursesListItem[]>(`${this.BASE_URL}/courses`).subscribe((courses) => {
+        this.http.get<CoursesListItem[]>(`${this.BASE_URL}/courses`).subscribe((courses) => { // /courses?start=${0}&count=${1}
           resolve(this.transformToListCourses(courses));
         });
       }
@@ -136,8 +127,6 @@ export class CoursesService {
 
 
   private getFilterListCourses(courses: CoursesListItem[]): CoursesListItem[] {
-    console.log('CoursesService: getFilterListCourses()');
-
     if (this.filter !== '') {
       return courses.filter(({ Title }) => Title.toUpperCase().indexOf(this.filter.toUpperCase()) !== -1);
     }
@@ -164,8 +153,6 @@ function withUpdateCourses(
   const originalMethod = descriptor.value;
 
   descriptor.value = function (...args) {
-    console.log('CoursesService: withUpdateCourses()');
-
     originalMethod.apply(this, args);
 
     this.updateCourses();

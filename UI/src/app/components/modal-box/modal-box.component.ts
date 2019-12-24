@@ -2,7 +2,7 @@ import { Component, Output, EventEmitter } from '@angular/core';
 import { IUser } from 'src/app/interfaces/user';
 
 @Component({
-  selector: 'app-modal-box',
+  selector: 'app-login-box',
   templateUrl: './modal-box.component.html',
   styleUrls: ['./modal-box.component.sass']
 })

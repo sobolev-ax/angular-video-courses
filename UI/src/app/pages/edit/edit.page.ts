@@ -13,45 +13,52 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./edit.page.sass']
 })
 export class EditPageComponent implements OnInit, OnDestroy {
+  @Output() logIn = new EventEmitter<IUser>();
+
   public duration: moment.Duration = moment.duration(100, 'minutes');
+
   public description: string;
+
   public title: string;
+
   public date: string;
+
   public authors: string;
 
   public crumbs: string[] = ['courses'];
 
   public durationMoment = moment;
 
-  private updateSubscription: Subscription;
+  get elDuration() {
+    return this.duration.asMinutes();
+  }
+
+  set elDuration(val) {
+    this.duration = moment.duration(val, 'minutes');
+  }
+
+  private routeSubscription: Subscription;
+
 
   constructor(
     private activateRoute: ActivatedRoute,
     private coursesService: CoursesService,
   ) { }
 
-  ngOnInit() {
-    console.log('EditPageComponent.ngOnInit()');
 
-    this.updateSubscription = this.activateRoute.params.subscribe(
-      params => this.crumbs[1] = this.coursesService.getCourse(Number(params['id'])).Title
+  ngOnInit() {
+    this.routeSubscription = this.activateRoute.params.subscribe(
+      () => {
+        this.crumbs[1] = this.title;
+      }
     );
   }
 
+
   ngOnDestroy() {
-    console.log('EditPageComponent.ngOnDestroy()');
-
-    this.updateSubscription.unsubscribe();
+    this.routeSubscription.unsubscribe();
   }
 
-  get elDuration() {
-    return this.duration.asMinutes();
-  }
-  set elDuration(val) {
-    this.duration = moment.duration(val, 'minutes');
-  }
-
-  @Output() logIn = new EventEmitter<IUser>();
 
   enter(email: string, password: string): void {
     this.logIn.emit({ email, password });

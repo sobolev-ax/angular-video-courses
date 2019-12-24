@@ -3,6 +3,7 @@ import { IUser } from '../interfaces/user';
 
 import { USERS } from './local-data';
 import { Subject } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -11,17 +12,17 @@ export class AuthService {
 
   readonly auth$ = new Subject();
 
+  readonly status: boolean;
+
   private STORAGE_KEY = 'AuthServiceUser';
 
+  constructor(private http: HttpClient) {}
 
   @withUpdateAuthentication
-  public init(): void {
-    console.log('AuthService: init()');
-  }
+  public init(): void {}
 
   @withUpdateAuthentication
   public toLogin(email: IUser['email'], password: IUser['password']): boolean {
-    console.log('AuthService: toLogin()');
     const user: IUser = this.getUserInfo(email);
 
     if (!user) return false;
@@ -34,7 +35,6 @@ export class AuthService {
 
   @withUpdateAuthentication
   public toLogout(): boolean {
-    console.log('AuthService: toLogout()');
     if (!this.isAuthenticated()) return false;
 
     localStorage.removeItem(this.STORAGE_KEY);
@@ -43,16 +43,39 @@ export class AuthService {
   }
 
   public isAuthenticated(): boolean {
-    console.log('AuthService: isAuthenticated()');
-    return !!localStorage.getItem(this.STORAGE_KEY);
+    const status: boolean = !!localStorage.getItem(this.STORAGE_KEY);
+
+    console.log('Authentication status:', status);
+
+    return status;
   }
 
 
   private getUserInfo(email: IUser['email']): IUser {
-    console.log('AuthService: getUserInfo()');
     const user: IUser = USERS.find(user => user.email === email);
 
     return user;
+  }
+
+  private shouldUpdate(): boolean {
+    const currState: boolean = this.isAuthenticated();
+
+    return this.status !== currState;
+  }
+
+  private updateAuthentication(): void {
+    const newState: boolean = this.isAuthenticated();
+
+    const shouldUpdate: boolean = this.shouldUpdate();
+
+    if (shouldUpdate) {
+      console.log(`Global authentication status updated from ${this.status} to ${newState}`);
+
+      this.status = newState;
+      this.auth$.next(this.status);
+    } else {
+      console.log('Global');
+    }
   }
 }
 
@@ -64,11 +87,9 @@ function withUpdateAuthentication(
   const originalMethod = descriptor.value;
 
   descriptor.value = function (...args) {
-    console.log('AuthService: withUpdateAuthentication()');
-
     originalMethod.apply(this, args);
 
-    this.auth$.next(this.isAuthenticated());
+    this.updateAuthentication();
 
     return this.auth$;
   };

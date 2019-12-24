@@ -15,17 +15,12 @@ export class CoursesPageComponent implements OnInit, OnDestroy {
   public courses: CoursesListItem[] = [];
 
   public filter = '';
+
   public isLocalCourses = false;
 
   private updateSubscription: Subscription;
 
   private routeSubscription: Subscription;
-
-  private coursesLoad: CoursesLoad = {
-    Start: 0,
-    Step: 5,
-    Count: 0,
-  };
 
 
   constructor(
@@ -36,8 +31,6 @@ export class CoursesPageComponent implements OnInit, OnDestroy {
 
 
   ngOnInit() {
-    console.log('CoursesPageComponent.ngOnInit()');
-
     this.updateSubscription = this.coursesService.courses$.subscribe(this.updateCourses.bind(this));
     this.routeSubscription = this.activateRoute.queryParams.subscribe(this.updateRoute.bind(this));
 
@@ -45,38 +38,21 @@ export class CoursesPageComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    console.log('CoursesPageComponent.ngOnDestroy()');
-
     this.updateSubscription.unsubscribe();
     this.routeSubscription.unsubscribe();
   }
 
 
   public searchCourse(title: CoursesListItem['Title']): void {
-    console.log('CoursesPageComponent.searchCourse()');
-
     this.filter = title;
     this.coursesService.setFilter(this.filter);
   }
 
   public addCourse(course: CoursesListItem): void {
-    console.log('CoursesPageComponent.addCourse()');
-
     this.router.navigate(['new']);
-    // const newCourse: CoursesListItem = {
-    //   Id: 100,
-    //   Title: 'New Course',
-    //   CreationDate: moment(),
-    //   Duration: moment.duration(),
-    //   Description: 'New description'
-    // };
-
-    // this.coursesService.addCourse(newCourse);
   }
 
   public deleteCourse(id: CoursesListItem['Id']): void {
-    console.log('CoursesPageComponent.deleteCourse(), id:', id);
-
     const question = `Are you sure to delete this course?`;
     const confirmed = confirm(question);
 
@@ -86,32 +62,14 @@ export class CoursesPageComponent implements OnInit, OnDestroy {
   }
 
   public editCourse(id: CoursesListItem['Id']): void {
-    console.log('CoursesPageComponent.editCourse()');
-
     this.router.navigate([`courses/${id}`]);
-
-    // const course: CoursesListItem = {
-    //   Id: 0,
-    //   Title: 'Edited',
-    //   CreationDate: moment(),
-    //   Duration: moment.duration(),
-    //   Description: 'New description'
-    // };
-
-    // this.coursesService.updateCourse(course);
   }
 
   public updateCourses(courses: CoursesListItem[]): void {
-    console.log('CoursesPageComponent.updateCourses()');
-
     this.courses = [...courses];
   }
 
   public updateRoute(params: Params): void {
-    console.log('CoursesPageComponent.updateRoute()');
-
-    this.coursesLoad.Count = this.coursesLoad.Count + this.coursesLoad.Step;
-
     // this.router.navigate(
     //   [''],
     //   {
