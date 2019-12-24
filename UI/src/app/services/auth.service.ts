@@ -12,17 +12,17 @@ export class AuthService {
 
   readonly auth$ = new Subject();
 
-  readonly status: boolean;
-
   private STORAGE_KEY = 'AuthServiceUser';
 
   constructor(private http: HttpClient) {}
 
   @withUpdateAuthentication
-  public init(): void {}
-
-  @withUpdateAuthentication
   public toLogin(email: IUser['email'], password: IUser['password']): boolean {
+
+    const body = { login: 'admin', password: 'admin' };
+    console.log(this.http.post('http://localhost:3004/auth/login', body));
+    console.log(1);
+
     const user: IUser = this.getUserInfo(email);
 
     if (!user) return false;
@@ -45,7 +45,7 @@ export class AuthService {
   public isAuthenticated(): boolean {
     const status: boolean = !!localStorage.getItem(this.STORAGE_KEY);
 
-    console.log('Authentication status:', status);
+    console.log('Authentication status check:', status);
 
     return status;
   }
@@ -57,40 +57,29 @@ export class AuthService {
     return user;
   }
 
-  private shouldUpdate(): boolean {
-    const currState: boolean = this.isAuthenticated();
+  public updateAuthentication(): void {
+    const status: boolean = this.isAuthenticated();
 
-    return this.status !== currState;
-  }
+    this.auth$.next(status);
 
-  private updateAuthentication(): void {
-    const newState: boolean = this.isAuthenticated();
-
-    const shouldUpdate: boolean = this.shouldUpdate();
-
-    if (shouldUpdate) {
-      console.log(`Global authentication status updated from ${this.status} to ${newState}`);
-
-      this.status = newState;
-      this.auth$.next(this.status);
-    } else {
-      console.log('Global');
-    }
+    console.log('Authentication send auth$:', status);
   }
 }
 
 function withUpdateAuthentication(
   target: Object,
   method: string,
-  descriptor: PropertyDescriptor
-): void {
+  descriptor: PropertyDescriptor,
+) {
   const originalMethod = descriptor.value;
 
-  descriptor.value = function (...args) {
-    originalMethod.apply(this, args);
+  descriptor.value = decorator;
+
+  function decorator(...args) {
+    const result: any = originalMethod.apply(this, args);
 
     this.updateAuthentication();
 
-    return this.auth$;
-  };
+    return result;
+  }
 }

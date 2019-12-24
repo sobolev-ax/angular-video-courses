@@ -19,6 +19,16 @@
     },
     "login": "Morales",
     "password": "id"
+  },
+  {
+    "id": 3,
+    "fakeToken": "58ebfdf7ec92657b493b2111",
+    "name": {
+      "first": "Mr",
+      "last": "Cat"
+    },
+    "login": "admin",
+    "password": "admin"
   }
 ]
 }
