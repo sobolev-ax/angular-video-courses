@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { CoursesListItem } from '../interfaces/courses-list-item';
+import { ServerCourse } from '../interfaces/server-course';
 
 import { COURSES } from './local-data';
-import { Subject } from 'rxjs';
+import { Subject, Subscription, Observable } from 'rxjs';
 import * as moment from 'moment';
 import { CoursesLoad } from '../interfaces/courses-load';
 
@@ -51,10 +52,20 @@ export class CoursesService {
     this.filter = filter;
   }
 
+  public addCourse(course: CoursesListItem): Observable<ServerCourse> {
+    const newCourse: ServerCourse = {
+      name: course.Title,
+      date: String(course.CreationDate.format('YYYY-MM-DD')),
+      length: course.Duration.asMinutes(),
+      description: course.Description,
+      authors: {
+        id: 0,
+        name: 'Author'
+      },
+      isTopRated: false
+    };
 
-  @withUpdateCourses
-  public addCourse(course: CoursesListItem): void {
-    this.courses.unshift(course);
+    return this.http.post<ServerCourse>(`${this.BASE_URL}/courses`, newCourse);
   }
 
 
