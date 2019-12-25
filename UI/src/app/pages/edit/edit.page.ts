@@ -34,6 +34,7 @@ export class EditPageComponent implements OnInit, OnDestroy {
   public crumbs: string[] = ['courses'];
 
   private routeSubscription: Subscription;
+  private serviceSubscription: Subscription;
 
 
   constructor(
@@ -46,7 +47,14 @@ export class EditPageComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.routeSubscription = this.activateRoute.params.subscribe(
       (params) => {
-        if (params.id === undefined) this.crumbs.push('New course');
+        if (params.id === undefined) {
+          this.crumbs.push('New course');
+          return;
+        }
+
+        this.serviceSubscription = this.coursesService.getCourse(params.id).subscribe(
+            this.toFillPage.bind(this)
+        );
       }
     );
   }
@@ -54,8 +62,18 @@ export class EditPageComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.routeSubscription.unsubscribe();
+    this.serviceSubscription.unsubscribe();
   }
 
+  private toFillPage(course: CoursesListItem): void {
+    console.log('Got course by id:', course.Id);
+
+    this.description = course.Description;
+    this.title = course.Title;
+    this.date = course.CreationDate.format('YYYY-MM-DD');
+    this.elDuration = course.Duration.asMinutes();
+    this.authors = 'some authors';
+  }
 
   public submit(): void {
     if (

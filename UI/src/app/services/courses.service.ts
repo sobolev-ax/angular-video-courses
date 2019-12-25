@@ -4,9 +4,10 @@ import { CoursesListItem } from '../interfaces/courses-list-item';
 import { ServerCourse } from '../interfaces/server-course';
 
 import { COURSES } from './local-data';
-import { Subject, Subscription, Observable } from 'rxjs';
+import { Subject, Subscription, Observable, of } from 'rxjs';
 import * as moment from 'moment';
 import { CoursesLoad } from '../interfaces/courses-load';
+import { map, catchError } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -79,27 +80,29 @@ export class CoursesService {
   public updateCourse(c: CoursesListItem): void {
     const course = this.getCourse(c.Id);
 
-    course.Title = c.Title;
-    course.TopRated = c.TopRated;
-    course.CreationDate = c.CreationDate;
-    course.Duration = c.Duration;
-    course.Description = c.Description;
+    // course.Title = c.Title;
+    // course.TopRated = c.TopRated;
+    // course.CreationDate = c.CreationDate;
+    // course.Duration = c.Duration;
+    // course.Description = c.Description;
   }
 
-  public getCourse(id: CoursesListItem['Id']): CoursesListItem {
-    let course: CoursesListItem;
+  public getCourse(id: CoursesListItem['Id']): Observable<CoursesListItem> {
+    const gotError = (error: any): Observable<CoursesListItem> => {
+      console.log('Not found course for this id:', id);
+      return of({
+        Id: null,
+        Title: '',
+        CreationDate: moment(),
+        Duration: moment.duration(),
+        Description: ''
+      });
+    };
 
-    if (true) {
-      course = this.createCourseItem(this.http.get<CoursesListItem[]>(`${this.BASE_URL}/courses/2`));
-    } else {
-      course = this.courses.find(course => course.Id === id);
-    }
-
-    if (course === undefined) {
-      throw new TypeError(`Cannot find course for this id: ${id}`);
-    }
-
-    return course;
+    return this.http.get<ServerCourse>(`${this.BASE_URL}/courses/${id}`).pipe(
+      map(course => this.createCourseItem(course)),
+      catchError(gotError),
+    );
   }
 
 
@@ -110,7 +113,7 @@ export class CoursesService {
   }
 
 
-  private createCourseItem(item): CoursesListItem {
+  private createCourseItem(item: ServerCourse): CoursesListItem {
     return {
       Id: item.id,
       Title: item.name,
