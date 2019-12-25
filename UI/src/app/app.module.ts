@@ -4,7 +4,7 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { AppComponent } from './app.component';
 import { FormsModule } from '@angular/forms';
-import { HttpClientModule }   from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 
 import { CoursesListComponent } from './components/courses-list/courses-list.component';
@@ -27,6 +27,8 @@ import { CoursesGuard } from './pages/courses/courses.guard';
 
 import { CoursesService } from './services/courses.service';
 import { AuthService } from './services/auth.service';
+
+import { AuthInterceptor } from './interceptors/auth-interceptor';
 
 const appRoutes: Routes = [
   { path: '', redirectTo: 'courses', pathMatch:'full' },
@@ -89,6 +91,11 @@ const appRoutes: Routes = [
     CoursesService,
     AuthService,
     CoursesGuard,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true,
+    },
   ],
   bootstrap: [AppComponent]
 })

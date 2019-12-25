@@ -18,7 +18,7 @@ export class AuthService {
 
   constructor(private http: HttpClient) {}
 
-  public toLogin(email: IUser['email'], password: IUser['password']): void {
+  public toLogin(email: IUser['email'] = '', password: IUser['password'] = ''): void {
     const credentials = { password, login: email };
 
     const gotToken = (): void => {
@@ -64,6 +64,10 @@ export class AuthService {
     this.auth$.next(status);
 
     console.log('Authentication send auth$:', status);
+  }
+
+  public getAuthorizationToken(): string {
+    return JSON.parse(localStorage.getItem(this.STORAGE_KEY)) || '';
   }
 }
 
