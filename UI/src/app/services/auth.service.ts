@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import { IUser } from '../interfaces/user';
+import { HttpClient  } from '@angular/common/http';
+import { catchError, tap } from 'rxjs/operators';
+import { Subject, Observable, of } from 'rxjs';
 
-import { USERS } from './local-data';
-import { Subject } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
+import { IUser } from '../interfaces/user';
 
 @Injectable({
   providedIn: 'root'
@@ -12,25 +12,33 @@ export class AuthService {
 
   readonly auth$ = new Subject();
 
-  private STORAGE_KEY = 'AuthServiceUser';
+  private STORAGE_KEY = 'AuthServiceToken';
+
+  private BASE_URL = 'http://localhost:3004';
 
   constructor(private http: HttpClient) {}
 
-  @withUpdateAuthentication
-  public toLogin(email: IUser['email'], password: IUser['password']): boolean {
+  public toLogin(email: IUser['email'], password: IUser['password']): void {
+    const credentials = { password, login: email };
 
-    const body = { login: 'admin', password: 'admin' };
-    console.log(this.http.post('http://localhost:3004/auth/login', body));
-    console.log(1);
+    const gotToken = (): void => {
+      console.log('Authentication login: Successful');
+    };
 
-    const user: IUser = this.getUserInfo(email);
+    const gotError = (error: any): Observable<string> => {
+      console.log('Authentication login:', error.error);
+      return of('');
+    };
 
-    if (!user) return false;
-    if (user.password !== password) return false;
+    this.http.post(`${this.BASE_URL}/auth/login`, credentials).pipe(
+      tap(gotToken),
+      catchError(gotError),
+    ).subscribe((data: any): void => {
+      if (data.length === 0) return;
 
-    localStorage.setItem(this.STORAGE_KEY, JSON.stringify(user));
-
-    return true;
+      localStorage.setItem(this.STORAGE_KEY, JSON.stringify(data.token));
+      this.updateAuthentication();
+    });
   }
 
   @withUpdateAuthentication
@@ -48,13 +56,6 @@ export class AuthService {
     console.log('Authentication status check:', status);
 
     return status;
-  }
-
-
-  private getUserInfo(email: IUser['email']): IUser {
-    const user: IUser = USERS.find(user => user.email === email);
-
-    return user;
   }
 
   public updateAuthentication(): void {

@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { AuthService } from 'src/app/services/auth.service';
 import { IUser } from 'src/app/interfaces/user';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 
 @Component({
@@ -9,7 +10,9 @@ import { Router } from '@angular/router';
   templateUrl: './login.page.html',
   styleUrls: ['./login.page.sass']
 })
-export class LoginPageComponent implements OnInit {
+export class LoginPageComponent implements OnInit, OnDestroy {
+
+  private authSubscription: Subscription;
 
   constructor(
     private authService: AuthService,
@@ -17,13 +20,20 @@ export class LoginPageComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    if (!this.authService.isAuthenticated()) return;
-    this.router.navigate(['']);
+    this.authSubscription = this.authService.auth$.subscribe(this.updateAuth.bind(this));
+
+    this.authService.updateAuthentication();
+  }
+
+  ngOnDestroy() {
+    this.authSubscription.unsubscribe();
   }
 
   logIn(event: IUser): void {
-    const isLogin: boolean = this.authService.toLogin(event.email, event.password);
+    this.authService.toLogin(event.email, event.password);
+  }
 
+  private updateAuth(isLogin): void {
     if (isLogin) {
       this.router.navigate(['']);
     }
