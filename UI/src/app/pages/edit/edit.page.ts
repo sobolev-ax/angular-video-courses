@@ -23,6 +23,10 @@ export class EditPageComponent implements OnInit, OnDestroy {
     this.duration = moment.duration(val, 'minutes');
   }
 
+  public id: number;
+
+  public topRated: boolean;
+
   public description = '';
 
   public title = '';
@@ -48,7 +52,7 @@ export class EditPageComponent implements OnInit, OnDestroy {
     this.routeSubscription = this.activateRoute.params.subscribe(
       (params) => {
         if (params.id === undefined) {
-          this.crumbs.push('New course');
+          this.crumbs.push('new course');
           return;
         }
 
@@ -66,8 +70,17 @@ export class EditPageComponent implements OnInit, OnDestroy {
   }
 
   private toFillPage(course: CoursesListItem): void {
+    if (course.Id === null) {
+      this.crumbs.push('new course');
+      return;
+    }
+
     console.log('Got course by id:', course.Id);
 
+    this.crumbs.push(course.Title);
+
+    this.id = course.Id;
+    this.topRated = course.TopRated;
     this.description = course.Description;
     this.title = course.Title;
     this.date = course.CreationDate.format('YYYY-MM-DD');
@@ -81,32 +94,41 @@ export class EditPageComponent implements OnInit, OnDestroy {
       || this.title === ''
       || this.date === ''
       || this.elDuration === 0
-      || this.authors === ''
     ) {
       console.log('Check all fields ------');
       console.log(`title: ${this.title === '' ? 'Empty!' : this.title}`);
       console.log(`description: ${this.description === '' ? 'Empty!' : this.description}`);
       console.log(`date: ${this.date === '' ? 'Empty!' : this.date}`);
       console.log(`duration: ${this.elDuration === 0 ? 'Empty!' : this.elDuration}`);
-      console.log(`authors: ${this.authors === '' ? 'Empty!' : this.authors}`);
 
       return;
     }
 
     const course: CoursesListItem = {
-      Id: null,
+      Id: this.id || null,
       Title: this.title,
       CreationDate: moment(this.date),
       Duration: this.duration,
       Description: this.description,
     };
 
-    this.coursesService.addCourse(course).subscribe(
-      () => {
-        console.log('Added new course:', course.Title);
-        this.router.navigate(['']);
-      },
-      err => console.log('Can\'t add new course:', err)
-    );
+    if (this.id) {
+      this.coursesService.updateCourse(course).subscribe(
+        () => {
+          console.log('Edited course:', course.Id);
+          this.router.navigate(['']);
+        },
+        err => console.log('Can\'t edit:', err)
+      );
+
+    } else {
+      this.coursesService.addCourse(course).subscribe(
+        () => {
+          console.log('Added new course:', course.Title);
+          this.router.navigate(['']);
+        },
+        err => console.log('Can\'t add new course:', err)
+      );
+    }
   }
 }

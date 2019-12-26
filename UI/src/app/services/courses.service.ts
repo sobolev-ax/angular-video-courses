@@ -76,15 +76,21 @@ export class CoursesService {
   }
 
 
-  @withUpdateCourses
-  public updateCourse(c: CoursesListItem): void {
-    const course = this.getCourse(c.Id);
+  public updateCourse(course: CoursesListItem): Observable<ServerCourse> {
+    const updateCourse: ServerCourse = {
+      id: course.Id,
+      name: course.Title,
+      date: String(course.CreationDate.format('YYYY-MM-DD')),
+      length: course.Duration.asMinutes(),
+      description: course.Description,
+      authors: {
+        id: 0,
+        name: 'Author'
+      },
+      isTopRated: course.TopRated
+    };
 
-    // course.Title = c.Title;
-    // course.TopRated = c.TopRated;
-    // course.CreationDate = c.CreationDate;
-    // course.Duration = c.Duration;
-    // course.Description = c.Description;
+    return this.http.patch<ServerCourse>(`${this.BASE_URL}/courses/${course.Id}`, updateCourse);
   }
 
   public getCourse(id: CoursesListItem['Id']): Observable<CoursesListItem> {
