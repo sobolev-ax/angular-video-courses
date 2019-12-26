@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { AuthService } from 'src/app/services/auth.service';
 import { Router } from '@angular/router';
 import { Subscriber, Subscription } from 'rxjs';
+import { UserInfo } from 'src/app/interfaces/user-info';
 
 @Component({
   selector: 'app-header',
@@ -12,7 +13,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   public isAuth: boolean;
 
+  public name = '';
+
   private updateSubscription: Subscription;
+  private userInfoSubscription: Subscription;
 
 
   constructor(
@@ -27,9 +31,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    console.log('HeaderComponent.ngOnDestroy()');
-
     this.updateSubscription.unsubscribe();
+
+    if (this.userInfoSubscription) {
+      this.userInfoSubscription.unsubscribe();
+    }
   }
 
 
@@ -43,5 +49,13 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   private updateAuth(logged: boolean): void {
     this.isAuth = logged;
+
+    if (logged) {
+      this.userInfoSubscription = this.authService.getUserInfo().subscribe((user: UserInfo) => {
+        this.name = `${user.name.first} ${user.name.last}`;
+      });
+    } else {
+      this.name = '';
+    }
   }
 }

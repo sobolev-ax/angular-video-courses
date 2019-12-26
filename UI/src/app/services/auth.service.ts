@@ -4,6 +4,8 @@ import { catchError, tap } from 'rxjs/operators';
 import { Subject, Observable, of } from 'rxjs';
 
 import { IUser } from '../interfaces/user';
+import { UserInfo } from '../interfaces/user-info';
+import { TokenRequestModel } from '../interfaces/token-request-model';
 
 @Injectable({
   providedIn: 'root'
@@ -48,6 +50,16 @@ export class AuthService {
     localStorage.removeItem(this.STORAGE_KEY);
 
     return true;
+  }
+
+  public getUserInfo(): Observable<UserInfo> {
+    if (!this.isAuthenticated()) throw new Error('You should login');
+
+    const token: TokenRequestModel = {
+      token: this.getAuthorizationToken(),
+    };
+
+    return this.http.post<UserInfo>(`${this.BASE_URL}/auth/userinfo`, token);
   }
 
   public isAuthenticated(): boolean {

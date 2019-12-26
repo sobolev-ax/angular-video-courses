@@ -62,7 +62,7 @@ export class EditPageComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.routeSubscription.unsubscribe();
-    this.serviceSubscription.unsubscribe();
+    if (this.serviceSubscription) this.serviceSubscription.unsubscribe();
   }
 
   private toFillPage(course: CoursesListItem): void {
