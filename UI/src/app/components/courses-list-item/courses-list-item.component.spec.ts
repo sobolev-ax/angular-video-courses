@@ -35,33 +35,33 @@ describe('CoursesListItemComponent', () => {
 
   it('should display full information of course', () => {
     const main: HTMLElement = fixture.nativeElement.querySelector('.item-main');
-    const duration = (new DurationPipe).transform(mockCourse.Duration);
+    const duration = (new DurationPipe).transform(mockCourse.duration);
 
-    expect(main.textContent).toContain(mockCourse.Title.toUpperCase());
-    expect(main.textContent).toContain(pipe.transform(mockCourse.CreationDate, 'd LLL, yyyy'));
+    expect(main.textContent).toContain(mockCourse.title.toUpperCase());
+    expect(main.textContent).toContain(pipe.transform(mockCourse.creationDate, 'd LLL, yyyy'));
     expect(main.textContent).toContain(duration);
-    expect(main.textContent).toContain(mockCourse.Description);
+    expect(main.textContent).toContain(mockCourse.description);
 
     expect(Object.keys(mockCourse).length).toBe(5);
   });
 
   it('should raise editCourse event when clicked', () => {
     editBtnEl.click();
-    expect(testHost.editedCourse).toBe(mockCourse.Id);
+    expect(testHost.editedCourse).toBe(mockCourse.id);
   });
 
   it('should raise deleteCourse event when clicked', () => {
     deleBtnEl.click();
-    expect(testHost.deletedCourse).toBe(mockCourse.Id);
+    expect(testHost.deletedCourse).toBe(mockCourse.id);
   });
 });
 
 const mockCourse: CoursesListItem = {
-  Id: 0,
-  Title: 'Title',
-  CreationDate: moment(),
-  Duration: moment.duration(),
-  Description: 'Description'
+  id: 0,
+  title: 'Title',
+  creationDate: moment(),
+  duration: moment.duration(),
+  description: 'Description'
 };
 
 @Component({

@@ -70,21 +70,21 @@ export class EditPageComponent implements OnInit, OnDestroy {
   }
 
   private toFillPage(course: CoursesListItem): void {
-    if (course.Id === null) {
+    if (course.id === null) {
       this.crumbs.push('new course');
       return;
     }
 
-    console.log('Got course by id:', course.Id);
+    console.log('Got course by id:', course.id);
 
-    this.crumbs.push(course.Title);
+    this.crumbs.push(course.title);
 
-    this.id = course.Id;
-    this.topRated = course.TopRated;
-    this.description = course.Description;
-    this.title = course.Title;
-    this.date = course.CreationDate.format('YYYY-MM-DD');
-    this.elDuration = course.Duration.asMinutes();
+    this.id = course.id;
+    this.topRated = course.isTopRated;
+    this.description = course.description;
+    this.title = course.title;
+    this.date = course.creationDate.format('YYYY-MM-DD');
+    this.elDuration = course.duration.asMinutes();
     this.authors = 'some authors';
   }
 
@@ -105,17 +105,17 @@ export class EditPageComponent implements OnInit, OnDestroy {
     }
 
     const course: CoursesListItem = {
-      Id: this.id || null,
-      Title: this.title,
-      CreationDate: moment(this.date),
-      Duration: this.duration,
-      Description: this.description,
+      id: this.id || null,
+      title: this.title,
+      creationDate: moment(this.date),
+      duration: this.duration,
+      description: this.description,
     };
 
     if (this.id) {
       this.coursesService.updateCourse(course).subscribe(
         () => {
-          console.log('Edited course:', course.Id);
+          console.log('Edited course:', course.id);
           this.router.navigate(['']);
         },
         err => console.log('Can\'t edit:', err)
@@ -124,7 +124,7 @@ export class EditPageComponent implements OnInit, OnDestroy {
     } else {
       this.coursesService.addCourse(course).subscribe(
         () => {
-          console.log('Added new course:', course.Title);
+          console.log('Added new course:', course.title);
           this.router.navigate(['']);
         },
         err => console.log('Can\'t add new course:', err)

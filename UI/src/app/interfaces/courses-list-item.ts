@@ -1,23 +1,10 @@
 import * as moment from 'moment';
 
 export interface CoursesListItem {
-  Id: number;
-  Title: string;
-  TopRated?: boolean;
-  CreationDate: moment.Moment;
-  Duration: moment.Duration;
-  Description: string;
+  id: number;
+  title: string;
+  isTopRated?: boolean;
+  creationDate: moment.Moment;
+  duration: moment.Duration;
+  description: string;
 }
-
-class Course {
-  constructor(name)
-  constructor(name, id)
-   {
-      // type of course === string
-       ///
-      /// server
-  }
-}
-
-new Course('course');
-

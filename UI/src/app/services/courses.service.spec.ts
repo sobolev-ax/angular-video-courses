@@ -7,12 +7,12 @@ describe('CoursesService', () => {
   let service;
 
   const course: CoursesListItem = {
-    Id: COURSES[COURSES.length - 1].Id + 1,
-    Title: 'Title',
-    CreationDate: moment(),
-    Duration: moment.duration(),
-    Description: '',
-    TopRated: false,
+    id: COURSES[COURSES.length - 1].id + 1,
+    title: 'title',
+    creationDate: moment(),
+    duration: moment.duration(),
+    description: '',
+    isTopRated: false,
   };
 
   beforeEach(() => {
@@ -26,7 +26,7 @@ describe('CoursesService', () => {
   });
 
   it('removeCourse() should remove course', () => {
-    const removeId = COURSES[0].Id;
+    const removeId = COURSES[0].id;
     const decreasedLength = COURSES.length - 1;
 
     service.removeCourse(removeId);
@@ -47,7 +47,7 @@ describe('CoursesService', () => {
   });
 
   it('filterListCourses() should return one course', () => {
-    const search = service.courses[0].Title;
+    const search = service.courses[0].title;
 
     const count = service.getFilterListCourses(search).length;
 
@@ -63,11 +63,11 @@ describe('CoursesService', () => {
   });
 
   it('updateCourse() should update course by Id', () => {
-    course.Id = 0;
+    course.id = 0;
 
     service.updateCourse(course);
 
-    expect(service.courses[0].Title).toEqual(course.Title);
+    expect(service.courses[0].title).toEqual(course.title);
   });
 });
 
@@ -84,12 +84,12 @@ describe('CoursesService', () => {
 // });
 
 // it('ngOnChanges() should filter courses', () => {
-// 	comp.filter = service.getListCourses()[0].Title;
+// 	comp.filter = service.getListCourses()[0].title;
 
 // 	comp.ngOnChanges();
 
 // 	expect(comp.courses.length).toBe(1);
-// 	expect(comp.courses[0].Title).toBe(comp.filter);
+// 	expect(comp.courses[0].title).toBe(comp.filter);
 // });
 
 // it('addCourse() should call console.log', () => {

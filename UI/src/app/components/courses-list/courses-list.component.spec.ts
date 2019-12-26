@@ -6,11 +6,11 @@ describe('CoursesListComponent', () => {
   let comp: CoursesListComponent;
 
   const course: CoursesListItem = {
-    Id: 0,
-    Title: '',
-    CreationDate: moment(),
-    Duration: moment.duration(),
-    Description: '',
+    id: 0,
+    title: '',
+    creationDate: moment(),
+    duration: moment.duration(),
+    description: '',
   };
 
   beforeAll(() => {
@@ -35,7 +35,7 @@ describe('CoursesListComponent', () => {
 
     id = comp.trackByFn(index, course);
 
-    expect(id).toBe(course.Id);
+    expect(id).toBe(course.id);
   });
 
   it('add() should emit event', () => {
@@ -45,14 +45,14 @@ describe('CoursesListComponent', () => {
   });
 
   it('delete() should emit event', () => {
-    comp.delete(course.Id);
+    comp.delete(course.id);
 
-    expect(comp.deleteCourse.emit).toHaveBeenCalledWith(course.Id);
+    expect(comp.deleteCourse.emit).toHaveBeenCalledWith(course.id);
   });
 
   it('edit() should emit event', () => {
-    comp.edit(course.Id);
+    comp.edit(course.id);
 
-    expect(comp.editCourse.emit).toHaveBeenCalledWith(course.Id);
+    expect(comp.editCourse.emit).toHaveBeenCalledWith(course.id);
   });
 });

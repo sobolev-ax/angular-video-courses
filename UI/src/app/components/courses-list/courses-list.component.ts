@@ -12,22 +12,22 @@ export class CoursesListComponent {
   @Input() courses: CoursesListItem[];
 
   @Output() addCourse = new EventEmitter<CoursesListItem>();
-  @Output() deleteCourse = new EventEmitter<CoursesListItem['Id']>();
-  @Output() editCourse = new EventEmitter<CoursesListItem['Id']>();
+  @Output() deleteCourse = new EventEmitter<CoursesListItem['id']>();
+  @Output() editCourse = new EventEmitter<CoursesListItem['id']>();
 
   trackByFn(index: Number, item: CoursesListItem): Number {
-    return item.Id;
+    return item.id;
   }
 
   add(): void {
     this.addCourse.emit();
   }
 
-  delete(id: CoursesListItem['Id']): void {
+  delete(id: CoursesListItem['id']): void {
     this.deleteCourse.emit(id);
   }
 
-  edit(id: CoursesListItem['Id']): void {
+  edit(id: CoursesListItem['id']): void {
     this.editCourse.emit(id);
   }
 }

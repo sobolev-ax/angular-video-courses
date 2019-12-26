@@ -55,10 +55,10 @@ export class CoursesService {
 
   public addCourse(course: CoursesListItem): Observable<ServerCourse> {
     const newCourse: ServerCourse = {
-      name: course.Title,
-      date: String(course.CreationDate.format('YYYY-MM-DD')),
-      length: course.Duration.asMinutes(),
-      description: course.Description,
+      name: course.title,
+      date: String(course.creationDate.format('YYYY-MM-DD')),
+      length: course.duration.asMinutes(),
+      description: course.description,
       authors: {
         id: 0,
         name: 'Author'
@@ -69,39 +69,44 @@ export class CoursesService {
     return this.http.post<ServerCourse>(`${this.BASE_URL}/courses`, newCourse);
   }
 
-
-  @withUpdateCourses
-  public removeCourse(id: CoursesListItem['Id']): void {
-    this.courses = this.courses.filter(course => course.Id !== id);
+  public removeCourse(id: CoursesListItem['id']): void {
+    this.http.delete<ServerCourse>(`${this.BASE_URL}/courses/${id}`).subscribe(
+    (data) => {
+      console.log('Course deleted:', id);
+      this.updateCourses();
+    },
+    (err) => {
+      console.log('Can\'t delete course by id:', id);
+    }
+    );
   }
-
 
   public updateCourse(course: CoursesListItem): Observable<ServerCourse> {
     const updateCourse: ServerCourse = {
-      id: course.Id,
-      name: course.Title,
-      date: String(course.CreationDate.format('YYYY-MM-DD')),
-      length: course.Duration.asMinutes(),
-      description: course.Description,
+      id: course.id,
+      name: course.title,
+      date: String(course.creationDate.format('YYYY-MM-DD')),
+      length: course.duration.asMinutes(),
+      description: course.description,
       authors: {
         id: 0,
         name: 'Author'
       },
-      isTopRated: course.TopRated
+      isTopRated: course.isTopRated
     };
 
-    return this.http.patch<ServerCourse>(`${this.BASE_URL}/courses/${course.Id}`, updateCourse);
+    return this.http.patch<ServerCourse>(`${this.BASE_URL}/courses/${course.id}`, updateCourse);
   }
 
-  public getCourse(id: CoursesListItem['Id']): Observable<CoursesListItem> {
+  public getCourse(id: CoursesListItem['id']): Observable<CoursesListItem> {
     const gotError = (error: any): Observable<CoursesListItem> => {
       console.log('Not found course for this id:', id);
       return of({
-        Id: null,
-        Title: '',
-        CreationDate: moment(),
-        Duration: moment.duration(),
-        Description: ''
+        id: null,
+        title: '',
+        creationDate: moment(),
+        duration: moment.duration(),
+        description: ''
       });
     };
 
@@ -121,12 +126,12 @@ export class CoursesService {
 
   private createCourseItem(item: ServerCourse): CoursesListItem {
     return {
-      Id: item.id,
-      Title: item.name,
-      TopRated: item.isTopRated,
-      CreationDate: moment(item.date),
-      Duration: moment.duration(item.length, 'minutes'),
-      Description: item.description,
+      id: item.id,
+      title: item.name,
+      isTopRated: item.isTopRated,
+      creationDate: moment(item.date),
+      duration: moment.duration(item.length, 'minutes'),
+      description: item.description,
     };
   }
 
@@ -148,7 +153,7 @@ export class CoursesService {
 
   private getFilterListCourses(courses: CoursesListItem[]): CoursesListItem[] {
     if (this.filter !== '') {
-      return courses.filter(({ Title }) => Title.toUpperCase().indexOf(this.filter.toUpperCase()) !== -1);
+      return courses.filter(({ title: title }) => title.toUpperCase().indexOf(this.filter.toUpperCase()) !== -1);
     }
 
     return courses;

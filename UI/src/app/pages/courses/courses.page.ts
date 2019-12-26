@@ -43,7 +43,7 @@ export class CoursesPageComponent implements OnInit, OnDestroy {
   }
 
 
-  public searchCourse(title: CoursesListItem['Title']): void {
+  public searchCourse(title: CoursesListItem['title']): void {
     this.filter = title;
     this.coursesService.setFilter(this.filter);
   }
@@ -52,7 +52,7 @@ export class CoursesPageComponent implements OnInit, OnDestroy {
     this.router.navigate(['new']);
   }
 
-  public deleteCourse(id: CoursesListItem['Id']): void {
+  public deleteCourse(id: CoursesListItem['id']): void {
     const question = `Are you sure to delete this course?`;
     const confirmed = confirm(question);
 
@@ -61,7 +61,7 @@ export class CoursesPageComponent implements OnInit, OnDestroy {
     this.coursesService.removeCourse(id);
   }
 
-  public editCourse(id: CoursesListItem['Id']): void {
+  public editCourse(id: CoursesListItem['id']): void {
     this.router.navigate([`courses/${id}`]);
   }
 

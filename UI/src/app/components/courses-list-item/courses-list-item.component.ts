@@ -11,14 +11,14 @@ export class CoursesListItemComponent {
 
   @Input() item: CoursesListItem;
 
-  @Output() deleteCourse = new EventEmitter<CoursesListItem['Id']>();
-  @Output() editCourse = new EventEmitter<CoursesListItem['Id']>();
+  @Output() deleteCourse = new EventEmitter<CoursesListItem['id']>();
+  @Output() editCourse = new EventEmitter<CoursesListItem['id']>();
 
   delete(): void {
-    this.deleteCourse.emit(this.item.Id);
+    this.deleteCourse.emit(this.item.id);
   }
 
   edit(): void {
-    this.editCourse.emit(this.item.Id);
+    this.editCourse.emit(this.item.id);
   }
 }

@@ -23,53 +23,53 @@ const durations: IDurations = {
 
 const COURSES: CoursesListItem[] = [
   {
-    Id: 0,
-    Title: 'Introduction to the Angular Docs',
-    CreationDate: dt.nextDate,
-    Duration: durations.normal,
-    Description: 'Learn about where you can find course descriptions, what information they include, how they work, and details ' +
+    id: 0,
+    title: 'Introduction to the Angular Docs',
+    creationDate: dt.nextDate,
+    duration: durations.normal,
+    description: 'Learn about where you can find course descriptions, what information they include, how they work, and details ' +
       'about various components of a course description. Course descriptions report information about a university or college\'s ' +
       'classes. They\'re published both in course catalogs that outline degree requirements and in course schedules that contain ' +
       'descriptions for all courses offered during a particular semester.'
   },
   {
-    Id: 1,
-    Title: 'Tour of Heroes App and Tutorial',
-    CreationDate: dt.today,
-    Duration: durations.short,
-    Description: 'Learn about where you can find course descriptions, what information they include, how they work, and details ' +
+    id: 1,
+    title: 'Tour of Heroes App and Tutorial',
+    creationDate: dt.today,
+    duration: durations.short,
+    description: 'Learn about where you can find course descriptions, what information they include, how they work, and details ' +
       'about various components of a course description. Course descriptions report information about a university or college\'s ' +
       'classes. They\'re published both in course catalogs that outline degree requirements and in course schedules that contain ' +
       'descriptions for all courses offered during a particular semester.'
   },
   {
-    Id: 2,
-    Title: 'Architecture overview',
-    TopRated: true,
-    CreationDate: dt.prevDate,
-    Duration: durations.long,
-    Description: 'Learn about where you can find course descriptions, what information they include, how they work, and details ' +
+    id: 2,
+    title: 'Architecture overview',
+    isTopRated: true,
+    creationDate: dt.prevDate,
+    duration: durations.long,
+    description: 'Learn about where you can find course descriptions, what information they include, how they work, and details ' +
       'about various components of a course description. Course descriptions report information about a university or college\'s ' +
       'classes. They\'re published both in course catalogs that outline degree requirements and in course schedules that contain ' +
       'descriptions for all courses offered during a particular semester.'
   },
   {
-    Id: 3,
-    Title: 'Security',
-    CreationDate: dt.prevOneWeeks,
-    Duration: durations.normal,
-    Description: 'Learn about where you can find course descriptions, what information they include, how they work, and details ' +
+    id: 3,
+    title: 'Security',
+    creationDate: dt.prevOneWeeks,
+    duration: durations.normal,
+    description: 'Learn about where you can find course descriptions, what information they include, how they work, and details ' +
       'about various components of a course description. Course descriptions report information about a university or college\'s ' +
       'classes. They\'re published both in course catalogs that outline degree requirements and in course schedules that contain ' +
       'descriptions for all courses offered during a particular semester.'
   },
   {
-    Id: 4,
-    Title: 'Workspace and project file structure',
-    TopRated: true,
-    CreationDate: dt.prevTwoWeeks,
-    Duration: durations.normal,
-    Description: 'Learn about where you can find course descriptions, what information they include, how they work, and details ' +
+    id: 4,
+    title: 'Workspace and project file structure',
+    isTopRated: true,
+    creationDate: dt.prevTwoWeeks,
+    duration: durations.normal,
+    description: 'Learn about where you can find course descriptions, what information they include, how they work, and details ' +
       'about various components of a course description. Course descriptions report information about a university or college\'s ' +
       'classes. They\'re published both in course catalogs that outline degree requirements and in course schedules that contain ' +
       'descriptions for all courses offered during a particular semester.'
