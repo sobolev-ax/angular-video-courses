@@ -3,7 +3,6 @@ import { HttpClient } from '@angular/common/http';
 import { CoursesListItem } from '../interfaces/courses-list-item';
 import { ServerCourse } from '../interfaces/server-course';
 
-import { COURSES } from './local-data';
 import { Subject, Subscription, Observable, of } from 'rxjs';
 import * as moment from 'moment';
 import { CoursesLoad } from '../interfaces/courses-load';

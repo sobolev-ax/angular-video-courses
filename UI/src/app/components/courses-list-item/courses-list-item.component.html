@@ -1,16 +1,16 @@
 <article
   class="article item"
-  [ngClass]="{'article-top-rated': item.TopRated}"
+  [ngClass]="{'article-top-rated': item.isTopRated}"
 >
   <div class="item-main">
     <div class="item-main-header">
       <h3>{{item.title | uppercase}}
-        <i *ngIf="item.TopRated" class="fa btn-ic fa-star"></i>
+        <i *ngIf="item.isTopRated" class="fa btn-ic fa-star"></i>
       </h3>
       <div class="item-main-header-meta">
         <span class="btn btn-not btn-color-b">
           <i class="fa btn-ic fa-clock-o"></i>
-          {{item.Duration | duration}}
+          {{item.duration | duration}}
         </span>
         <span class="btn btn-not btn-color-b">
           <i class="fa btn-ic fa-calendar"></i>
