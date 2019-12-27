@@ -7,7 +7,7 @@
       [course]="filter"
     ></app-search>
     <app-courses-list
-      [courses]="courses"
+      [courses]="state.courses"
       (addCourse)="addCourse($event)"
       (deleteCourse)="deleteCourse($event)"
       (editCourse)="editCourse($event)"

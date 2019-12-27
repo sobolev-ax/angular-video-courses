@@ -3,9 +3,9 @@ import { HttpClient } from '@angular/common/http';
 import { CoursesListItem } from '../interfaces/courses-list-item';
 import { ServerCourse } from '../interfaces/server-course';
 
-import { Subject, Subscription, Observable, of } from 'rxjs';
+import { Subject, Subscription, Observable, of, BehaviorSubject } from 'rxjs';
 import * as moment from 'moment';
-import { CoursesLoad } from '../interfaces/courses-load';
+import { CoursesListState } from '../interfaces/courses-list-state';
 import { map, catchError } from 'rxjs/operators';
 
 @Injectable({
@@ -13,43 +13,28 @@ import { map, catchError } from 'rxjs/operators';
 })
 export class CoursesService {
 
-  readonly courses$: Subject<CoursesListItem[]> = new Subject();
-  readonly route$: Subject<CoursesLoad> = new Subject();
-
-  private courses = [];
-
-  private isLocalCourses: boolean;
-
-  private filter = '';
-
-  private BASE_URL = 'http://localhost:3004';
-
-  private start: number;
-  private count: number;
-
-  private coursesLoad: CoursesLoad = {
-    Start: 0,
-    Step: 5,
-    Count: 10,
+  private state: CoursesListState = {
+    start: 0,
+    count: 7,
+    step: 10,
+    sort: '',
+    filter: '',
+    textFragment: '',
+    courses: []
   };
 
+  readonly state$: Subject<CoursesListState> = new BehaviorSubject(this.state);
+
+  private BASE_URL = 'http://localhost:3004';
 
   constructor(
     private http: HttpClient,
   ) { }
 
-
-  public init(filter: string = '', isLocalCourses: boolean = false): void {
-    this.filter = filter;
-    this.isLocalCourses = isLocalCourses;
-
-    this.updateCourses(true);
-  }
-
-
-  @withUpdateCourses
-  public setFilter(filter: string): void {
-    this.filter = filter;
+  public setState(state: CoursesListState): void {
+    this.state = {
+      ...state
+    };
   }
 
   public addCourse(course: CoursesListItem): Observable<ServerCourse> {
@@ -115,13 +100,9 @@ export class CoursesService {
     );
   }
 
-
   private transformToListCourses(courses): CoursesListItem[] {
-    this.courses = courses.map(this.createCourseItem.bind(this));
-
-    return this.courses;
+    return courses.map(this.createCourseItem.bind(this));
   }
-
 
   private createCourseItem(item: ServerCourse): CoursesListItem {
     return {
@@ -134,53 +115,21 @@ export class CoursesService {
     };
   }
 
-
-  private async getListCourses(isFirstInit: boolean = false): Promise<CoursesListItem[]> {
-    return await new Promise((resolve, reject) => {
-      if (this.isLocalCourses) {
-        const courses = isFirstInit ? [...COURSES] : this.courses;
-
-        setTimeout(() => resolve(courses), 750);
-      } else {
-        this.http.get<CoursesListItem[]>(`${this.BASE_URL}/courses`).subscribe((courses) => { // /courses?start=${0}&count=${1}
-          resolve(this.transformToListCourses(courses));
-        });
-      }
-    });
+  private getListCourses(): Observable<CoursesListItem[]> {
+    return this.http.get<ServerCourse[]>(`${this.BASE_URL}/courses`, {params: {
+      start: String(this.state.start),
+      count: String(this.state.count),
+    }}).pipe(
+      map(this.transformToListCourses.bind(this)),
+    );
   }
 
-
-  private getFilterListCourses(courses: CoursesListItem[]): CoursesListItem[] {
-    if (this.filter !== '') {
-      return courses.filter(({ title: title }) => title.toUpperCase().indexOf(this.filter.toUpperCase()) !== -1);
-    }
-
-    return courses;
+  public updateCourses(): void {
+    this.getListCourses().subscribe(
+      courses => this.state$.next({
+        ...this.state,
+        courses
+      })
+    );
   }
-
-
-  private updateCourses(isFirstInit: boolean = false): void {
-    this.getListCourses(isFirstInit)
-      .then((courses) => {
-        this.courses = courses;
-        this.courses$.next(this.getFilterListCourses(courses));
-      });
-  }
-}
-
-
-function withUpdateCourses(
-  target: Object,
-  method: string,
-  descriptor: PropertyDescriptor
-): void {
-  const originalMethod = descriptor.value;
-
-  descriptor.value = function (...args) {
-    originalMethod.apply(this, args);
-
-    this.updateCourses();
-
-    return this.courses$;
-  };
 }
