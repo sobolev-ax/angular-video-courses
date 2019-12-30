@@ -24,12 +24,13 @@ export class CoursesPageComponent implements OnInit, OnDestroy {
     filter: '',
     textFragment: '',
     courses: [],
+    next: true,
   };
 
   constructor(
-    private coursesService: CoursesService,
-    private router: Router,
-    private activateRoute: ActivatedRoute,
+    private readonly coursesService: CoursesService,
+    private readonly router: Router,
+    private readonly activateRoute: ActivatedRoute,
   ) {
     const start = activateRoute.snapshot.params['start'];
     const count = activateRoute.snapshot.params['count'];
@@ -42,7 +43,7 @@ export class CoursesPageComponent implements OnInit, OnDestroy {
     this.stateSubscription = this.coursesService.state$.subscribe(this.updateState.bind(this));
     this.routeSubscription = this.activateRoute.queryParams.subscribe(this.updateRoute.bind(this));
 
-    this.coursesService.updateCourses();
+    // this.coursesService.getCourses();
   }
 
   ngOnDestroy() {
@@ -50,19 +51,19 @@ export class CoursesPageComponent implements OnInit, OnDestroy {
     this.stateSubscription.unsubscribe();
   }
 
-  public editCourse(id: CoursesListItem['id']): void {
+  editCourse(id: CoursesListItem['id']): void {
     this.router.navigate([`courses/${id}`]);
   }
 
-  public addCourse(course: CoursesListItem): void {
+  addCourse(course: CoursesListItem): void {
     this.router.navigate(['new']);
   }
 
-  public searchCourse(title: CoursesListItem['title']): void {
+  searchCourse(title: CoursesListItem['title']): void {
     // this.filter = title;
   }
 
-  public deleteCourse(id: CoursesListItem['id']): void {
+  deleteCourse(id: CoursesListItem['id']): void {
     const question = `Are you sure to delete this course?`;
     const confirmed = confirm(question);
 
@@ -71,24 +72,14 @@ export class CoursesPageComponent implements OnInit, OnDestroy {
     this.coursesService.removeCourse(id);
   }
 
-  public updateState(state: CoursesListState): void {
+  updateState(state: CoursesListState): void {
     this.state = {
       ...state
     };
   }
 
-  public updateRoute(params: Params): void {
-    // this.router.navigateByUrl(
-    //   'courses',
-    //   {
-    //     queryParams:{
-    //       start: this.state.start,
-    //       count:  this.state.count,
-    //     }
-    //   }
-    // );
+  updateRoute(params: Params): void {
     if (params.start !== this.state.start || params.count !== this.state.count) {
-      console.log(1);
       this.router.navigate(
         [''],
         {

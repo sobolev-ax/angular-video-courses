@@ -6,7 +6,7 @@ import { ServerCourse } from '../interfaces/server-course';
 import { Subject, Subscription, Observable, of, BehaviorSubject } from 'rxjs';
 import * as moment from 'moment';
 import { CoursesListState } from '../interfaces/courses-list-state';
-import { map, catchError } from 'rxjs/operators';
+import { map, catchError, tap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -20,7 +20,8 @@ export class CoursesService {
     sort: '',
     filter: '',
     textFragment: '',
-    courses: []
+    courses: [],
+    next: true,
   };
 
   readonly state$: Subject<CoursesListState> = new BehaviorSubject(this.state);
@@ -33,7 +34,14 @@ export class CoursesService {
 
   public setState(state: CoursesListState): void {
     this.state = {
-      ...state
+      start: state.start,
+      count: state.count,
+      step: state.step,
+      sort: state.sort,
+      filter: state.filter,
+      textFragment: state.textFragment,
+      courses: [...state.courses],
+      next: state.next,
     };
   }
 
@@ -57,7 +65,7 @@ export class CoursesService {
     this.http.delete<ServerCourse>(`${this.BASE_URL}/courses/${id}`).subscribe(
     (data) => {
       console.log('Course deleted:', id);
-      this.updateCourses();
+      this.getCoursesWithUpdate();
     },
     (err) => {
       console.log('Can\'t delete course by id:', id);
@@ -116,20 +124,31 @@ export class CoursesService {
   }
 
   private getListCourses(): Observable<CoursesListItem[]> {
+    const gotCourses = (): void => {
+
+    };
+
     return this.http.get<ServerCourse[]>(`${this.BASE_URL}/courses`, {params: {
       start: String(this.state.start),
       count: String(this.state.count),
     }}).pipe(
+      tap(gotCourses),
       map(this.transformToListCourses.bind(this)),
     );
   }
 
-  public updateCourses(): void {
+  public getCoursesWithUpdate(): void {
     this.getListCourses().subscribe(
-      courses => this.state$.next({
-        ...this.state,
-        courses
-      })
+      (courses) => {
+        this.state = {
+          ...this.state,
+          courses
+        };
+
+        this.state$.next({
+          ...this.state
+        });
+      }
     );
   }
 }

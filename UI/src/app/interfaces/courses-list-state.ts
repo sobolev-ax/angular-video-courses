@@ -8,4 +8,5 @@ export interface CoursesListState {
   filter: string;
   textFragment: string;
   courses: CoursesListItem[];
+  next: boolean;
 }

@@ -10,10 +10,12 @@ import { CoursesListItem } from '../../interfaces/courses-list-item';
 export class CoursesListComponent {
 
   @Input() courses: CoursesListItem[];
+  @Input() isNext: boolean;
 
   @Output() addCourse = new EventEmitter<CoursesListItem>();
   @Output() deleteCourse = new EventEmitter<CoursesListItem['id']>();
   @Output() editCourse = new EventEmitter<CoursesListItem['id']>();
+  @Output() getMoreCourses = new EventEmitter();
 
   trackByFn(index: Number, item: CoursesListItem): Number {
     return item.id;
@@ -29,5 +31,9 @@ export class CoursesListComponent {
 
   edit(id: CoursesListItem['id']): void {
     this.editCourse.emit(id);
+  }
+
+  more(): void {
+    this.getMoreCourses.emit();
   }
 }

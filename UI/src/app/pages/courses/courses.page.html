@@ -8,6 +8,7 @@
     ></app-search>
     <app-courses-list
       [courses]="state.courses"
+      [isNext]="state.next"
       (addCourse)="addCourse($event)"
       (deleteCourse)="deleteCourse($event)"
       (editCourse)="editCourse($event)"
