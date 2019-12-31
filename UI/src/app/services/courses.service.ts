@@ -123,32 +123,30 @@ export class CoursesService {
     };
   }
 
-  private getListCourses(): Observable<CoursesListItem[]> {
+  public getListCourses(): void {
     const gotCourses = (): void => {
 
     };
 
-    return this.http.get<ServerCourse[]>(`${this.BASE_URL}/courses`, {params: {
+    this.http.get<ServerCourse[]>(`${this.BASE_URL}/courses`, {params: {
       start: String(this.state.start),
       count: String(this.state.count),
     }}).pipe(
       tap(gotCourses),
       map(this.transformToListCourses.bind(this)),
-    );
+    ).subscribe((courses: CoursesListItem[]) => {
+      this.state = {
+        ...this.state,
+        courses: [...courses]
+      };
+
+      this.sendUpdate();
+    });
   }
 
-  public getCoursesWithUpdate(): void {
-    this.getListCourses().subscribe(
-      (courses) => {
-        this.state = {
-          ...this.state,
-          courses
-        };
-
-        this.state$.next({
-          ...this.state
-        });
-      }
-    );
+  public sendUpdate(): void {
+    this.state$.next({
+      ...this.state
+    });
   }
 }

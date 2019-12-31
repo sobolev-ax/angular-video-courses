@@ -31,11 +31,7 @@ export class CoursesPageComponent implements OnInit, OnDestroy {
     private readonly coursesService: CoursesService,
     private readonly router: Router,
     private readonly activateRoute: ActivatedRoute,
-  ) {
-    const start = activateRoute.snapshot.params['start'];
-    const count = activateRoute.snapshot.params['count'];
-    console.log(start);
-  }
+  ) { }
 
   ngOnInit() {
     this.coursesService.setState(this.state);
@@ -43,7 +39,7 @@ export class CoursesPageComponent implements OnInit, OnDestroy {
     this.stateSubscription = this.coursesService.state$.subscribe(this.updateState.bind(this));
     this.routeSubscription = this.activateRoute.queryParams.subscribe(this.updateRoute.bind(this));
 
-    // this.coursesService.getCourses();
+    this.coursesService.getListCourses();
   }
 
   ngOnDestroy() {
