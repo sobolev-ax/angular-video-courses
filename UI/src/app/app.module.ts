@@ -13,6 +13,7 @@ import { HeaderComponent } from './components/header/header.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { BreadcrumbsComponent } from './components/breadcrumbs/breadcrumbs.component';
 import { SearchComponent } from './components/search/search.component';
+import { LoadingComponent } from './components/loading/loading.component';
 
 import { RelevanceDirective } from './directives/relevance.directive';
 import { DurationPipe } from './pipes/duration.pipe';
@@ -65,6 +66,7 @@ const appRoutes: Routes = [
     FooterComponent,
     BreadcrumbsComponent,
     SearchComponent,
+    LoadingComponent,
     RelevanceDirective,
     DurationPipe,
     ModalBoxComponent,
@@ -79,6 +81,7 @@ const appRoutes: Routes = [
     FooterComponent,
     BreadcrumbsComponent,
     SearchComponent,
+    LoadingComponent,
     ModalBoxComponent,
   ],
   imports: [

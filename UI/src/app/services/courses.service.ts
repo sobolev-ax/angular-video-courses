@@ -6,7 +6,8 @@ import { ServerCourse } from '../interfaces/server-course';
 import { Subject, Observable, of, BehaviorSubject } from 'rxjs';
 import * as moment from 'moment';
 import { CoursesListState } from '../interfaces/courses-list-state';
-import { map, catchError, tap } from 'rxjs/operators';
+import { map, catchError, tap, finalize, throttleTime, delay } from 'rxjs/operators';
+import { LoadingService } from './loading.service';
 
 @Injectable({
   providedIn: 'root'
@@ -30,6 +31,7 @@ export class CoursesService {
 
   constructor(
     private http: HttpClient,
+    private loadingService: LoadingService,
   ) { }
 
   public setState(state: CoursesListState): void {
@@ -140,7 +142,10 @@ export class CoursesService {
       console.log(`Courses got: ${couses.length}`);
     };
 
+    this.loadingService.setLoading(true);
+
     this.http.get<ServerCourse[]>(`${this.BASE_URL}/courses`, { params }).pipe(
+      delay(500),
       tap(gotCourses),
       map(this.transformToListCourses.bind(this)),
     ).subscribe((courses: CoursesListItem[]) => {
@@ -155,6 +160,8 @@ export class CoursesService {
       };
 
       this.sendUpdate();
+
+      this.loadingService.setLoading(false);
     });
   }
 
