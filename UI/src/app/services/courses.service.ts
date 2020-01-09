@@ -65,7 +65,7 @@ export class CoursesService {
     this.http.delete<ServerCourse>(`${this.BASE_URL}/courses/${id}`).subscribe(
     (data) => {
       console.log('Course deleted:', id);
-      this.getCoursesWithUpdate();
+      this.getListCourses();
     },
     (err) => {
       console.log('Can\'t delete course by id:', id);
@@ -124,17 +124,31 @@ export class CoursesService {
   }
 
   public getListCourses(): void {
-    const gotCourses = (): void => {
-
-    };
-
-    this.http.get<ServerCourse[]>(`${this.BASE_URL}/courses`, {params: {
+    const params = {
       start: String(this.state.start),
       count: String(this.state.count),
-    }}).pipe(
+      textFragment: this.state.textFragment
+    };
+
+    console.log(`Courses request:
+      start - ${params.start},
+      count - ${params.count},
+      step - ${this.state.step},
+      textFragment- ${this.state.textFragment}`);
+
+    const gotCourses = (): void => {
+      console.log(`Courses got: start - ${params.start}, count - ${params.count}, step - ${this.state.step}`);
+    };
+
+    this.http.get<ServerCourse[]>(`${this.BASE_URL}/courses`, { params }).pipe(
       tap(gotCourses),
       map(this.transformToListCourses.bind(this)),
     ).subscribe((courses: CoursesListItem[]) => {
+
+      if (courses.length < this.state.count) {
+        this.state.next = false;
+      }
+
       this.state = {
         ...this.state,
         courses: [...courses]
@@ -142,6 +156,25 @@ export class CoursesService {
 
       this.sendUpdate();
     });
+  }
+
+  public getNextListCourses(): void {
+    this.state = {
+      ...this.state,
+      count: this.state.count + this.state.step,
+    };
+
+    this.getListCourses();
+  }
+
+  public getTextFragmentListCourses(text: string): void {
+    this.state = {
+      ...this.state,
+      next: true,
+      textFragment: text
+    };
+
+    this.getListCourses();
   }
 
   public sendUpdate(): void {

@@ -12,13 +12,11 @@ import { CoursesListState } from 'src/app/interfaces/courses-list-state';
 })
 export class CoursesPageComponent implements OnInit, OnDestroy {
 
-  private routeSubscription: Subscription;
-
   private stateSubscription: Subscription;
 
   private state: CoursesListState = {
     start: 0,
-    count: 10,
+    count: 7,
     step: 10,
     sort: '',
     filter: '',
@@ -27,23 +25,22 @@ export class CoursesPageComponent implements OnInit, OnDestroy {
     next: true,
   };
 
+  private filter: string = this.state.textFragment;
+
   constructor(
     private readonly coursesService: CoursesService,
     private readonly router: Router,
-    private readonly activateRoute: ActivatedRoute,
   ) { }
 
   ngOnInit() {
     this.coursesService.setState(this.state);
 
     this.stateSubscription = this.coursesService.state$.subscribe(this.updateState.bind(this));
-    this.routeSubscription = this.activateRoute.queryParams.subscribe(this.updateRoute.bind(this));
 
     this.coursesService.getListCourses();
   }
 
   ngOnDestroy() {
-    this.routeSubscription.unsubscribe();
     this.stateSubscription.unsubscribe();
   }
 
@@ -55,8 +52,12 @@ export class CoursesPageComponent implements OnInit, OnDestroy {
     this.router.navigate(['new']);
   }
 
-  searchCourse(title: CoursesListItem['title']): void {
-    // this.filter = title;
+  getNextCourses(): void {
+    this.coursesService.getNextListCourses();
+  }
+
+  searchCourse(text: string): void {
+    this.coursesService.getTextFragmentListCourses(text);
   }
 
   deleteCourse(id: CoursesListItem['id']): void {
@@ -72,19 +73,5 @@ export class CoursesPageComponent implements OnInit, OnDestroy {
     this.state = {
       ...state
     };
-  }
-
-  updateRoute(params: Params): void {
-    if (params.start !== this.state.start || params.count !== this.state.count) {
-      this.router.navigate(
-        [''],
-        {
-          queryParams:{
-            start: this.state.start,
-            count:  this.state.count,
-          }
-        }
-      );
-    }
   }
 }
