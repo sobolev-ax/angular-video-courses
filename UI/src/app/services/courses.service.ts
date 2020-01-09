@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { CoursesListItem } from '../interfaces/courses-list-item';
 import { ServerCourse } from '../interfaces/server-course';
 
-import { Subject, Subscription, Observable, of, BehaviorSubject } from 'rxjs';
+import { Subject, Observable, of, BehaviorSubject } from 'rxjs';
 import * as moment from 'moment';
 import { CoursesListState } from '../interfaces/courses-list-state';
 import { map, catchError, tap } from 'rxjs/operators';
@@ -134,10 +134,10 @@ export class CoursesService {
       start - ${params.start},
       count - ${params.count},
       step - ${this.state.step},
-      textFragment- ${this.state.textFragment}`);
+      textFragment - ${this.state.textFragment}`);
 
-    const gotCourses = (): void => {
-      console.log(`Courses got: start - ${params.start}, count - ${params.count}, step - ${this.state.step}`);
+    const gotCourses = (couses): void => {
+      console.log(`Courses got: ${couses.length}`);
     };
 
     this.http.get<ServerCourse[]>(`${this.BASE_URL}/courses`, { params }).pipe(
@@ -171,8 +171,10 @@ export class CoursesService {
     this.state = {
       ...this.state,
       next: true,
-      textFragment: text
+      textFragment: text.trim(),
     };
+
+    if (text.length < 3 && text.length !== 0) return;
 
     this.getListCourses();
   }
