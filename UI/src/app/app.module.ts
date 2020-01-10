@@ -30,6 +30,8 @@ import { CoursesService } from './services/courses.service';
 import { AuthService } from './services/auth.service';
 
 import { AuthInterceptor } from './interceptors/auth-interceptor';
+import { StoreModule } from '@ngrx/store';
+import { authReducers } from './store/reducers/auth.reducers';
 
 const appRoutes: Routes = [
   { path: '', redirectTo: 'courses', pathMatch:'full' },
@@ -87,6 +89,9 @@ const appRoutes: Routes = [
   imports: [
     FormsModule,
     BrowserModule,
+    StoreModule.forRoot({
+      auth: authReducers
+    }),
     RouterModule.forRoot(appRoutes),
     HttpClientModule,
   ],
