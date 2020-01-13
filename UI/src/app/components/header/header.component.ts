@@ -3,6 +3,9 @@ import { AuthService } from 'src/app/services/auth.service';
 import { Router } from '@angular/router';
 import { Subscriber, Subscription } from 'rxjs';
 import { UserInfo } from 'src/app/interfaces/user-info';
+import { Store, select } from '@ngrx/store';
+import { IAppState } from 'src/app/store/state/app.state';
+import { selectAuthToken } from 'src/app/store/selectors/auth.selector';
 
 @Component({
   selector: 'app-header',
@@ -10,28 +13,33 @@ import { UserInfo } from 'src/app/interfaces/user-info';
   styleUrls: ['./header.component.sass']
 })
 export class HeaderComponent implements OnInit, OnDestroy {
-
   public isAuth: boolean;
 
   public name = '';
 
   private updateSubscription: Subscription;
   private userInfoSubscription: Subscription;
+  private authSubscription: Subscription;
 
 
   constructor(
     private authService: AuthService,
     private router: Router,
+    private store: Store<IAppState>,
   ) { }
 
 
   ngOnInit() {
     this.updateSubscription = this.authService.auth$.subscribe(this.updateAuth.bind(this));
     this.authService.updateAuthentication();
+    this.authSubscription = this.store.pipe(select(selectAuthToken)).subscribe((token) => {
+      console.log(token);
+    });
   }
 
   ngOnDestroy() {
     this.updateSubscription.unsubscribe();
+    this.authSubscription.unsubscribe();
 
     if (this.userInfoSubscription) {
       this.userInfoSubscription.unsubscribe();

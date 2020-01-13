@@ -2,12 +2,14 @@ import { Injectable } from '@angular/core';
 import { Effect, ofType, Actions } from '@ngrx/effects';
 import { Store, select } from '@ngrx/store';
 import { of } from 'rxjs';
-import { switchMap, map, withLatestFrom } from 'rxjs/operators';
+import { switchMap, map, withLatestFrom, switchMapTo } from 'rxjs/operators';
 
 import { IAppState } from '../state/app.state';
 
 import {
-  GetTokenSuccess,
+  EAuthActions,
+  LogRequest,
+  LogSuccess,
 } from '../actions/auth.actions';
 
 import { AuthService } from '../../services/auth.service';
@@ -18,5 +20,15 @@ import { UserInfo } from '../../interfaces/user-info';
 @Injectable()
 export class AuthEffects {
   @Effect()
-  getToken$ = this._action$.pipe()
+  logRequest$ = this.actions$.pipe(
+    ofType<LogRequest>(EAuthActions.toLogRequest),
+    switchMap(() => {
+      return 'qqqqq';
+    })
+  );
+
+  constructor(
+    private authService: AuthService,
+    private actions$: Actions,
+  ) {}
 }

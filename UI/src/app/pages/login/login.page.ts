@@ -3,6 +3,10 @@ import { AuthService } from 'src/app/services/auth.service';
 import { IUser } from 'src/app/interfaces/user';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { Store, select } from '@ngrx/store';
+import { IAppState } from 'src/app/store/state/app.state';
+import { selectAuthToken } from 'src/app/store/selectors/auth.selector';
+import { LogRequest } from 'src/app/store/actions/auth.actions';
 
 
 @Component({
@@ -17,6 +21,7 @@ export class LoginPageComponent implements OnInit, OnDestroy {
   constructor(
     private authService: AuthService,
     private router: Router,
+    private store: Store<IAppState>,
   ) { }
 
   ngOnInit() {
@@ -30,7 +35,11 @@ export class LoginPageComponent implements OnInit, OnDestroy {
   }
 
   logIn(event: IUser): void {
-    this.authService.toLogin(event.email, event.password);
+    // this.authService.toLogin(event.email, event.password);
+    this.store.dispatch(new LogRequest({
+      email: event.email,
+      password: event.password,
+    }));
   }
 
   private updateAuth(isLogin): void {

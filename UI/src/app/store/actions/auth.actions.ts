@@ -1,21 +1,19 @@
 import { Action } from '@ngrx/store';
-
-import { UserInfo } from 'src/app/interfaces/user-info';
+import { IUser } from 'src/app/interfaces/user';
 
 export enum EAuthActions {
-  getToken = '[Auth] Get Token',
-  GetTokenSuccess = '[Auth] Get Token Success'
+  toLogRequest = '[Auth] Log Request',
+  toLogSuccess = '[Auth] Log Success',
 }
 
-export class GetTokenRequest implements Action {
-  public readonly type = EAuthActions.getToken;
+export class LogRequest implements Action {
+  public readonly type = EAuthActions.toLogRequest;
+  constructor(public payload: IUser) {}
 }
 
-export class GetTokenSuccess implements Action {
-  public readonly type = EAuthActions.GetTokenSuccess;
+export class LogSuccess implements Action {
+  public readonly type = EAuthActions.toLogSuccess;
   constructor(public payload: string) {}
 }
 
-export type AuthActions =
-  | GetTokenRequest
-  | GetTokenSuccess;
+export type AuthActions = LogRequest | LogSuccess;
