@@ -6,6 +6,7 @@ import { Subject, Observable, of } from 'rxjs';
 import { IUser } from '../interfaces/user';
 import { UserInfo } from '../interfaces/user-info';
 import { TokenRequestModel } from '../interfaces/token-request-model';
+import { IAuth } from '../interfaces/auth-state';
 
 @Injectable({
   providedIn: 'root'
@@ -20,28 +21,36 @@ export class AuthService {
 
   constructor(private http: HttpClient) {}
 
-  public toLogin(email: IUser['email'] = '', password: IUser['password'] = ''): void {
+  public toLogin(email: IUser['email'] = '', password: IUser['password'] = ''): Observable<IAuth> {
     const credentials = { password, login: email };
 
-    const gotToken = (): void => {
-      console.log('Authentication login: Successful');
-    };
+    console.log(credentials);
 
-    const gotError = (error: any): Observable<string> => {
-      console.log('Authentication login:', error.error);
-      return of('');
-    };
-
-    this.http.post(`${this.BASE_URL}/auth/login`, credentials).pipe(
-      tap(gotToken),
-      catchError(gotError),
-    ).subscribe((data: any): void => {
-      if (data.length === 0) return;
-
-      localStorage.setItem(this.STORAGE_KEY, JSON.stringify(data.token));
-      this.updateAuthentication();
-    });
+    return this.http.post<IAuth>(`${this.BASE_URL}/auth/login`, credentials);
   }
+
+  // public toLogin(email: IUser['email'] = '', password: IUser['password'] = ''): void {
+  //   const credentials = { password, login: email };
+
+  //   const gotToken = (): void => {
+  //     console.log('Authentication login: Successful');
+  //   };
+
+  //   const gotError = (error: any): Observable<string> => {
+  //     console.log('Authentication login:', error.error);
+  //     return of('');
+  //   };
+
+  //   this.http.post(`${this.BASE_URL}/auth/login`, credentials).pipe(
+  //     tap(gotToken),
+  //     catchError(gotError),
+  //   ).subscribe((data: any): void => {
+  //     if (data.length === 0) return;
+
+  //     localStorage.setItem(this.STORAGE_KEY, JSON.stringify(data.token));
+  //     this.updateAuthentication();
+  //   });
+  // }
 
   @withUpdateAuthentication
   public toLogout(): boolean {

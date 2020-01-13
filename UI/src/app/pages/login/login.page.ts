@@ -35,7 +35,6 @@ export class LoginPageComponent implements OnInit, OnDestroy {
   }
 
   logIn(event: IUser): void {
-    // this.authService.toLogin(event.email, event.password);
     this.store.dispatch(new LogRequest({
       email: event.email,
       password: event.password,
