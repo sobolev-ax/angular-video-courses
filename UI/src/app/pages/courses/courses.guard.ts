@@ -30,6 +30,6 @@ export class CoursesGuard implements CanActivate {
       return this.router.parseUrl('/login');
     }
 
-    return this.authService.isAuthenticated();
+    return false;
   }
 }

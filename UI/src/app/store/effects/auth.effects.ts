@@ -1,22 +1,13 @@
 import { Injectable } from '@angular/core';
 import { Effect, ofType, Actions } from '@ngrx/effects';
-import { Store, select } from '@ngrx/store';
 import { of } from 'rxjs';
-import { switchMap, map, withLatestFrom, switchMapTo, catchError } from 'rxjs/operators';
-
-import { IAppState } from '../state/app.state';
-
-import {
-  EAuthActions,
-  LogRequest,
-  LogSuccess,
-  LogFailed,
-} from '../actions/auth.actions';
+import { switchMap, map, catchError, finalize } from 'rxjs/operators';
+import { EAuthActions, LogRequest, LogSuccess, LogFailed } from '../actions/auth.actions';
+import { LoadingOn, LoadingOff } from '../actions/common.actions';
 
 import { AuthService } from '../../services/auth.service';
-import { IUser } from '../../interfaces/user';
-import { UserInfo } from '../../interfaces/user-info';
-
+import { Store } from '@ngrx/store';
+import { IAppState } from 'src/app/interfaces/app-state';
 
 @Injectable()
 export class AuthEffects {
@@ -24,6 +15,7 @@ export class AuthEffects {
   constructor(
     private authService: AuthService,
     private actions$: Actions,
+    private store: Store<IAppState>,
   ) {}
 
   @Effect()
@@ -33,11 +25,16 @@ export class AuthEffects {
       const mail = data.payload.email;
       const pswd = data.payload.password;
 
+      this.store.dispatch(new LoadingOn());
+
       return this.authService
         .toLogin(mail, pswd)
         .pipe(
-          map(credentials => new LogSuccess(credentials.token)),
-          catchError(error => of(new LogFailed(error)))
+          map((credentials) => {
+            return new LogSuccess(credentials.token);
+          }),
+          catchError(error => of(new LogFailed(error))),
+          // finalize(() => this.store.dispatch(new LoadingOff())),
         );
     })
   );

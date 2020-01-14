@@ -1,15 +1,10 @@
 export interface UserInfo {
   id?: number;
+  fakeToken: string;
   name: {
     first: string;
     last: string;
   };
-  date: string;
-  length: number;
-  description: string;
-  authors: {
-    id: number;
-    name: string;
-  };
-  isTopRated: boolean;
+  login: string;
+  password: string;
 }

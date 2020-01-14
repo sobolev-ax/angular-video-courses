@@ -4,8 +4,8 @@ import { Router } from '@angular/router';
 import { Subscriber, Subscription } from 'rxjs';
 import { UserInfo } from 'src/app/interfaces/user-info';
 import { Store, select } from '@ngrx/store';
-import { IAppState } from 'src/app/store/state/app.state';
 import { selectAuthToken } from 'src/app/store/selectors/auth.selector';
+import { IAppState } from 'src/app/interfaces/app-state';
 
 @Component({
   selector: 'app-header',
@@ -59,7 +59,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.isAuth = logged;
 
     if (logged) {
-      this.userInfoSubscription = this.authService.getUserInfo().subscribe((user: UserInfo) => {
+      this.userInfoSubscription = this.authService.getUserInfo().subscribe((user: UserInfo | null) => {
         this.name = `${user.name.first} ${user.name.last}`;
       });
     } else {

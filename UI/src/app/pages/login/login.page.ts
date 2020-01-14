@@ -4,9 +4,9 @@ import { IUser } from 'src/app/interfaces/user';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { Store, select } from '@ngrx/store';
-import { IAppState } from 'src/app/store/state/app.state';
 import { selectAuthToken } from 'src/app/store/selectors/auth.selector';
 import { LogRequest } from 'src/app/store/actions/auth.actions';
+import { IAppState } from 'src/app/interfaces/app-state';
 
 
 @Component({

@@ -1,7 +1,6 @@
 import { createSelector } from '@ngrx/store';
-
-import { IAppState } from '../state/app.state';
-import { IAuthState } from '../state/auth.state';
+import { IAppState } from 'src/app/interfaces/app-state';
+import { IAuthState } from 'src/app/interfaces/auth-state';
 
 const auth = (state: IAppState) => state.auth;
 

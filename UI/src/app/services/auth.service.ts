@@ -6,7 +6,7 @@ import { Subject, Observable, of } from 'rxjs';
 import { IUser } from '../interfaces/user';
 import { UserInfo } from '../interfaces/user-info';
 import { TokenRequestModel } from '../interfaces/token-request-model';
-import { IAuth } from '../interfaces/auth-state';
+import { IAuthState } from '../interfaces/auth-state';
 
 @Injectable({
   providedIn: 'root'
@@ -21,12 +21,18 @@ export class AuthService {
 
   constructor(private http: HttpClient) {}
 
-  public toLogin(email: IUser['email'] = '', password: IUser['password'] = ''): Observable<IAuth> {
+  public toLogin(email: IUser['email'] = '', password: IUser['password'] = ''): Observable<IAuthState> {
     const credentials = { password, login: email };
 
-    console.log(credentials);
+    const saveToken = (data): void => {
+      console.log('Authentication login: Successful', data);
 
-    return this.http.post<IAuth>(`${this.BASE_URL}/auth/login`, credentials);
+      localStorage.setItem(this.STORAGE_KEY, JSON.stringify(data.token));
+    };
+
+    return this.http.post<IAuthState>(`${this.BASE_URL}/auth/login`, credentials).pipe(
+      tap(saveToken),
+    );
   }
 
   // public toLogin(email: IUser['email'] = '', password: IUser['password'] = ''): void {

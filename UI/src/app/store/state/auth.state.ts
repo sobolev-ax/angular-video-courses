@@ -1,11 +1,6 @@
-import { UserInfo } from 'src/app/interfaces/user-info';
-
-export interface IAuthState {
-  token: string;
-  user: UserInfo;
-}
+import { IAuthState } from 'src/app/interfaces/auth-state';
 
 export const initialAuthState: IAuthState = {
-  token: null,
+  token: '',
   user: null,
 };

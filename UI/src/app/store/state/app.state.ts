@@ -1,16 +1,10 @@
-import { RouterReducerState } from '@ngrx/router-store';
-
-import { IAuthState, initialAuthState } from './auth.state';
-
-export interface IAppState {
-  router?: RouterReducerState;
-  auth: IAuthState;
-  loading: boolean;
-}
+import { initialAuthState } from './auth.state';
+import { IAppState } from 'src/app/interfaces/app-state';
+import { initialCommonState } from './common.state';
 
 export const initialAppState: IAppState = {
   auth: initialAuthState,
-  loading: false,
+  common: initialCommonState,
 };
 
 export function getInitialState(): IAppState {
