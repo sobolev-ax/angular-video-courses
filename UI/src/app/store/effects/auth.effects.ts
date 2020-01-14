@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Effect, ofType, Actions } from '@ngrx/effects';
 import { of } from 'rxjs';
 import { switchMap, map, catchError, finalize } from 'rxjs/operators';
-import { EAuthActions, LogRequest, LogSuccess, LogFailed } from '../actions/auth.actions';
+import { EAuthActions, LogRequest, LogSuccess, LogFailed, GetLocalTokenSuccess } from '../actions/auth.actions';
 import { LoadingOn, LoadingOff } from '../actions/common.actions';
 
 import { AuthService } from '../../services/auth.service';
@@ -34,8 +34,24 @@ export class AuthEffects {
             return new LogSuccess(credentials.token);
           }),
           catchError(error => of(new LogFailed(error))),
-          // finalize(() => this.store.dispatch(new LoadingOff())),
+          finalize(() => this.store.dispatch(new LoadingOff())),
         );
     })
   );
+
+  // @Effect()
+  // getLocalTokenRequest$ = this.actions$.pipe(
+  //   ofType<LogRequest>(EAuthActions.toGetLocalTokenRequest),
+  //   switchMap(() => {
+  //     return this.authService
+  //       .getAuthorizationToken();
+  //       // .pipe(
+  //       //   map((token) => {
+  //       //     if (token.length === 0) return;
+
+  //       //     return new GetLocalTokenSuccess(token);
+  //       //   }),
+  //       // );
+  //   })
+  // );
 }

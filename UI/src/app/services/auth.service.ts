@@ -71,7 +71,7 @@ export class AuthService {
     if (!this.isAuthenticated()) throw new Error('You should login');
 
     const token: TokenRequestModel = {
-      token: this.getAuthorizationToken(),
+      token: '' // this.getAuthorizationToken(),
     };
 
     return this.http.post<UserInfo>(`${this.BASE_URL}/auth/userinfo`, token);
@@ -93,8 +93,8 @@ export class AuthService {
     console.log('Authentication send auth$:', status);
   }
 
-  public getAuthorizationToken(): string {
-    return JSON.parse(localStorage.getItem(this.STORAGE_KEY)) || '';
+  public getAuthorizationToken(): Observable<string> {
+    return of(JSON.parse(localStorage.getItem(this.STORAGE_KEY)) || '');
   }
 }
 

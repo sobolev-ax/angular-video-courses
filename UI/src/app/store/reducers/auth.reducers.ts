@@ -13,6 +13,7 @@ export const authReducer = (
       return {
         ...state,
         token: '',
+        user: null,
       };
     }
     case EAuthActions.toLogSuccess: {
@@ -20,6 +21,7 @@ export const authReducer = (
       return {
         ...state,
         token: acttion.payload,
+        user: null,
       };
     }
     case EAuthActions.toLogFailed: {
@@ -27,6 +29,59 @@ export const authReducer = (
       return {
         ...state,
         token: '',
+        user: null,
+      };
+    }
+    case EAuthActions.toLogOut: {
+      console.log('toLogOut', acttion);
+      return {
+        ...state,
+        token: '',
+        user: null,
+      };
+    }
+    case EAuthActions.toUserRequest: {
+      console.log('toUserRequest', acttion);
+      return {
+        ...state,
+        user: null,
+      };
+    }
+    case EAuthActions.toUserSuccess: {
+      console.log('toUserSuccess', acttion);
+      return {
+        ...state,
+        user: acttion.payload,
+      };
+    }
+    case EAuthActions.toUserFailed: {
+      console.log('toUserFailed', acttion);
+      return {
+        ...state,
+        user: null,
+      };
+    }
+    case EAuthActions.toUserOut: {
+      console.log('toUserOut', acttion);
+      return {
+        ...state,
+        user: null,
+      };
+    }
+    case EAuthActions.toGetLocalTokenRequest: {
+      console.log('toGetLocalTokenRequest', acttion);
+      return {
+        ...state,
+        token: '',
+        user: null,
+      };
+    }
+    case EAuthActions.toGetLocalTokenSuccess: {
+      console.log('toGetLocalTokenSuccess', acttion);
+      return {
+        ...state,
+        token: acttion.payload,
+        user: null,
       };
     }
     default:
