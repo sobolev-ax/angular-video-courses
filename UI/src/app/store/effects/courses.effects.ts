@@ -1,15 +1,15 @@
 import { Injectable } from '@angular/core';
 import { Effect, ofType, Actions } from '@ngrx/effects';
-import { of } from 'rxjs';
-import { switchMap, map, catchError, finalize, take } from 'rxjs/operators';
+import { switchMap, map, finalize, take } from 'rxjs/operators';
 import { LoadingOn, LoadingOff } from '../actions/common.actions';
 import { CoursesService } from '../../services/courses.service';
 import { Store, select } from '@ngrx/store';
 import { IAppState } from 'src/app/interfaces/app-state';
-import { ECoursesActions, CoursesRequest, CoursesSuccess } from '../actions/courses.actions';
+import { ECoursesActions, CoursesRequest, CoursesSuccess, CoursesSetFilter, CoursesRequestMore } from '../actions/courses.actions';
 import { CoursesParams } from 'src/app/interfaces/courses-params';
 import { getCoursesParams } from '../selectors/courses.selector';
 import { CoursesListItem } from 'src/app/interfaces/courses-list-item';
+import { of } from 'rxjs';
 
 @Injectable()
 export class CoursesEffects {
@@ -21,7 +21,7 @@ export class CoursesEffects {
   ) {}
 
   @Effect()
-  userRequest$ = this.actions$.pipe(
+  coursesRequest$ = this.actions$.pipe(
     ofType<CoursesRequest>(ECoursesActions.toCoursesRequest),
     switchMap(() => {
       let params: CoursesParams;
@@ -29,6 +29,8 @@ export class CoursesEffects {
       this.store.dispatch(new LoadingOn());
 
       this.store.pipe(select(getCoursesParams), take(1)).subscribe(data => params = { ...data });
+
+      console.log(params);
 
       return this.coursesService
         .rxGetListCourses(params)
@@ -38,6 +40,26 @@ export class CoursesEffects {
           }),
           finalize(() => this.store.dispatch(new LoadingOff())),
         );
+    })
+  );
+
+  @Effect()
+  coursesRequestMore$ = this.actions$.pipe(
+    ofType<CoursesRequestMore>(ECoursesActions.toCoursesRequestMore),
+    switchMap(() => {
+      this.store.dispatch(new CoursesRequest());
+
+      return of();
+    })
+  );
+
+  @Effect()
+  coursesSetFilter$ = this.actions$.pipe(
+    ofType<CoursesSetFilter>(ECoursesActions.toCoursesSetFilter),
+    switchMap(() => {
+      this.store.dispatch(new CoursesRequest());
+
+      return of();
     })
   );
 }

@@ -2,6 +2,9 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { LoadingService } from 'src/app/services/loading.service';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { Store, select } from '@ngrx/store';
+import { IAppState } from 'src/app/interfaces/app-state';
+import { getLoading } from 'src/app/store/selectors/common.selector';
 
 @Component({
   selector: 'app-loading',
@@ -15,17 +18,17 @@ export class LoadingComponent implements OnInit, OnDestroy {
   private isLoading: boolean;
 
   constructor(
-    private loadingService: LoadingService,
+    private store: Store<IAppState>,
   ) { }
 
   ngOnInit() {
-    this.loadingSubscription = this.loadingService.loading$
+    this.loadingSubscription = this.store.pipe(select(getLoading))
     .pipe(
-      debounceTime(300),
+      debounceTime(100),
       distinctUntilChanged(),
     )
-    .subscribe((isLoading: boolean) => {
-      this.isLoading = isLoading;
+    .subscribe((loading: boolean) => {
+      this.isLoading = loading;
     });
   }
 

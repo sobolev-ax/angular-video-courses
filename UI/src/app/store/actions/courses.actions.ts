@@ -3,11 +3,17 @@ import { CoursesListItem } from 'src/app/interfaces/courses-list-item';
 
 export enum ECoursesActions {
   toCoursesRequest = '[Courses] Courses Request',
+  toCoursesRequestMore = '[Courses] Courses Request More',
   toCoursesSuccess = '[Courses] Courses Success',
+  toCoursesSetFilter = '[Courses] Courses Filter',
 }
 
 export class CoursesRequest implements Action {
   public readonly type = ECoursesActions.toCoursesRequest;
+}
+
+export class CoursesRequestMore implements Action {
+  public readonly type = ECoursesActions.toCoursesRequestMore;
 }
 
 export class CoursesSuccess implements Action {
@@ -15,4 +21,9 @@ export class CoursesSuccess implements Action {
   constructor(public payload: CoursesListItem[]) {}
 }
 
-export type CoursesActions = CoursesRequest | CoursesSuccess;
+export class CoursesSetFilter implements Action {
+  public readonly type = ECoursesActions.toCoursesSetFilter;
+  constructor(public payload: string) {}
+}
+
+export type CoursesActions = CoursesRequest | CoursesSuccess | CoursesSetFilter | CoursesRequestMore;

@@ -1,8 +1,8 @@
 import { createSelector } from '@ngrx/store';
-import { IAppState } from 'src/app/interfaces/app-state';
-import { ICoursesState } from 'src/app/interfaces/courses-state';
-import { CoursesParams } from 'src/app/interfaces/courses-params';
-import { CoursesListItem } from 'src/app/interfaces/courses-list-item';
+import { IAppState } from '../../interfaces/app-state';
+import { ICoursesState } from '../../interfaces/courses-state';
+import { CoursesParams } from '../../interfaces/courses-params';
+import { ICoursesPageState } from '../../interfaces/courses-page-state';
 
 const courses = (state: IAppState) => state.courses;
 
@@ -15,12 +15,11 @@ export const getCoursesParams = createSelector(
   })
 );
 
-export const getCoursesList = createSelector(
+export const getCoursesPageState = createSelector(
   courses,
-  (state: ICoursesState): CoursesListItem[] => state.courses
-);
-
-export const canNextCoursesList = createSelector(
-  courses,
-  (state: ICoursesState): boolean => state.next
+  (state: ICoursesState): ICoursesPageState => ({
+    textFragment: state.textFragment,
+    courses: state.courses,
+    next: state.next,
+  })
 );

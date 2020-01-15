@@ -34,6 +34,7 @@ import { StoreModule } from '@ngrx/store';
 import { appReducers } from './store/reducers/app.reducers';
 import { EffectsModule } from '@ngrx/effects';
 import { AuthEffects } from './store/effects/auth.effects';
+import { CoursesEffects } from './store/effects/courses.effects';
 
 const appRoutes: Routes = [
   { path: '', redirectTo: 'courses', pathMatch:'full' },
@@ -96,6 +97,7 @@ const appRoutes: Routes = [
     ),
     EffectsModule.forRoot([
       AuthEffects,
+      CoursesEffects,
     ]),
     RouterModule.forRoot(appRoutes),
     HttpClientModule,

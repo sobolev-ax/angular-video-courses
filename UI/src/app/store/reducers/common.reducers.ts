@@ -6,7 +6,7 @@ export const commonReducer = (
   state = initialCommonState,
   acttion: CommonActions
 ): ICommonState => {
-  console.log('Common Reducer', acttion.type);
+  console.log('[Common] Reducer', acttion.type);
   switch (acttion.type) {
     case ECommonActions.toLoadingOn: {
       console.log('toLoadingOn', acttion);

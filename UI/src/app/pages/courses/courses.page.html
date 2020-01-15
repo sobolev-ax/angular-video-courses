@@ -4,7 +4,7 @@
     ></app-breadcrumbs>
     <app-search
       (searchCourse)="searchCourse($event)"
-      [course]="filter"
+      [course]="state.textFragment"
     ></app-search>
     <app-courses-list
       [courses]="state.courses"
