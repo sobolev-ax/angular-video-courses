@@ -5,7 +5,8 @@ import { LoadingOn, LoadingOff } from '../actions/common.actions';
 import { CoursesService } from '../../services/courses.service';
 import { Store, select } from '@ngrx/store';
 import { IAppState } from 'src/app/interfaces/app-state';
-import { ECoursesActions, CoursesRequest, CoursesSuccess, CoursesSetFilter, CoursesRequestMore } from '../actions/courses.actions';
+import { ECoursesActions, CoursesRequest, CoursesSuccess, CoursesSetFilter, CoursesRequestMore, CoursesRequestDelete }
+  from '../actions/courses.actions';
 import { CoursesParams } from 'src/app/interfaces/courses-params';
 import { getCoursesParams } from '../selectors/courses.selector';
 import { CoursesListItem } from 'src/app/interfaces/courses-list-item';
@@ -30,8 +31,6 @@ export class CoursesEffects {
 
       this.store.pipe(select(getCoursesParams), take(1)).subscribe(data => params = { ...data });
 
-      console.log(params);
-
       return this.coursesService
         .rxGetListCourses(params)
         .pipe(
@@ -50,6 +49,20 @@ export class CoursesEffects {
       this.store.dispatch(new CoursesRequest());
 
       return of();
+    })
+  );
+
+  @Effect()
+  coursesRequestDelete$ = this.actions$.pipe(
+    ofType<CoursesRequestDelete>(ECoursesActions.toCoursesRequestDelete),
+    switchMap((action) => {
+      return this.coursesService
+        .rxRemoveCourse(action.payload)
+        .pipe(
+          map(() => {
+            return new CoursesRequest();
+          })
+        );
     })
   );
 

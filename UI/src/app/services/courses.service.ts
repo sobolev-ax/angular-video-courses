@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpResponse } from '@angular/common/http';
 import { CoursesListItem } from '../interfaces/courses-list-item';
 import { ServerCourse } from '../interfaces/server-course';
 
@@ -130,6 +130,12 @@ export class CoursesService {
     return this.http.get<ServerCourse[]>(`${this.BASE_URL}/courses`, { params: { ...params } }).pipe(
       delay(550),
       map(this.transformToListCourses.bind(this)),
+    );
+  }
+
+  public rxRemoveCourse(id: CoursesListItem['id']): Observable<any> {
+    return this.http.delete<ServerCourse>(`${this.BASE_URL}/courses/${id}`).pipe(
+      delay(300)
     );
   }
 

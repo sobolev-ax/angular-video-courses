@@ -21,6 +21,12 @@ export const coursesReducer = (
         count: state.count + state.step,
       };
     }
+    case ECoursesActions.toCoursesRequestDelete: {
+      console.log('toCoursesRequestDelete', acttion);
+      return {
+        ...state,
+      };
+    }
     case ECoursesActions.toCoursesSuccess: {
       console.log('toCoursesSuccess', acttion);
       return {

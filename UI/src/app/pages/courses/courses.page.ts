@@ -7,7 +7,7 @@ import { Store, select } from '@ngrx/store';
 import { IAppState } from 'src/app/interfaces/app-state';
 import { ICoursesPageState } from 'src/app/interfaces/courses-page-state';
 import { getCoursesPageState } from 'src/app/store/selectors/courses.selector';
-import { CoursesRequest, CoursesSetFilter, CoursesRequestMore } from 'src/app/store/actions/courses.actions';
+import { CoursesRequest, CoursesSetFilter, CoursesRequestMore, CoursesRequestDelete } from 'src/app/store/actions/courses.actions';
 
 @Component({
   selector: 'app-courses-page',
@@ -64,6 +64,6 @@ export class CoursesPageComponent implements OnInit, OnDestroy {
 
     if (!confirmed) return;
 
-    this.coursesService.removeCourse(id);
+    this.store.dispatch(new CoursesRequestDelete(id));
   }
 }
