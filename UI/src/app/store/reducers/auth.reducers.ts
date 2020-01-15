@@ -54,20 +54,6 @@ export const authReducer = (
         user: acttion.payload,
       };
     }
-    case EAuthActions.toUserFailed: {
-      console.log('toUserFailed', acttion);
-      return {
-        ...state,
-        user: null,
-      };
-    }
-    case EAuthActions.toUserOut: {
-      console.log('toUserOut', acttion);
-      return {
-        ...state,
-        user: null,
-      };
-    }
     case EAuthActions.toGetLocalTokenRequest: {
       console.log('toGetLocalTokenRequest', acttion);
       return {

@@ -1,5 +1,4 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { AuthService } from 'src/app/services/auth.service';
 import { IUser } from 'src/app/interfaces/user';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -8,7 +7,6 @@ import { selectAuthToken } from 'src/app/store/selectors/auth.selector';
 import { LogRequest } from 'src/app/store/actions/auth.actions';
 import { IAppState } from 'src/app/interfaces/app-state';
 
-
 @Component({
   selector: 'app-login-page',
   templateUrl: './login.page.html',
@@ -16,22 +14,19 @@ import { IAppState } from 'src/app/interfaces/app-state';
 })
 export class LoginPageComponent implements OnInit, OnDestroy {
 
-  private authSubscription: Subscription;
+  private tokenSubscription: Subscription;
 
   constructor(
-    private authService: AuthService,
     private router: Router,
     private store: Store<IAppState>,
   ) { }
 
   ngOnInit() {
-    this.authSubscription = this.authService.auth$.subscribe(this.updateAuth.bind(this));
-
-    this.authService.updateAuthentication();
+    this.tokenSubscription = this.store.pipe(select(selectAuthToken)).subscribe(this.checkToken.bind(this));
   }
 
   ngOnDestroy() {
-    this.authSubscription.unsubscribe();
+    this.tokenSubscription.unsubscribe();
   }
 
   logIn(event: IUser): void {
@@ -41,9 +36,9 @@ export class LoginPageComponent implements OnInit, OnDestroy {
     }));
   }
 
-  private updateAuth(isLogin): void {
-    if (isLogin) {
-      this.router.navigate(['']);
-    }
+  private checkToken(token): void {
+    if (token.length === 0) return;
+
+    this.router.navigate(['']);
   }
 }

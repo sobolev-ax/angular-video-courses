@@ -2,6 +2,7 @@ import { Action } from '@ngrx/store';
 import { IUser } from 'src/app/interfaces/user';
 import { IAuthState } from 'src/app/interfaces/auth-state';
 import { UserInfo } from 'src/app/interfaces/user-info';
+import { TokenRequestModel } from 'src/app/interfaces/token-request-model';
 
 export enum EAuthActions {
   toLogRequest = '[Auth] Log Request',
@@ -10,8 +11,6 @@ export enum EAuthActions {
   toLogOut = '[Auth] Log Out',
   toUserRequest = '[Auth] User Request',
   toUserSuccess = '[Auth] User Success',
-  toUserFailed = '[Auth] User Failed',
-  toUserOut = '[Auth] User Out',
   toGetLocalTokenRequest = '[Auth] Get Local Token Request',
   toGetLocalTokenSuccess = '[Auth] Get Local Token Success',
 }
@@ -37,21 +36,12 @@ export class LogOut implements Action {
 
 export class UserRequest implements Action {
   public readonly type = EAuthActions.toUserRequest;
-  constructor(public payload: IAuthState['token']) {}
+  constructor(public payload: TokenRequestModel['token']) {}
 }
 
 export class UserSuccess implements Action {
   public readonly type = EAuthActions.toUserSuccess;
   constructor(public payload: UserInfo) {}
-}
-
-export class UserFailed implements Action {
-  public readonly type = EAuthActions.toUserFailed;
-  constructor(public payload: Error) {}
-}
-
-export class UserOut implements Action {
-  public readonly type = EAuthActions.toUserOut;
 }
 
 export class GetLocalTokenRequest implements Action {
@@ -64,6 +54,6 @@ export class GetLocalTokenSuccess implements Action {
 }
 
 export type AuthActions =
-    UserRequest | UserSuccess | UserFailed | UserOut
+    UserRequest | UserSuccess
   | LogRequest | LogSuccess | LogFailed | LogOut
   | GetLocalTokenRequest | GetLocalTokenSuccess;

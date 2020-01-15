@@ -1,11 +1,12 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { AuthService } from 'src/app/services/auth.service';
 import { Router } from '@angular/router';
-import { Subscriber, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { UserInfo } from 'src/app/interfaces/user-info';
 import { Store, select } from '@ngrx/store';
-import { selectAuthToken } from 'src/app/store/selectors/auth.selector';
+import { selectAuthToken, checkAuth, getUser } from 'src/app/store/selectors/auth.selector';
 import { IAppState } from 'src/app/interfaces/app-state';
+import { take } from 'rxjs/operators';
+import { UserRequest, LogOut } from 'src/app/store/actions/auth.actions';
 
 @Component({
   selector: 'app-header',
@@ -14,56 +15,44 @@ import { IAppState } from 'src/app/interfaces/app-state';
 })
 export class HeaderComponent implements OnInit, OnDestroy {
   public isAuth: boolean;
-
   public name = '';
 
-  private updateSubscription: Subscription;
   private userInfoSubscription: Subscription;
-  private authSubscription: Subscription;
-
+  private tokenSubscription: Subscription;
 
   constructor(
-    private authService: AuthService,
     private router: Router,
     private store: Store<IAppState>,
   ) { }
 
-
   ngOnInit() {
-    this.updateSubscription = this.authService.auth$.subscribe(this.updateAuth.bind(this));
-    this.authService.updateAuthentication();
-    this.authSubscription = this.store.pipe(select(selectAuthToken)).subscribe((token) => {
-      console.log(token);
+    this.tokenSubscription = this.store.pipe(select(selectAuthToken)).subscribe((token) => {
+      this.store.pipe(select(checkAuth), take(1)).subscribe(auth => this.isAuth = auth);
+
+      if (!this.isAuth) {
+        this.router.navigate(['login']);
+        return;
+      }
+
+      this.store.dispatch(new UserRequest(token));
+    });
+
+    this.userInfoSubscription = this.store.pipe(select(getUser)).subscribe((user: UserInfo) => {
+      if (!user) {
+        this.name = '';
+        return;
+      }
+
+      this.name = `${user.name.first} ${user.name.last}`;
     });
   }
 
   ngOnDestroy() {
-    this.updateSubscription.unsubscribe();
-    this.authSubscription.unsubscribe();
-
-    if (this.userInfoSubscription) {
-      this.userInfoSubscription.unsubscribe();
-    }
+    this.tokenSubscription.unsubscribe();
+    this.userInfoSubscription.unsubscribe();
   }
-
 
   public logOut(): void {
-    const isLogout = this.authService.toLogout();
-
-    if (isLogout) {
-      this.router.navigate(['login']);
-    }
-  }
-
-  private updateAuth(logged: boolean): void {
-    this.isAuth = logged;
-
-    if (logged) {
-      this.userInfoSubscription = this.authService.getUserInfo().subscribe((user: UserInfo | null) => {
-        this.name = `${user.name.first} ${user.name.last}`;
-      });
-    } else {
-      this.name = '';
-    }
+    this.store.dispatch(new LogOut());
   }
 }
