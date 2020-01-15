@@ -8,6 +8,7 @@ import * as moment from 'moment';
 import { CoursesListState } from '../interfaces/courses-list-state';
 import { map, catchError, tap, finalize, throttleTime, delay } from 'rxjs/operators';
 import { LoadingService } from './loading.service';
+import { CoursesParams } from '../interfaces/courses-params';
 
 @Injectable({
   providedIn: 'root'
@@ -123,6 +124,13 @@ export class CoursesService {
       duration: moment.duration(item.length, 'minutes'),
       description: item.description,
     };
+  }
+
+  public rxGetListCourses(params: CoursesParams): Observable<CoursesListItem[]> {
+    return this.http.get<ServerCourse[]>(`${this.BASE_URL}/courses`, { params: { ...params } }).pipe(
+      delay(550),
+      map(this.transformToListCourses.bind(this)),
+    );
   }
 
   public getListCourses(): void {

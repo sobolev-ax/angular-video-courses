@@ -13,17 +13,17 @@ import { CoursesListState } from 'src/app/interfaces/courses-list-state';
 export class CoursesPageComponent implements OnInit, OnDestroy {
 
   private stateSubscription: Subscription;
+  private coursesSubscription: Subscription;
+  private nextSubscription: Subscription;
 
-  private state: CoursesListState = {
-    start: 0,
-    count: 7,
-    step: 10,
-    sort: '',
-    filter: '',
+  private state = {
     textFragment: '',
     courses: [],
     next: true,
   };
+
+  private courses: CoursesListItem[];
+  private canNext = false;
 
   private filter: string = this.state.textFragment;
 
@@ -33,7 +33,7 @@ export class CoursesPageComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    this.coursesService.setState(this.state);
+    //this.coursesService.setState(this.state);
 
     this.stateSubscription = this.coursesService.state$.subscribe(this.updateState.bind(this));
 
