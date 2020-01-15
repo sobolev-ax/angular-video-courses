@@ -1,6 +1,7 @@
 import { CoursesActions, ECoursesActions } from '../actions/courses.actions';
 import { initialCoursesState } from '../state/courses.state';
 import { ICoursesState } from 'src/app/interfaces/courses-state';
+import { Action } from 'rxjs/internal/scheduler/Action';
 
 export const coursesReducer = (
   state = initialCoursesState,
@@ -23,6 +24,25 @@ export const coursesReducer = (
     }
     case ECoursesActions.toCoursesRequestDelete: {
       console.log('toCoursesRequestDelete', acttion);
+      return {
+        ...state,
+      };
+    }
+    case ECoursesActions.toSelectCourseRequest: {
+      console.log('toSelectCourseRequest', acttion);
+      return {
+        ...state,
+      };
+    }
+    case ECoursesActions.toSelectCourseSuccess: {
+      console.log('toSelectCourseSuccess', acttion);
+      return {
+        ...state,
+        selected: acttion.payload
+      };
+    }
+    case ECoursesActions.toUpdateCourseRequest: {
+      console.log('toUpdateCourseRequest', acttion);
       return {
         ...state,
       };

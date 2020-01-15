@@ -9,4 +9,5 @@ export const initialCoursesState: ICoursesState = {
   textFragment: '',
   courses: [],
   next: true,
+  selected: null,
 };

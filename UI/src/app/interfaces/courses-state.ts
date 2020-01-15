@@ -9,4 +9,5 @@ export interface ICoursesState {
   textFragment: string;
   courses: CoursesListItem[];
   next: boolean;
+  selected: CoursesListItem;
 }

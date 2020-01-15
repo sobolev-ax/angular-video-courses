@@ -6,6 +6,10 @@ import * as moment from 'moment';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CoursesService } from 'src/app/services/courses.service';
 import { Subscription } from 'rxjs';
+import { Store, select } from '@ngrx/store';
+import { IAppState } from 'src/app/interfaces/app-state';
+import { SelectCourseRequest, UpdateCourseRequest } from 'src/app/store/actions/courses.actions';
+import { getSelectedCourse } from 'src/app/store/selectors/courses.selector';
 
 @Component({
   selector: 'app-edit-page',
@@ -38,13 +42,14 @@ export class EditPageComponent implements OnInit, OnDestroy {
   public crumbs: string[] = ['courses'];
 
   private routeSubscription: Subscription;
-  private serviceSubscription: Subscription;
+  private courseSubscription: Subscription;
 
 
   constructor(
     private router: Router,
     private activateRoute: ActivatedRoute,
     private coursesService: CoursesService,
+    private store: Store<IAppState>,
   ) { }
 
 
@@ -56,9 +61,13 @@ export class EditPageComponent implements OnInit, OnDestroy {
           return;
         }
 
-        this.serviceSubscription = this.coursesService.getCourse(params.id).subscribe(
-            this.toFillPage.bind(this)
-        );
+        this.courseSubscription = this.store.pipe(select(getSelectedCourse)).subscribe((course) => {
+          if (!course) return;
+
+          this.toFillPage(course);
+        });
+
+        this.store.dispatch(new SelectCourseRequest(params.id));
       }
     );
   }
@@ -66,7 +75,7 @@ export class EditPageComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.routeSubscription.unsubscribe();
-    if (this.serviceSubscription) this.serviceSubscription.unsubscribe();
+    if (this.courseSubscription) this.courseSubscription.unsubscribe();
   }
 
   private toFillPage(course: CoursesListItem): void {
@@ -113,14 +122,8 @@ export class EditPageComponent implements OnInit, OnDestroy {
     };
 
     if (this.id) {
-      this.coursesService.updateCourse(course).subscribe(
-        () => {
-          console.log('Edited course:', course.id);
-          this.router.navigate(['']);
-        },
-        err => console.log('Can\'t edit:', err)
-      );
-
+      this.store.dispatch(new UpdateCourseRequest(course));
+      this.router.navigate(['']);
     } else {
       this.coursesService.addCourse(course).subscribe(
         () => {

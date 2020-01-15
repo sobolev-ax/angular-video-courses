@@ -139,6 +139,29 @@ export class CoursesService {
     );
   }
 
+  public rxGetCourse(id: CoursesListItem['id']): Observable<any> {
+    return this.http.get<ServerCourse>(`${this.BASE_URL}/courses/${id}`).pipe(
+      map(course => this.createCourseItem(course)),
+    );
+  }
+
+  public rxUpdateCourse(course: CoursesListItem): Observable<ServerCourse> {
+    const updateCourse: ServerCourse = {
+      id: course.id,
+      name: course.title,
+      date: String(course.creationDate.format('YYYY-MM-DD')),
+      length: course.duration.asMinutes(),
+      description: course.description,
+      authors: {
+        id: 0,
+        name: 'Author'
+      },
+      isTopRated: course.isTopRated
+    };
+
+    return this.http.patch<ServerCourse>(`${this.BASE_URL}/courses/${course.id}`, updateCourse);
+  }
+
   public getListCourses(): void {
     const params = {
       start: String(this.state.start),

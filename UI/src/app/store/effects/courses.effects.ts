@@ -5,7 +5,9 @@ import { LoadingOn, LoadingOff } from '../actions/common.actions';
 import { CoursesService } from '../../services/courses.service';
 import { Store, select } from '@ngrx/store';
 import { IAppState } from 'src/app/interfaces/app-state';
-import { ECoursesActions, CoursesRequest, CoursesSuccess, CoursesSetFilter, CoursesRequestMore, CoursesRequestDelete }
+import {
+  ECoursesActions, CoursesRequest, CoursesSuccess, CoursesSetFilter, CoursesRequestMore, CoursesRequestDelete,
+  SelectCourseRequest, SelectCourseSuccess, UpdateCourseRequest }
   from '../actions/courses.actions';
 import { CoursesParams } from 'src/app/interfaces/courses-params';
 import { getCoursesParams } from '../selectors/courses.selector';
@@ -61,6 +63,34 @@ export class CoursesEffects {
         .pipe(
           map(() => {
             return new CoursesRequest();
+          })
+        );
+    })
+  );
+
+  @Effect()
+  updateCourseRequest$ = this.actions$.pipe(
+    ofType<UpdateCourseRequest>(ECoursesActions.toUpdateCourseRequest),
+    switchMap((action) => {
+      return this.coursesService
+        .rxUpdateCourse(action.payload)
+        .pipe(
+          map(() => {
+            return new CoursesRequest();
+          })
+        );
+    })
+  );
+
+  @Effect()
+  selectCourseRequest$ = this.actions$.pipe(
+    ofType<SelectCourseRequest>(ECoursesActions.toSelectCourseRequest),
+    switchMap((action) => {
+      return this.coursesService
+        .rxGetCourse(action.payload)
+        .pipe(
+          map((course) => {
+            return new SelectCourseSuccess(course);
           })
         );
     })

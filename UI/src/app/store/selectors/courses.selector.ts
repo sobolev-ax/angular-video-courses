@@ -3,6 +3,7 @@ import { IAppState } from '../../interfaces/app-state';
 import { ICoursesState } from '../../interfaces/courses-state';
 import { CoursesParams } from '../../interfaces/courses-params';
 import { ICoursesPageState } from '../../interfaces/courses-page-state';
+import { CoursesListItem } from 'src/app/interfaces/courses-list-item';
 
 const courses = (state: IAppState) => state.courses;
 
@@ -22,4 +23,9 @@ export const getCoursesPageState = createSelector(
     courses: state.courses,
     next: state.next,
   })
+);
+
+export const getSelectedCourse = createSelector(
+  courses,
+  (state: ICoursesState): CoursesListItem => state.selected,
 );
