@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { AppComponent } from './app.component';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
@@ -99,6 +99,7 @@ const appRoutes: Routes = [
     ]),
     RouterModule.forRoot(appRoutes),
     HttpClientModule,
+    StoreDevtoolsModule.instrument(),
   ],
   providers: [
     CoursesService,
