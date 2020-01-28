@@ -12,7 +12,6 @@
       <div class="item-inner">
         <label for="title">Title:</label>
         <span class="input-required">*required</span>
-        <span *ngIf="title.errors.required" class="input-required">*required</span>
       </div>
       <input
         type="text"
@@ -22,22 +21,7 @@
         formControlName="title"
       />
     </div>
-
     <div class="item input-wrap">
-      <div class="item-inner input-inner--right">
-        <button
-          routerLink="/courses"
-          class="btn btn-text btn-color-a input-inner-el"
-        >Cancel</button>
-        <button
-          type="submit"
-          class="btn btn-text btn-color-a input-inner-el"
-        >Save</button>
-      </div>
-    </div>
-  </form>
-
-  <div class="item input-wrap">
       <div class="item-inner">
         <label for="description">Description:</label>
         <span class="input-required">*required</span>
@@ -46,45 +30,61 @@
         class="input-txt input-txt-paper"
         placeholder="Enter description"
         id="description"
-        [(ngModel)]="description"
+        formControlName="description"
       ></textarea>
-  </div>
-  <div class="item input-wrap">
-    <div class="item-inner input-inner--left">
-      <label for="duration" class="input-inner-el">Duration:</label>
-      <span class="input-required input-inner-el">*required</span>
     </div>
-    <div class="item-inner input-inner--left">
-      <input
-        type="number"
-        class="input-txt input-txt-paper input-inner-el"
-        placeholder="Enter duration"
-        id="duration"
-        [(ngModel)]="elDuration"
-      />
-      <span class="input-inner-el">
-        {{ elDuration | duration }}
-      </span>
+    <div class="item input-wrap">
+      <div class="item-inner input-inner--left">
+        <label for="duration" class="input-inner-el">Duration:</label>
+        <span class="input-required input-inner-el">*required</span>
+      </div>
+      <div class="item-inner input-inner--left">
+        <input
+          type="number"
+          class="input-txt input-txt-paper input-inner-el"
+          placeholder="Enter duration"
+          id="duration"
+          formControlName="elDuration"
+        />
+        <span class="input-inner-el">
+          {{ elDuration | duration }}
+        </span>
+      </div>
     </div>
-  </div>
-  <div class="item input-wrap">
-    <div class="item-inner input-inner--left">
-      <label for="date" class="input-inner-el">Date:</label>
-      <span class="input-required input-inner-el">*required</span>
+    <div class="item input-wrap">
+      <div class="item-inner input-inner--left">
+        <label for="date" class="input-inner-el">Date:</label>
+        <span class="input-required input-inner-el">*required</span>
+      </div>
+      <div class="item-inner input-inner--left">
+        <input
+          type="date"
+          class="input-txt input-txt-paper input-inner-el"
+          placeholder="Enter date"
+          id="date"
+          formControlName="date"
+        />
+        <span class="input-inner-el">
+          {{ date }}
+        </span>
+      </div>
     </div>
-    <div class="item-inner input-inner--left">
-      <input
-        type="date"
-        class="input-txt input-txt-paper input-inner-el"
-        placeholder="Enter date"
-        id="date"
-        [(ngModel)]="date"
-      />
-      <span class="input-inner-el">
-        {{ date }}
-      </span>
+
+    <div class="item input-wrap">
+      <div class="item-inner input-inner--right">
+        <button
+          routerLink="/courses"
+          class="btn btn-text btn-color-a input-inner-el"
+        >Cancel</button>
+        <button
+          [disabled]="!form.valid"
+          type="submit"
+          class="btn btn-text btn-color-a input-inner-el"
+        >Save</button>
+      </div>
     </div>
-  </div>
+  </form>
+
   <div class="item input-wrap">
       <div class="item-inner input-inner--left">
         <label for="authors" class="input-inner-el">Authors:</label>

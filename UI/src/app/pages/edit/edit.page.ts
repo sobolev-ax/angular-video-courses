@@ -1,7 +1,7 @@
 import { Component, Output, EventEmitter, OnInit, OnDestroy } from '@angular/core';
 import { CoursesListItem } from 'src/app/interfaces/courses-list-item';
 import { DurationPipe } from 'src/app/pipes/duration.pipe';
-import { ReactiveFormsModule, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 import * as moment from 'moment';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -34,9 +34,9 @@ export class EditPageComponent implements OnInit, OnDestroy {
 
   public description = '';
 
-  public title = '';
+  // public title = '';
 
-  public date = '';
+  // public date = '';
 
   public authors = '';
 
@@ -47,7 +47,6 @@ export class EditPageComponent implements OnInit, OnDestroy {
   private routeSubscription: Subscription;
   private courseSubscription: Subscription;
 
-
   constructor(
     private router: Router,
     private activateRoute: ActivatedRoute,
@@ -55,10 +54,11 @@ export class EditPageComponent implements OnInit, OnDestroy {
     private store: Store<IAppState>,
   ) {
     this.form = new FormGroup({
-      title: new FormControl('', Validators.required)
+      title: new FormControl('', [Validators.required, Validators.maxLength(50)]),
+      description: new FormControl('', [Validators.required, Validators.maxLength(500)]),
+      date: new FormControl('', Validators.required),
     });
   }
-
 
   ngOnInit() {
     this.routeSubscription = this.activateRoute.params.subscribe(
@@ -79,18 +79,9 @@ export class EditPageComponent implements OnInit, OnDestroy {
     );
   }
 
-
   ngOnDestroy() {
     this.routeSubscription.unsubscribe();
     if (this.courseSubscription) this.courseSubscription.unsubscribe();
-  }
-
-  private titleValidator = (control: FormControl) => {
-    const condition = !!control.value;
-    if (!condition) {
-      return { myNameValidator: 'does not match the condition' };
-    }
-    return null;
   }
 
   private toFillPage(course: CoursesListItem): void {
@@ -105,12 +96,11 @@ export class EditPageComponent implements OnInit, OnDestroy {
 
     this.id = course.id;
     this.topRated = course.isTopRated;
-    this.description = course.description;
-    // this.form.title = course.title;
     this.form.setValue({
-      title: course.title
+      title: course.title,
+      description: course.description,
+      date: course.creationDate.format('YYYY-MM-DD'),
     });
-    this.date = course.creationDate.format('YYYY-MM-DD');
     this.elDuration = course.duration.asMinutes();
     this.authors = 'some authors';
   }
@@ -119,9 +109,9 @@ export class EditPageComponent implements OnInit, OnDestroy {
     const course: CoursesListItem = {
       id: this.id || null,
       title: this.form.get('title').value,
-      creationDate: moment(this.date),
+      creationDate: moment(this.form.get('date').value),
       duration: this.duration,
-      description: this.description,
+      description: this.form.get('description').value,
     };
 
     if (this.id) {
