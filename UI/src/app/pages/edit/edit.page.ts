@@ -1,6 +1,7 @@
 import { Component, Output, EventEmitter, OnInit, OnDestroy } from '@angular/core';
 import { CoursesListItem } from 'src/app/interfaces/courses-list-item';
 import { DurationPipe } from 'src/app/pipes/duration.pipe';
+import { ReactiveFormsModule, FormControl, FormGroup, Validators } from '@angular/forms';
 
 import * as moment from 'moment';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -41,6 +42,8 @@ export class EditPageComponent implements OnInit, OnDestroy {
 
   public crumbs: string[] = ['courses'];
 
+  public form: FormGroup;
+
   private routeSubscription: Subscription;
   private courseSubscription: Subscription;
 
@@ -50,7 +53,11 @@ export class EditPageComponent implements OnInit, OnDestroy {
     private activateRoute: ActivatedRoute,
     private coursesService: CoursesService,
     private store: Store<IAppState>,
-  ) { }
+  ) {
+    this.form = new FormGroup({
+      title: new FormControl('', Validators.required)
+    });
+  }
 
 
   ngOnInit() {
@@ -78,6 +85,14 @@ export class EditPageComponent implements OnInit, OnDestroy {
     if (this.courseSubscription) this.courseSubscription.unsubscribe();
   }
 
+  private titleValidator = (control: FormControl) => {
+    const condition = !!control.value;
+    if (!condition) {
+      return { myNameValidator: 'does not match the condition' };
+    }
+    return null;
+  }
+
   private toFillPage(course: CoursesListItem): void {
     if (course.id === null) {
       this.crumbs.push('new course');
@@ -91,31 +106,19 @@ export class EditPageComponent implements OnInit, OnDestroy {
     this.id = course.id;
     this.topRated = course.isTopRated;
     this.description = course.description;
-    this.title = course.title;
+    // this.form.title = course.title;
+    this.form.setValue({
+      title: course.title
+    });
     this.date = course.creationDate.format('YYYY-MM-DD');
     this.elDuration = course.duration.asMinutes();
     this.authors = 'some authors';
   }
 
   public submit(): void {
-    if (
-         this.description === ''
-      || this.title === ''
-      || this.date === ''
-      || this.elDuration === 0
-    ) {
-      console.log('Check all fields ------');
-      console.log(`title: ${this.title === '' ? 'Empty!' : this.title}`);
-      console.log(`description: ${this.description === '' ? 'Empty!' : this.description}`);
-      console.log(`date: ${this.date === '' ? 'Empty!' : this.date}`);
-      console.log(`duration: ${this.elDuration === 0 ? 'Empty!' : this.elDuration}`);
-
-      return;
-    }
-
     const course: CoursesListItem = {
       id: this.id || null,
-      title: this.title,
+      title: this.form.get('title').value,
       creationDate: moment(this.date),
       duration: this.duration,
       description: this.description,

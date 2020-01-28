@@ -7,19 +7,36 @@
       {{ (crumbs[1] || '').toUpperCase() }}
     </h3>
   </div>
-  <div class="item input-wrap">
-    <div class="item-inner">
-      <label for="title">Title:</label>
-      <span class="input-required">*required</span>
+  <form [formGroup]="form" (ngSubmit)="submit()">
+    <div class="item input-wrap">
+      <div class="item-inner">
+        <label for="title">Title:</label>
+        <span class="input-required">*required</span>
+        <span *ngIf="title.errors.required" class="input-required">*required</span>
+      </div>
+      <input
+        type="text"
+        class="input-txt input-txt-paper"
+        placeholder="Enter title"
+        id="title"
+        formControlName="title"
+      />
     </div>
-    <input
-      type="text"
-      class="input-txt input-txt-paper"
-      placeholder="Enter title"
-      id="title"
-      [(ngModel)]="title"
-    />
-  </div>
+
+    <div class="item input-wrap">
+      <div class="item-inner input-inner--right">
+        <button
+          routerLink="/courses"
+          class="btn btn-text btn-color-a input-inner-el"
+        >Cancel</button>
+        <button
+          type="submit"
+          class="btn btn-text btn-color-a input-inner-el"
+        >Save</button>
+      </div>
+    </div>
+  </form>
+
   <div class="item input-wrap">
       <div class="item-inner">
         <label for="description">Description:</label>
@@ -83,16 +100,4 @@
         />
       </div>
     </div>
-  <div class="item input-wrap">
-      <div class="item-inner input-inner--right">
-        <button
-          routerLink="/courses"
-          class="btn btn-text btn-color-a input-inner-el"
-        >Cancel</button>
-        <button
-          (click)="submit()"
-          class="btn btn-text btn-color-a input-inner-el"
-        >Save</button>
-      </div>
-  </div>
 </section>
