@@ -12,6 +12,12 @@
       <div class="item-inner">
         <label for="title">Title:</label>
         <span class="input-required">*required</span>
+        <span *ngIf="form.get('title').dirty && form.get('title').hasError('required')">
+          Title is required
+        </span>
+        <span *ngIf="form.get('title').dirty && form.get('title').hasError('maxlength')">
+          Length limited
+        </span>
       </div>
       <input
         type="text"
@@ -25,6 +31,12 @@
       <div class="item-inner">
         <label for="description">Description:</label>
         <span class="input-required">*required</span>
+        <span *ngIf="form.get('description').dirty && form.get('description').hasError('required')">
+          Description is required
+        </span>
+        <span *ngIf="form.get('description').dirty && form.get('description').hasError('maxlength')">
+          Length limited
+        </span>
       </div>
       <textarea
         class="input-txt input-txt-paper"
@@ -37,6 +49,12 @@
       <div class="item-inner input-inner--left">
         <label for="duration" class="input-inner-el">Duration:</label>
         <span class="input-required input-inner-el">*required</span>
+        <span *ngIf="form.get('duration').dirty && form.get('duration').hasError('required')">
+          Duration is required
+        </span>
+        <span *ngIf="form.get('duration').dirty && form.get('duration').hasError('min')">
+          Should be positive :)
+        </span>
       </div>
       <div class="item-inner input-inner--left">
         <input
@@ -44,10 +62,10 @@
           class="input-txt input-txt-paper input-inner-el"
           placeholder="Enter duration"
           id="duration"
-          formControlName="elDuration"
+          formControlName="duration"
         />
         <span class="input-inner-el">
-          {{ elDuration | duration }}
+          {{ form.get('duration').value | duration }}
         </span>
       </div>
     </div>
@@ -55,6 +73,9 @@
       <div class="item-inner input-inner--left">
         <label for="date" class="input-inner-el">Date:</label>
         <span class="input-required input-inner-el">*required</span>
+        <span *ngIf="form.get('date').dirty && form.get('date').hasError('required')">
+          Date is required
+        </span>
       </div>
       <div class="item-inner input-inner--left">
         <input
@@ -65,7 +86,7 @@
           formControlName="date"
         />
         <span class="input-inner-el">
-          {{ date }}
+          {{ form.get('date').value }}
         </span>
       </div>
     </div>
@@ -85,7 +106,7 @@
     </div>
   </form>
 
-  <div class="item input-wrap">
+  <!-- <div class="item input-wrap">
       <div class="item-inner input-inner--left">
         <label for="authors" class="input-inner-el">Authors:</label>
         <span class="input-required input-inner-el">*required</span>
@@ -99,5 +120,5 @@
           [(ngModel)]="authors"
         />
       </div>
-    </div>
+    </div> -->
 </section>

@@ -90,6 +90,10 @@ router-outlet
   opacity: .3
   cursor: default
 
+.btn[disabled]:hover
+  opacity: .3
+  cursor: default
+
 .btn-a
   line-height: 2.57
   letter-spacing: -0.1px
@@ -172,6 +176,18 @@ router-outlet
 
 .input-txt.ng-invalid
   border-color: red
+
+.input-txt.ng-invalid:focus
+  outline-color: red
+
+.input-txt.ng-valid:focus
+  outline-color: green
+
+.input-txt.ng-untouched
+  border-color: unset
+
+.input-txt.ng-untouched:focus
+  outline-color: unset
 
 .input-ic
   position: absolute

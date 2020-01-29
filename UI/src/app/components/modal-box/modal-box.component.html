@@ -4,39 +4,42 @@
       Login
     </h3>
   </div>
-  <div class="item input-wrap">
-    <div class="item-inner">
-      <label for="email">E-mail:</label>
-      <span class="input-required">*required</span>
-    </div>
-    <input
-      type="text"
-      class="input-txt input-txt-paper"
-      placeholder="Enter e-mail"
-      id="email"
-      [(ngModel)]="email"
-    />
-  </div>
-  <div class="item input-wrap">
+  <form [formGroup]="form" (ngSubmit)="enter()">
+    <div class="item input-wrap">
       <div class="item-inner">
-        <label for="password">Password:</label>
+        <label for="email">E-mail:</label>
         <span class="input-required">*required</span>
       </div>
       <input
         type="text"
         class="input-txt input-txt-paper"
-        placeholder="Enter password"
-        id="password"
-        [(ngModel)]="password"
+        placeholder="Enter e-mail"
+        id="email"
+        formControlName="email"
       />
-  </div>
-  <div class="item input-wrap">
-      <div class="item-inner">
-        <a routerLink="/login">Forgot password?</a>
-        <button
-          (click)="enter(email, password)"
-          class="btn btn-text btn-color-a"
-        >Login</button>
-      </div>
-  </div>
+    </div>
+    <div class="item input-wrap">
+        <div class="item-inner">
+          <label for="password">Password:</label>
+          <span class="input-required">*required</span>
+        </div>
+        <input
+          type="text"
+          class="input-txt input-txt-paper"
+          placeholder="Enter password"
+          id="password"
+          formControlName="password"
+        />
+    </div>
+    <div class="item input-wrap">
+        <div class="item-inner">
+          <!-- <a routerLink="/login">Forgot password?</a> -->
+          <button
+            [disabled]="!form.valid"
+            type="submit"
+            class="btn btn-text btn-color-a"
+          >Login</button>
+        </div>
+    </div>
+  </form>
 </section>

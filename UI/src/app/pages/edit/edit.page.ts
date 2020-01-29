@@ -18,26 +18,8 @@ import { getSelectedCourse } from 'src/app/store/selectors/courses.selector';
   styleUrls: ['./edit.page.sass']
 })
 export class EditPageComponent implements OnInit, OnDestroy {
-  public duration: moment.Duration = moment.duration(30, 'minutes');
-
-  get elDuration() {
-    return this.duration.asMinutes();
-  }
-
-  set elDuration(val) {
-    this.duration = moment.duration(val, 'minutes');
-  }
-
   public id: number;
-
   public topRated: boolean;
-
-  public description = '';
-
-  // public title = '';
-
-  // public date = '';
-
   public authors = '';
 
   public crumbs: string[] = ['courses'];
@@ -56,7 +38,8 @@ export class EditPageComponent implements OnInit, OnDestroy {
     this.form = new FormGroup({
       title: new FormControl('', [Validators.required, Validators.maxLength(50)]),
       description: new FormControl('', [Validators.required, Validators.maxLength(500)]),
-      date: new FormControl('', Validators.required),
+      date: new FormControl('2020-05-03', [Validators.required]),
+      duration: new FormControl(0, [Validators.required, Validators.min(0)]),
     });
   }
 
@@ -100,8 +83,8 @@ export class EditPageComponent implements OnInit, OnDestroy {
       title: course.title,
       description: course.description,
       date: course.creationDate.format('YYYY-MM-DD'),
+      duration: course.duration.asMinutes(),
     });
-    this.elDuration = course.duration.asMinutes();
     this.authors = 'some authors';
   }
 
@@ -110,7 +93,7 @@ export class EditPageComponent implements OnInit, OnDestroy {
       id: this.id || null,
       title: this.form.get('title').value,
       creationDate: moment(this.form.get('date').value),
-      duration: this.duration,
+      duration:  moment.duration(this.form.get('duration').value, 'minutes'),
       description: this.form.get('description').value,
     };
 
